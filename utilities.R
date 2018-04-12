@@ -100,6 +100,14 @@ correct <- function(PVC, subROI) {
 }
 
 
+create_final_table <- function(ROI_def, header) {
+	final_table <- data.frame(
+		row.names = c(ROI_def@hemilobenames, ROI_def@lobenames, "totalcortical"),
+		data_name = rep(0, length(c(ROI_def@hemilobenames, ROI_def@lobenames))+1))
+	names(final_table) <- header		
+	return(final_table)
+}
+
 fill_means_table <- function(single_mean, subROI, means, proportiontable) {
 	means[subROI, "mean"] <- single_mean
 	means[subROI, "proportion_of_hemilobe"] <- proportiontable[subROI, "proportion_of_hemilobe"]
@@ -109,6 +117,10 @@ fill_means_table <- function(single_mean, subROI, means, proportiontable) {
 	return(means)
 }
 
+# These steps calculate the slope for each hemilobe/lobe by iterating through 
+# each ROI name (from hemilobe names) and ROI in ROI_def@hemilobe/lobe. This 
+# speaks to the critical importance of both sources having the same order, so be 
+# cautious if changing the standardROIs()/fullROIs() function.
 weighted_average <- function(ROI_def_val, ROI_def_names, means, finaltable, headername, proportion_of_text) {
 	counter <- 1
 	temp <- 0
