@@ -118,45 +118,14 @@ voistatScraper <- function(voistat_file, ROI_def=standardROIs()) {
 	means <- fill_table(mean_table(ROI_def), storedvalues, ROI_def, 
 		proportiontable, headername="Averaged..1.1.")
 	
-	# Creating another data frame to store the calculated SUVRs, which will be returned.
-	VALUEtable <- data.frame(
-		row.names = c(ROI_def@hemilobenames, ROI_def@lobenames, "totalcortical"),
-		VALUE = rep(0, length(c(ROI_def@hemilobenames, ROI_def@lobenames))+1)
-		)
+	VALUEtable <- create_final_table(ROI_def, "VALUE")
 
-	# This step calculates the value for each hemilobe by iterating through each ROI name (from hemilobe names)
-	# and ROI in ROI_def@hemilobe. This speaks to the critical importance of both sources having the same 
-	# order, so be cautious if changing the standardROIs() function.
-	counter <- 1	
-	VALUEtemp <- 0
-	for (ROI in ROI_def@hemilobe) {
-		for (subROI in ROI) {
-			VALUEtemp <- VALUEtemp + (means[subROI, "mean"] * means[subROI, "proportion_of_hemilobe"])
-		}
-		VALUEtable[ROI_def@hemilobenames[counter], "VALUE"] <- VALUEtemp
-		VALUEtemp <- 0
-		counter <- counter + 1
-	}
-
-	# As above, this step does the same for the full lobes.
-	counter <- 1		
-	VALUEtemp <- 0
-	for (ROI in ROI_def@lobe) {
-		for (subROI in ROI) {
-			VALUEtemp <- VALUEtemp + (means[subROI, "mean"] * means[subROI, "proportion_of_lobe"])
-		}
-		VALUEtable[ROI_def@lobenames[counter], "VALUE"] <- VALUEtemp
-		VALUEtemp <- 0
-		counter <- counter + 1
-	}
-
-	# This step is similar as above but for the total cortical ROI. The main difference is that it is only
-	# one ROI, so there is only one for loop.
-	VALUEtemp <- 0
-	for (subROI in ROI_def@totalcortical) {
-		VALUEtemp <- sum(VALUEtemp, ((means[subROI, "mean"] * means[subROI, "proportion_of_total"])))
-	}
-		VALUEtable["totalcortical", "VALUE"] <- VALUEtemp
+	VALUEtable <- weighted_average(ROI_def@hemilobe, ROI_def@hemilobenames, 
+		means, VALUEtable, "VALUE", "proportion_of_hemilobe")
+	VALUEtable <- weighted_average(ROI_def@lobe, ROI_def@lobenames, means, 
+		VALUEtable, "VALUE", "proportion_of_lobe")
+	VALUEtable <- weighted_average(ROI_def@totalcortical, "totalcortical", 
+		means, VALUEtable, "VALUE", "proportion_of_total")	
 
 	return(VALUEtable)
 }
