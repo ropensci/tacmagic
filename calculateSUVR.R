@@ -89,34 +89,11 @@ calcSUVR <- function(TAC_file, ROI_def, proportiontable, SUVR_def, corrected=TRU
 	# and ROI in ROI_def@hemilobe. This speaks to the critical importance of both sources having the same 
 	# order, so be cautious if changing the standardROIs() function.
 
-#	counter <- 1
-#	SUVRtemp <- 0
-#	for (ROI in ROI_def@hemilobe) {
-#		for (subROI in ROI) {
-#			SUVRtemp <- SUVRtemp + (means[subROI, "mean"] * means[subROI, "proportion_of_hemilobe"])
-#		}
-#		SUVRtable[ROI_def@hemilobenames[counter], "SUVR"] <- SUVRtemp/cerebellumreference
-#		SUVRtemp <- 0
-#		counter <- counter + 1
-#	}
-
 	SUVRtable <- weighted_average(ROI_def@hemilobe, ROI_def@hemilobenames, 
 		means, SUVRtable, "SUVR", "proportion_of_hemilobe")
 	SUVRtable <- weighted_average(ROI_def@lobe, ROI_def@lobenames, means,
 		SUVRtable, "SUVR", "proportion_of_lobe")
 	SUVRtable <- SUVRtable/cerebellumreference
-
-	# As above, this step does the same for the full lobes.
-	counter <- 1
-	SUVRtemp <- 0
-	for (ROI in ROI_def@lobe) {
-		for (subROI in ROI) {
-			SUVRtemp <- SUVRtemp + (means[subROI, "mean"] * means[subROI, "proportion_of_lobe"])
-		}
-		SUVRtable[ROI_def@lobenames[counter], "SUVR"] <- SUVRtemp/cerebellumreference
-		SUVRtemp <- 0
-		counter <- counter + 1
-	}
 
 	# This step is similar as above but for the total cortical ROI. The main difference is that it is only
 	# one ROI, so there is only one for loop.
