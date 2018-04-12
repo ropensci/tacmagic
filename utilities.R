@@ -91,10 +91,56 @@ volumesFromVoistatTAC <- function(voistat_file, commontime="30") {
 	return(data.frame(ROIs, Volume..ccm., row.names=1))
 }
 
+#Simple function that adds "_C" to a string if PVC is true
 correct <- function(PVC, subROI) {
 	if (PVC) { 
 		subROI <- paste(subROI, "_C", sep="") 
 	}
 	return(subROI) 
 }
+
+
+fill_means_table <- function(single_mean, subROI, means, proportiontable) {
+	means[subROI, "mean"] <- single_mean
+	means[subROI, "proportion_of_hemilobe"] <- proportiontable[subROI, "proportion_of_hemilobe"]
+	means[subROI, "proportion_of_lobe"] <- proportiontable[subROI, "proportion_of_lobe"]
+	means[subROI, "proportion_of_total"] <- proportiontable[subROI, "proportion_of_total"]
+
+	return(means)
+}
+
+calculate_hemilobe <- function(ROI_def, means, finaltable, headername) {
+	counter <- 1
+	temp <- 0
+
+	for (ROI in ROI_def@hemilobe) {
+		for (subROI in ROI) {
+			temp <- temp + (means[subROI, "mean"] * means[subROI, "proportion_of_hemilobe"])
+		}
+	
+		finaltable[ROI_def@hemilobenames[counter], headername] <- temp
+		temp <- 0
+		counter <- counter + 1
+	}
+
+	return(finaltable)
+}
+
+weighted_average <- function(ROI_def_val, ROI_def_names, means, finaltable, headername, proportion_of_text) {
+	counter <- 1
+	temp <- 0
+
+	for (ROI in ROI_def_val) {
+		for (subROI in ROI) {
+			temp <- temp + (means[subROI, "mean"] * means[subROI, proportion_of_text])
+		}
+	
+		finaltable[ROI_def_names[counter], headername] <- temp
+		temp <- 0
+		counter <- counter + 1
+	}
+
+	return(finaltable)
+}
+
 

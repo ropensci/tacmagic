@@ -71,15 +71,8 @@ calcSUVR <- function(TAC_file, ROI_def, proportiontable, SUVR_def, corrected=TRU
 
 	# This fills in the mean table. Note the _C is added to get the PVC-corrected values by default, unless corrected=FALSE
 	for (subROI in ROI_def@all) {
-		if (corrected) {
-			subROI_C <- paste(subROI, "_C", sep="")
-		}	else {
-			subROI_C <- paste(subROI)
-			}
-		means[subROI, "mean"] <- sum(tac[SUVR_def, subROI_C])/denominator
-		means[subROI, "proportion_of_hemilobe"] <- proportiontable[subROI, "proportion_of_hemilobe"]
-		means[subROI, "proportion_of_lobe"] <- proportiontable[subROI, "proportion_of_lobe"]
-		means[subROI, "proportion_of_total"] <- proportiontable[subROI, "proportion_of_total"]
+		single_mean <- sum(tac[SUVR_def, correct(corrected, subROI)])/denominator
+		means <- fill_means_table(single_mean, subROI, means, proportiontable)
 	}
 
 	# Creating another data frame to store the calculated SUVRs, which will be returned.
@@ -95,16 +88,23 @@ calcSUVR <- function(TAC_file, ROI_def, proportiontable, SUVR_def, corrected=TRU
 	# This step calculates the SUVR for each hemilobe by iterating through each ROI name (from hemilobe names)
 	# and ROI in ROI_def@hemilobe. This speaks to the critical importance of both sources having the same 
 	# order, so be cautious if changing the standardROIs() function.
-	counter <- 1
-	SUVRtemp <- 0
-	for (ROI in ROI_def@hemilobe) {
-		for (subROI in ROI) {
-			SUVRtemp <- SUVRtemp + (means[subROI, "mean"] * means[subROI, "proportion_of_hemilobe"])
-		}
-		SUVRtable[ROI_def@hemilobenames[counter], "SUVR"] <- SUVRtemp/cerebellumreference
-		SUVRtemp <- 0
-		counter <- counter + 1
-	}
+
+#	counter <- 1
+#	SUVRtemp <- 0
+#	for (ROI in ROI_def@hemilobe) {
+#		for (subROI in ROI) {
+#			SUVRtemp <- SUVRtemp + (means[subROI, "mean"] * means[subROI, "proportion_of_hemilobe"])
+#		}
+#		SUVRtable[ROI_def@hemilobenames[counter], "SUVR"] <- SUVRtemp/cerebellumreference
+#		SUVRtemp <- 0
+#		counter <- counter + 1
+#	}
+
+	SUVRtable <- weighted_average(ROI_def@hemilobe, ROI_def@hemilobenames, 
+		means, SUVRtable, "SUVR", "proportion_of_hemilobe")
+	SUVRtable <- weighted_average(ROI_def@lobe, ROI_def@lobenames, means,
+		SUVRtable, "SUVR", "proportion_of_lobe")
+	SUVRtable <- SUVRtable/cerebellumreference
 
 	# As above, this step does the same for the full lobes.
 	counter <- 1
@@ -241,15 +241,13 @@ peakSlope <- function(TAC_file) {
 # Takes the slopes calculated in peakSlope, and merges them into ROIs as specified
 peakSlopeROI <- function(slopes, ROI_def, proportiontable, corrected=TRUE) {
 
-	# Creates a data.frame to store the slopes and relative volumes of each ROI
-	
+	# data.frame to store the slopes and relative volumes of each ROI
 	means <- mean_table(ROI_def)
 
+	# Fill the means table -- note this is where the corrected or uncorrected values come from
 	for (subROI in ROI_def@all) {
-		means[subROI, "mean"] <- slopes[, correct(corrected, subROI)]
-		means[subROI, "proportion_of_hemilobe"] <- proportiontable[subROI, "proportion_of_hemilobe"]
-		means[subROI, "proportion_of_lobe"] <- proportiontable[subROI, "proportion_of_lobe"]
-		means[subROI, "proportion_of_total"] <- proportiontable[subROI, "proportion_of_total"]
+		single_mean <- slopes[, correct(corrected, subROI)]		
+		means <- fill_means_table(single_mean, subROI, means, proportiontable)
 	}
 
 	# Creating another data frame to store the calculated SUVRs, which will be returned.
@@ -258,34 +256,18 @@ peakSlopeROI <- function(slopes, ROI_def, proportiontable, corrected=TRUE) {
 		slope = rep(0, length(c(ROI_def@hemilobenames, ROI_def@lobenames))+1)
 		)
 
-	# This step calculates the slope for each hemilobe by iterating through each ROI name (from hemilobe names)
-	# and ROI in ROI_def@hemilobe. This speaks to the critical importance of both sources having the same 
-	# order, so be cautious if changing the standardROIs() function.
-	counter <- 1
-	temp <- 0
-	for (ROI in ROI_def@hemilobe) {
-		for (subROI in ROI) {
-			temp <- temp + (means[subROI, "mean"] * means[subROI, "proportion_of_hemilobe"])
-		}
-		slope_table[ROI_def@hemilobenames[counter], "slope"] <- temp
-		temp <- 0
-		counter <- counter + 1
-	}
+	# These steps calculate the slope for each hemilobe/lobe by iterating 
+	# through each ROI name (from hemilobe names) and ROI in 
+	# ROI_def@hemilobe/lobe. This speaks to the critical importance of both 
+	# sources having the same order, so be cautious if changing the 
+	# standardROIs()/fullROIs() function.
+	slope_table <- weighted_average(ROI_def@hemilobe, ROI_def@hemilobenames, 
+		means, slope_table, "slope", "proportion_of_hemilobe")
+	slope_table <- weighted_average(ROI_def@lobe, ROI_def@lobenames, means, 
+		slope_table, "slope", "proportion_of_lobe")
 
-	# As above, this step does the same for the full lobes.
-	counter <- 1
-	temp <- 0
-	for (ROI in ROI_def@lobe) {
-		for (subROI in ROI) {
-			temp <- temp + (means[subROI, "mean"] * means[subROI, "proportion_of_lobe"])
-		}
-		slope_table[ROI_def@lobenames[counter], "slope"] <- temp
-		temp <- 0
-		counter <- counter + 1
-	}
-
-	# This step is similar as above but for the total cortical ROI. The main difference is that it is only
-	# one ROI, so there is only one for loop.
+	# This step is similar as above but for the total cortical ROI. The main 
+	# difference is that it is only one ROI, so there is only one for loop.
 	temp <- 0
 	for (subROI in ROI_def@totalcortical) {
 		temp <- sum(temp, ((means[subROI, "mean"] * means[subROI, "proportion_of_total"])))
