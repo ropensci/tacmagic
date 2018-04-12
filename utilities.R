@@ -109,23 +109,6 @@ fill_means_table <- function(single_mean, subROI, means, proportiontable) {
 	return(means)
 }
 
-calculate_hemilobe <- function(ROI_def, means, finaltable, headername) {
-	counter <- 1
-	temp <- 0
-
-	for (ROI in ROI_def@hemilobe) {
-		for (subROI in ROI) {
-			temp <- temp + (means[subROI, "mean"] * means[subROI, "proportion_of_hemilobe"])
-		}
-	
-		finaltable[ROI_def@hemilobenames[counter], headername] <- temp
-		temp <- 0
-		counter <- counter + 1
-	}
-
-	return(finaltable)
-}
-
 weighted_average <- function(ROI_def_val, ROI_def_names, means, finaltable, headername, proportion_of_text) {
 	counter <- 1
 	temp <- 0
@@ -142,5 +125,6 @@ weighted_average <- function(ROI_def_val, ROI_def_names, means, finaltable, head
 
 	return(finaltable)
 }
+
 
 

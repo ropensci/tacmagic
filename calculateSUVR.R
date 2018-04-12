@@ -5,12 +5,8 @@
 ## v 0.1.7--in progress		##
 ##################################
 
-# Also see PIB_pos.R for calculating PIB+ cutoff.
-# Also see ROI_definitions.R for standardROIs() and fullROIs()
-
 source("ROI_definitions.R")
 source("utilities.R")
-
 
 # In order to find the average SUVR, BPnd, or other value for an ROI, the 
 # relative size of each region must be calculated so that the average is
@@ -93,15 +89,9 @@ calcSUVR <- function(TAC_file, ROI_def, proportiontable, SUVR_def, corrected=TRU
 		means, SUVRtable, "SUVR", "proportion_of_hemilobe")
 	SUVRtable <- weighted_average(ROI_def@lobe, ROI_def@lobenames, means,
 		SUVRtable, "SUVR", "proportion_of_lobe")
+	SUVRtable <- weighted_average(ROI_def@totalcortical, "totalcortical", 
+		means, SUVRtable, "SUVR", "proportion_of_total")
 	SUVRtable <- SUVRtable/cerebellumreference
-
-	# This step is similar as above but for the total cortical ROI. The main difference is that it is only
-	# one ROI, so there is only one for loop.
-	SUVRtemp <- 0
-	for (subROI in ROI_def@totalcortical) {
-		SUVRtemp <- sum(SUVRtemp, ((means[subROI, "mean"] * means[subROI, "proportion_of_total"])))
-	}
-		SUVRtable["totalcortical", "SUVR"] <- SUVRtemp/cerebellumreference
 
 	return(SUVRtable)
 }
@@ -242,18 +232,9 @@ peakSlopeROI <- function(slopes, ROI_def, proportiontable, corrected=TRUE) {
 		means, slope_table, "slope", "proportion_of_hemilobe")
 	slope_table <- weighted_average(ROI_def@lobe, ROI_def@lobenames, means, 
 		slope_table, "slope", "proportion_of_lobe")
-
-	# This step is similar as above but for the total cortical ROI. The main 
-	# difference is that it is only one ROI, so there is only one for loop.
-	temp <- 0
-	for (subROI in ROI_def@totalcortical) {
-		temp <- sum(temp, ((means[subROI, "mean"] * means[subROI, "proportion_of_total"])))
-	}
-		slope_table["totalcortical", "slope"] <- temp
+	slope_table <- weighted_average(ROI_def@totalcortical, "totalcortical", 
+		means, slope_table, "slope", "proportion_of_total")
 
 	return(slope_table)
 }
-
-
-
 	
