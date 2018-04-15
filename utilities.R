@@ -5,12 +5,6 @@
 ## v 0.1.7--in progress		##
 ##################################
 
-
-##################################
-##	GENERIC UTILITIES	##
-##################################
-
-
 # Append text to headers in a data.frame
 # Useful, for example, before merging 2 data frames that have the same header.
 addColumnHeader <- function(data, headersuffix) {
@@ -59,13 +53,6 @@ fill_table <- function(means, storedvalues, ROI_def, proportiontable, headername
 	return(means)
 }
 
-#sum(tac[SUVR_def, subROI_C])/denominator
-
-
-
-##################################
-##    PMOD-RELATED UTILITIES	##
-##################################
 
 	
 # BPnd data can be copied from PNEURO and saved as a CSV. It contains ROI volume 
@@ -136,6 +123,10 @@ weighted_average <- function(ROI_def_val, ROI_def_names, means, finaltable, head
 	}
 
 	return(finaltable)
+}
+
+weighted_average_3levels <- function() {
+	return(0)
 }
 
 

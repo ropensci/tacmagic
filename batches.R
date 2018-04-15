@@ -69,8 +69,6 @@ batchSlope <- function(participants, ROI_def, outputfilename, corrected=TRUE, vo
 	first <- peakSlopeROI(firstslope, ROI_def, vols, corrected)
 	master <- t(first)
 	master <- master[-1,]
-
-	
 	
 	for (each in participants) {
 		print(paste("Working on...", each))

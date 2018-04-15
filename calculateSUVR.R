@@ -22,7 +22,6 @@ calcRelativeVolumes <- function(rawvolumes, ROI_def) {
 	proportiontable <- data.frame(row.names=rownames(rawvolumes), 
 		proportion_of_lobe, proportion_of_hemilobe, proportion_of_total)
 
-
 	# first iterates through each ROI in hemilobe, for example "leftfrontal"
 	for (ROI in ROI_def@hemilobe) {	
 		# total is the sum of the ROI within hemilobe
@@ -43,9 +42,9 @@ calcRelativeVolumes <- function(rawvolumes, ROI_def) {
 	}
 
 	totalcort <- sum(rawvolumes[unlist(ROI_def@totalcortical), "Volume..ccm."])
+
 	for (subROI in ROI_def@totalcortical) {
 		proportiontable[subROI, "proportion_of_total"] <- rawvolumes[subROI, "Volume..ccm."] / totalcort
-
 	}
 
 	return(proportiontable)
@@ -74,10 +73,6 @@ calcSUVR <- function(TAC_file, ROI_def, proportiontable, SUVR_def, corrected=TRU
 	# Data frame to store the calculated SUVRs, which will be returned.
 	SUVRtable <- create_final_table(ROI_def, "SUVR")
 
-	# Gets the cerebellum value to use as reference and calculate SUVR with
-	cerebellumreference <- (means["Cerebellum_l", "mean"] * means["Cerebellum_l", "proportion_of_lobe"]) + 
-		(means["Cerebellum_r", "mean"] * means["Cerebellum_r", "proportion_of_lobe"])
-
 	# This step calculates the SUVR for each hemilobe by iterating through each ROI name (from hemilobe names)
 	# and ROI in ROI_def@hemilobe. This speaks to the critical importance of both sources having the same 
 	# order, so be cautious if changing the standardROIs() function.
@@ -88,6 +83,10 @@ calcSUVR <- function(TAC_file, ROI_def, proportiontable, SUVR_def, corrected=TRU
 		SUVRtable, "SUVR", "proportion_of_lobe")
 	SUVRtable <- weighted_average(ROI_def@totalcortical, "totalcortical", 
 		means, SUVRtable, "SUVR", "proportion_of_total")
+	
+	# Gets the cerebellum value to use as reference and calculate SUVR with
+	cerebellumreference <- (means["Cerebellum_l", "mean"] * means["Cerebellum_l", "proportion_of_lobe"]) + 
+		(means["Cerebellum_r", "mean"] * means["Cerebellum_r", "proportion_of_lobe"])
 	SUVRtable <- SUVRtable/cerebellumreference
 
 	return(SUVRtable)
@@ -171,6 +170,7 @@ peakSlope <- function(TAC_file) {
 	return(holder)	
 }
 
+
 # Calculates weighted average slopes for ROIs, using slopes from peakSlope
 peakSlopeROI <- function(slopes, ROI_def, proportiontable, corrected=TRUE) {
 
@@ -187,7 +187,6 @@ peakSlopeROI <- function(slopes, ROI_def, proportiontable, corrected=TRUE) {
 
 	# Data frame for final weighted slopes, which will be returned.
 	slope_table <- create_final_table(ROI_def, "slope")
-
 
 	slope_table <- weighted_average(ROI_def@hemilobe, ROI_def@hemilobenames, 
 		means, slope_table, "slope", "proportion_of_hemilobe")
