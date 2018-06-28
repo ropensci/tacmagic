@@ -1,5 +1,5 @@
 ##################################
-## PMOD Output Analysis in R    ##
+## PET Analysis in R            ##
 ## utilities.R                  ##
 ## Eric E. Brown                ##
 ## v 0.1.7--in progress         ##
@@ -83,7 +83,6 @@ correct <- function(PVC, subROI) {
   return(subROI)
 }
 
-
 create_final_table <- function(ROI_def, header) {
   final_table <- data.frame(
     row.names = c(ROI_def@hemilobenames, ROI_def@lobenames, "totalcortical"),
@@ -103,7 +102,7 @@ fill_means_table <- function(single_mean, subROI, means, proportiontable) {
   return(means)
 }
 
-# These steps calculate the slope for each hemilobe/lobe by iterating through 
+# These steps calculate weighted avg for each hemilobe/lobe by iterating through 
 # each ROI name (from hemilobe names) and ROI in ROI_def@hemilobe/lobe. This 
 # speaks to the critical importance of both sources having the same order, so be 
 # cautious if changing the standardROIs()/fullROIs() function.
@@ -123,8 +122,4 @@ weighted_average <- function(ROI_def_val, ROI_def_names, means, finaltable,
   }
 
   return(finaltable)
-}
-
-weighted_average_3levels <- function() {
-  return(0)
 }

@@ -1,5 +1,5 @@
 ##################################
-## PMOD Output Analysis in R    ##
+## PET Analysis in R            ##
 ## calculateSUVR.R              ##
 ## Eric E. Brown                ##
 ## v 0.1.7--in progress         ##

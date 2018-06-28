@@ -1,11 +1,12 @@
 ##################################
-## PMOD Output Analysis in R    ##
-## calculateSUVR.R              ##
+## PET Analysis in R            ##
+## batches.R                    ##
 ## Eric E. Brown                ##
 ## v 0.1.7--in progress         ##
 ##################################
 
 source("calculateSUVR.R")
+source("fullTAC.R")
 source("utilities.R")
 source("ROI_definitions.R")
 

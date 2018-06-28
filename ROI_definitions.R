@@ -1,3 +1,10 @@
+##################################
+## PET Analysis in R            ##
+## ROI_definitions.R            ##
+## Eric E. Brown                ##
+## v 0.1.7--in progress         ##
+##################################
+
 # ROI definitions file.
 
 # Function to generate an object containing lists that define your ROIs

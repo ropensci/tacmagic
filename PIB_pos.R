@@ -1,4 +1,9 @@
-# PIB_pos.R
+##################################
+## PET Analysis in R            ##
+## PIB_pos.R                    ##
+## Eric E. Brown                ##
+## v 0.1.7--in progress         ##
+##################################
 
 # Based on the method described in:
 
