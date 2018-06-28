@@ -16,19 +16,19 @@ emptyTACtable <- function(tac_file, sep="\t", ROI_def=standardROIs(), do_total_c
   tac <- read.csv(tac_file, sep=sep)
 
   #Warning: ensure the tac file has first 2 columns = start and end
-  time_course <- tac[1:2]
-  names(time_course) <- c("start", "end")
-  frames <- length(time_course$start)
+  TACtable <- tac[1:2]
+  names(TACtable) <- c("start", "end")
+  frames <- length(TACtable$start)
 
   ROIs <- c(ROI_def@hemilobenames, ROI_def@lobenames)
   for (ROI in ROIs) {
-    time_course <- data.frame(time_course, rep(0, frames))
-    names(time_course)[ncol(time_course)] <- ROI
+    TACtable <- data.frame(TACtable, rep(0, frames))
+    names(TACtable)[ncol(TACtable)] <- ROI
     }
 
   if (do_total_cortical) {
     totalcortical <- rep(0, frames)
-    time_course <- data.frame(time_course, totalcortical)
+    TACtable <- data.frame(TACtable, totalcortical)
     }
   
   return(TACtable)
@@ -37,7 +37,10 @@ emptyTACtable <- function(tac_file, sep="\t", ROI_def=standardROIs(), do_total_c
 # This creates TACs for ROIs as specified in ROI_def, i.e. takes the weighted
 # average of TACs of each region that makes up the ROI.
 weighted_TAC <- function(ROI_def_val, ROI_def_names, tac, TACtable,
-                             proportion_of_text) {
+                             proportion_of_text, vols) {
+
+  frames <- length(TACtable$start)
+    
   counter <- 1
   temp <- 0
 
@@ -60,11 +63,11 @@ calcTAC <- function(tac_file, voistat_file, ROI_def=standardROIs()) {
   tac <- read.csv(tac_file, sep="\t")
   vols <- calcRelativeVolumes(volumesFromVoistatTAC(voistat_file), ROI_def)
   TACtable <- emptyTACtable(tac_file)
-  frames <- length(TACtable$start)
 
-  TACtable <- weighted_TAC(ROI_def@hemilobe, ROI_def@hemilobenames, tac, TACtable, "proportion_of_hemilobe")
-  TACtable <- weighted_TAC(ROI_def@lobe, ROI_def@lobenames, tac, TACtable, "proportion_of_lobe")
-  TACtable <- weighted_TAC(ROI_def@totalcortical, "totalcortical", tac, TACtable, "proportion_of_total")
+
+  TACtable <- weighted_TAC(ROI_def@hemilobe, ROI_def@hemilobenames, tac, TACtable, "proportion_of_hemilobe", vols)
+  TACtable <- weighted_TAC(ROI_def@lobe, ROI_def@lobenames, tac, TACtable, "proportion_of_lobe", vols)
+  TACtable <- weighted_TAC(ROI_def@totalcortical, "totalcortical", tac, TACtable, "proportion_of_total", vols)
 
   return(TACtable)
 }
@@ -88,7 +91,7 @@ groupTAC <- function(participantlist, directory="", ROI_def=standardROIs()) {
 
 # Simple plot of a single ROI TAC.
 plotTAC <- function(TACtable, ROIs=c("totalcortical", "cerebellum")) {
-  plot(1,type='n',xlim=c(1,35),ylim=c(0,15),xlab='Time', ylab='Activity')
+  plot(1,type='n',xlim=c(1,35),ylim=c(0,25),xlab='Time', ylab='Activity')
   colour <- rainbow(length(ROIs))
   index <- c(1:length(ROIs))
   for (ROI in index) {
