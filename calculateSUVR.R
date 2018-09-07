@@ -2,56 +2,11 @@
 ## PET Analysis in R            ##
 ## calculateSUVR.R              ##
 ## Eric E. Brown                ##
-## v 0.1.7--in progress         ##
+## PEAR v 0.1.8                 ##
+## Beta version--check all work ##
 ##################################
 
-source("ROI_definitions.R")
 source("utilities.R")
-
-# In order to find the average SUVR, BPnd, or other value for an ROI, the 
-# relative size of each region must be calculated so that the average is
-# weighted appropriately. This function calculates the weigtings.
-# For ROI definitions, use ROI_definitions.R
-# For rawvolumes, use utilities.R (volumesFromBPndPaste, volumesFromVoistatTAC)
-calcRelativeVolumes <- function(rawvolumes, ROI_def) {
-
-  # Prepare the output table.
-  proportion_of_hemilobe <- rep(NA, length(rownames(rawvolumes)))
-  proportion_of_lobe <- rep(NA, length(rownames(rawvolumes)))
-  proportion_of_total <- rep(NA, length(rownames(rawvolumes)))
-  proportiontable <- data.frame(row.names=rownames(rawvolumes), 
-                proportion_of_lobe, proportion_of_hemilobe, proportion_of_total)
-
-  # first iterates through each ROI in hemilobe, for example "leftfrontal"
-  for (ROI in ROI_def@hemilobe) {  
-    # total is the sum of the ROI within hemilobe
-    # e.g. total for "leftfrontal"
-    total <- sum(rawvolumes[ROI, "Volume..ccm."])
-    # now going within e.g. leftfrontal, to get the proportion
-    # each atlas ROI makes of e.g. leftfrontal
-    for (subROI in ROI) {
-      proportiontable[subROI, "proportion_of_hemilobe"] <- rawvolumes[subROI, 
-                                                         "Volume..ccm."] / total
-    }
-  }
-  
-  for (ROI in ROI_def@lobe) {
-    lobetotal <- sum(rawvolumes[ROI, "Volume..ccm."])
-    for (subROI in ROI) {
-      proportiontable[subROI, "proportion_of_lobe"] <- rawvolumes[subROI, 
-                                                     "Volume..ccm."] / lobetotal
-    }
-  }
-
-  totalcort <- sum(rawvolumes[unlist(ROI_def@totalcortical), "Volume..ccm."])
-
-  for (subROI in ROI_def@totalcortical) {
-    proportiontable[subROI, "proportion_of_total"] <- rawvolumes[subROI, 
-                                                     "Volume..ccm."] / totalcort
-  }
-
-  return(proportiontable)
-}
 
 # calcSUVR
 # Use relative volumes to calculate weighted SUVRs
@@ -59,15 +14,19 @@ calcRelativeVolumes <- function(rawvolumes, ROI_def) {
 # TAC_file is the name and path of the TAC_file
 # SUVR_def is a vector of the start times for the TACs to be used 
 # for example: c("3000", "3300", "3600", "3900")
-calcSUVR <- function(TAC_file, ROI_def, proportiontable, SUVR_def, corrected=TRUE) {
-  # Open the TAC file and get the number of TAC values in the SUVR definition (e.g. SUVR40-60)
+calcSUVR <- function(TAC_file, ROI_def, proportiontable, SUVR_def, 
+                     corrected=TRUE) {
+  # Open the TAC file and get the number of TAC values in the SUVR definition 
+  # (e.g. SUVR40-60)
   tac <- read.table(TAC_file, header=TRUE, row.names=1)
   denominator <- length(SUVR_def)
 
-  # Creates a data.frame to store the means (over the SUVR window) and relative volumes of each ROI
+  # Creates a data.frame to store the means (over the SUVR window) and relative 
+  # volumes of each ROI
   means <- mean_table(ROI_def)
 
-  # This fills in the mean table. Note the _C is added to get the PVC-corrected values by default, unless corrected=FALSE
+  # This fills in the mean table. Note the _C is added to get the PVC-corrected 
+  # values by default, unless corrected=FALSE
   for (subROI in ROI_def@all) {
     single_mean <- sum(tac[SUVR_def, correct(corrected, subROI)])/denominator
     means <- fill_means_table(single_mean, subROI, means, proportiontable)
@@ -76,9 +35,10 @@ calcSUVR <- function(TAC_file, ROI_def, proportiontable, SUVR_def, corrected=TRU
   # Data frame to store the calculated SUVRs, which will be returned.
   SUVRtable <- create_final_table(ROI_def, "SUVR")
 
-  # This step calculates the SUVR for each hemilobe by iterating through each ROI name (from hemilobe names)
-  # and ROI in ROI_def@hemilobe. This speaks to the critical importance of both sources having the same 
-  # order, so be cautious if changing the standardROIs() function.
+  # This step calculates the SUVR for each hemilobe by iterating through each 
+  # ROI name (from hemilobe names) and ROI in ROI_def@hemilobe. This speaks to 
+  # the critical importance of both sources having the same order, so be 
+  # cautious if changing the standardROIs() function.
 
   SUVRtable <- weighted_average(ROI_def@hemilobe, ROI_def@hemilobenames, 
     means, SUVRtable, "SUVR", "proportion_of_hemilobe")
@@ -88,8 +48,10 @@ calcSUVR <- function(TAC_file, ROI_def, proportiontable, SUVR_def, corrected=TRU
     means, SUVRtable, "SUVR", "proportion_of_total")
   
   # Gets the cerebellum value to use as reference and calculate SUVR with
-  cerebellumreference <- (means["Cerebellum_l", "mean"] * means["Cerebellum_l", "proportion_of_lobe"]) + 
-    (means["Cerebellum_r", "mean"] * means["Cerebellum_r", "proportion_of_lobe"])
+  cerebellumreference <- (means["Cerebellum_l", "mean"] * 
+                          means["Cerebellum_l", "proportion_of_lobe"]) + 
+                         (means["Cerebellum_r", "mean"] * 
+                          means["Cerebellum_r", "proportion_of_lobe"])
   SUVRtable <- SUVRtable/cerebellumreference
 
   return(SUVRtable)
@@ -100,7 +62,8 @@ calcSUVR <- function(TAC_file, ROI_def, proportiontable, SUVR_def, corrected=TRU
 # extracts mean data.
 voistatScraper <- function(voistat_file, ROI_def=standardROIs()) {
 
-  voistat <- read.csv(voistat_file, sep="\t", skip=6, header=T, stringsAsFactors=F)
+  voistat <- read.csv(voistat_file, sep="\t", skip=6, header=T, 
+                      stringsAsFactors=F)
   ROIs <- voistat$VoiName.Region...string.
   Volume..ccm. <- voistat$Volume..ccm.
   Averaged..1.1. <- voistat$Averaged..1.1.  

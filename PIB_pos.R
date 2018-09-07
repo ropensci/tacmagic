@@ -2,10 +2,11 @@
 ## PET Analysis in R            ##
 ## PIB_pos.R                    ##
 ## Eric E. Brown                ##
-## v 0.1.7--in progress         ##
+## PEAR v 0.1.8                 ##
+## Beta version--check all work ##
 ##################################
 
-# Based on the method described in:
+# Based on a method described in:
 
 # Aizenstein HJ, Nebes RD, Saxton JA, et al. 2008.
 # Frequent amyloid deposition without significant
@@ -51,20 +52,22 @@ remove <- function(data) {
   return(new)
 }
 
-# This function determines a PIB-Positive cutoff based on the method described
-# by Aizenstein et al.
+# This function determines a PIB-Positive cutoff similar to the method described
+# by Aizenstein et al. but simplified (check if this is suitable for you)
 # The first step is to remove the outliers from a set of control participants'
 # total neocortical SUVR. This step uses the removeOutliersStDev function with a
 # standard deviation of 1.5. Then, with the cleaned data, it determines and
 # returns the value of the upper inner fence, returning a single number as the
 # PIB+ cutoff score.
-azCutoff <- function(data) {
+# This could be repeated for multiple ROIs to emulate what was done in 
+# Aizenstein et. al
+uifCutoff <- function(data) {
   no_outliers <- removeOutliersUIF(data)
   cutoff <- (quantile(no_outliers, 0.75) + (1.5*IQR(data)))
   return(as.numeric(cutoff))
 }
 
-azCutoffSD <- function(data) {
+sdCutoff <- function(data) {
   no_outliers <- removeOutliersStDev(data, 1.5)
   cutoff <- (quantile(no_outliers, 0.75) + (1.5*IQR(data)))
   return(as.numeric(cutoff))

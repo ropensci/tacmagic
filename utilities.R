@@ -2,8 +2,12 @@
 ## PET Analysis in R            ##
 ## utilities.R                  ##
 ## Eric E. Brown                ##
-## v 0.1.7--in progress         ##
+## PEAR v 0.1.8                 ##
+## Beta version--check all work ##
 ##################################
+
+source("ROI_definitions.R")
+
 
 # Append text to headers in a data.frame
 # Useful, for example, before merging 2 data frames that have the same header.
@@ -12,6 +16,7 @@ addColumnHeader <- function(data, headersuffix) {
   names(data) <- paste(names(data), headersuffix, sep="")
   return(data)
 }
+
 
 # Adds a column to a data frame from another CSV file, toaddfile.
 # Adds the columns with the names from the vector varnames.
@@ -24,6 +29,7 @@ growDF <- function(master, toaddfile, varnames) {
   }
   return(masterdf)
 }
+
 
 mean_table <- function(ROI_def) {
   means <- data.frame(
@@ -75,6 +81,7 @@ volumesFromVoistatTAC <- function(voistat_file, commontime="30") {
   return(data.frame(ROIs, Volume..ccm., row.names=1))
 }
 
+
 #Simple function that adds "_C" to a string if PVC is true
 correct <- function(PVC, subROI) {
   if (PVC) {
@@ -83,6 +90,7 @@ correct <- function(PVC, subROI) {
   return(subROI)
 }
 
+
 create_final_table <- function(ROI_def, header) {
   final_table <- data.frame(
     row.names = c(ROI_def@hemilobenames, ROI_def@lobenames, "totalcortical"),
@@ -90,6 +98,7 @@ create_final_table <- function(ROI_def, header) {
   names(final_table) <- header
   return(final_table)
 }
+
 
 fill_means_table <- function(single_mean, subROI, means, proportiontable) {
   means[subROI, "mean"] <- single_mean
@@ -101,6 +110,7 @@ fill_means_table <- function(single_mean, subROI, means, proportiontable) {
                                                           "proportion_of_total"]
   return(means)
 }
+
 
 # These steps calculate weighted avg for each hemilobe/lobe by iterating through 
 # each ROI name (from hemilobe names) and ROI in ROI_def@hemilobe/lobe. This 
@@ -122,4 +132,117 @@ weighted_average <- function(ROI_def_val, ROI_def_names, means, finaltable,
   }
 
   return(finaltable)
+}
+
+
+### Utilities for TAC calculation.
+
+# This creates a data.frame to hold the mean TAC from the ROIs specified in 
+# ROI_def. 
+emptyTACtable <- function(tac_file, sep="", ROI_def=standardROIs(), 
+  do_total_cortical=TRUE, merge=F) {
+  
+  tac <- read.csv(tac_file, sep=sep)
+
+  #Warning: ensure the tac file has first 2 columns = start and end
+  TACtable <- tac[1:2]
+  names(TACtable) <- c("start", "end")
+  frames <- length(TACtable$start)
+
+  ROIs <- c(ROI_def@hemilobenames, ROI_def@lobenames)
+  for (ROI in ROIs) {
+    TACtable <- data.frame(TACtable, rep(0, frames))
+    names(TACtable)[ncol(TACtable)] <- ROI
+    }
+
+  if (do_total_cortical) {
+    totalcortical <- rep(0, frames)
+    TACtable <- data.frame(TACtable, totalcortical)
+    }
+
+  if (merge) {
+    TACtable <- data.frame(TACtable, (tac*0))
+  }
+  
+  return(TACtable)
+  }
+
+
+# This creates TACs for ROIs as specified in ROI_def, i.e. takes the weighted
+# average of TACs of each region that makes up the ROI.
+weighted_TAC <- function(ROI_def_val, ROI_def_names, tac, TACtable,
+                             proportion_of_text, vols) {
+  # number of time points in the TAC
+  frames <- length(TACtable$start)
+
+  counter <- 1
+  temp <- 0
+
+  for (ROI in ROI_def_val) {
+    for (subROI in ROI) {
+      temp <- temp + (tac[subROI] * vols[subROI, proportion_of_text])
+    }
+  
+    names(temp) <- ROI_def_names[counter]
+    TACtable[, ROI_def_names[counter]] <- temp
+    temp <- rep(0, frames)
+    counter <- counter + 1
+  }
+
+  return(TACtable)
+}
+
+
+# Check names
+#check_vars <- function(DF1, DF2) {
+#  all(names(DF1) == names(DF2))
+#
+#}
+
+
+## SUVR and related functions.
+
+# In order to find the average SUVR, BPnd, or other value for an ROI, the 
+# relative size of each region must be calculated so that the average is
+# weighted appropriately. This function calculates the weigtings.
+# For ROI definitions, use ROI_definitions.R
+# For rawvolumes, use utilities.R (volumesFromBPndPaste, volumesFromVoistatTAC)
+calcRelativeVolumes <- function(rawvolumes, ROI_def) {
+
+  # Prepare the output table.
+  proportion_of_hemilobe <- rep(NA, length(rownames(rawvolumes)))
+  proportion_of_lobe <- rep(NA, length(rownames(rawvolumes)))
+  proportion_of_total <- rep(NA, length(rownames(rawvolumes)))
+  proportiontable <- data.frame(row.names=rownames(rawvolumes), 
+                proportion_of_lobe, proportion_of_hemilobe, proportion_of_total)
+
+  # first iterates through each ROI in hemilobe, for example "leftfrontal"
+  for (ROI in ROI_def@hemilobe) {  
+    # total is the sum of the ROI within hemilobe
+    # e.g. total for "leftfrontal"
+    total <- sum(rawvolumes[ROI, "Volume..ccm."])
+    # now going within e.g. leftfrontal, to get the proportion
+    # each atlas ROI makes of e.g. leftfrontal
+    for (subROI in ROI) {
+      proportiontable[subROI, "proportion_of_hemilobe"] <- rawvolumes[subROI, 
+                                                         "Volume..ccm."] / total
+    }
+  }
+  
+  for (ROI in ROI_def@lobe) {
+    lobetotal <- sum(rawvolumes[ROI, "Volume..ccm."])
+    for (subROI in ROI) {
+      proportiontable[subROI, "proportion_of_lobe"] <- rawvolumes[subROI, 
+                                                     "Volume..ccm."] / lobetotal
+    }
+  }
+
+  totalcort <- sum(rawvolumes[unlist(ROI_def@totalcortical), "Volume..ccm."])
+
+  for (subROI in ROI_def@totalcortical) {
+    proportiontable[subROI, "proportion_of_total"] <- rawvolumes[subROI, 
+                                                     "Volume..ccm."] / totalcort
+  }
+
+  return(proportiontable)
 }

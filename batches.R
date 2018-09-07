@@ -2,7 +2,8 @@
 ## PET Analysis in R            ##
 ## batches.R                    ##
 ## Eric E. Brown                ##
-## v 0.1.7--in progress         ##
+## PEAR v 0.1.8                 ##
+## Beta version--check all work ##
 ##################################
 
 source("calculateSUVR.R")
