@@ -65,37 +65,58 @@ groupTAC <- function(participantlist, directory="", ROI_def=standardROIs(),
   return(groupTACtable)
 }
 
-# Simple plot of a single ROI TAC.
+# Plots time activity curves from 1 or 2 participants or group means.
 # Note this works with the output of groupTAC and calcTAC, as well as simply 
 # .tac files. Further, you can add together the original TAC file and the 
-# weighted TACs as they are simple data frames 
+# weighted TACs as they are simple data frames.
 # e.g. merged <- data.frame(individualtac, weightedTACtable)
-plotTAC <- function(TACtable, ROIs=c("totalcortical", "cerebellum")) {
-  plot(1,type='n',xlim=c(1,35),ylim=c(0,25),xlab='Time', ylab='Activity')
-  colour <- rainbow(length(ROIs))
-  index <- c(1:length(ROIs))
-  for (ROI in index) {
-    lines(TACtable[,ROIs[ROI]], type='o', col=colour[ROI], lwd=2)
-  }
-  legend("topright", legend = ROIs , col=colour, pch=1)
-}
+plotTAC2 <- function(TACtable1, TACtable2=NULL, ROIs=c("totalcortical", 
+  "cerebellum"), ymax=25, seconds_to_mins=FALSE) {
+  
+  # If the seconds_to_mins argument is TRUE, this converts the time from 
+  # seconds to minutes (by dividing the $start column by 60)
+  if (seconds_to_mins) {
+    time_conversion <- 60
+    time_units <- "Time (minutes)"
+  } else { 
+      time_conversion <- 1
+      time_units <- "Time (seconds)"
+    }
 
-
-# Similar to plotTAC but accepts 2 tac files (wheter from an individual or a 
-# group) as from groupTAC(). It plots both groups/individuals on the same chart 
-# with 2 legends (top legend for TACtable1) and uses 2 separate colour schemes 
-# to label the lines. 
-plotTAC2 <- function(TACtable1, TACtable2, ROIs=c("totalcortical", 
-                     "cerebellum")) {
-  plot(1,type='n',xlim=c(1,35),ylim=c(0,25),xlab='Time', ylab='Activity', 
-       main="Time Activity Curves")
+  # Sets up the plot using the frame start from the TAC file for the x axis
+  # and converting to minutes if chosen. 
+  plot(1,type='n',xlim=c(TACtable1$start[1],
+                      TACtable1$start[length(TACtable1$start)]/time_conversion),
+                        ylim=c(0,ymax),xlab=time_units, ylab='Activity')
+  
+  # Separate colour ranges for each group of TACs.
   colour1 <- rainbow(length(ROIs), start=0, end=0.25)
   colour2 <- rainbow(length(ROIs), start=0.5, end=0.8)
+  
+  # Plots the ROIs as specified in the ROIs argument.
   index <- c(1:length(ROIs))
   for (ROI in index) {
-    lines(TACtable1[,ROIs[ROI]], type='l', col=colour1[ROI], lwd=2, pch=1)
-    lines(TACtable2[,ROIs[ROI]], type='l', col=colour2[ROI], lwd=2, pch=1)
+
+    lines(x=TACtable1$start/time_conversion, 
+          y=TACtable1[,ROIs[ROI]], 
+          type='o', 
+          col=colour1[ROI], 
+          lwd=2)
+    
+  # Only if a 2nd TAC table is provided, plots a second participant/group on 
+  # the same plot.
+    if (is.data.frame(TACtable2)) {
+      lines(x=TACtable2$start/time_conversion, 
+            y=TACtable2[,ROIs[ROI]], 
+            type='o', 
+            col=colour2[ROI], 
+            lwd=2)
+    }
+    
   }
+  
   legend("topright", legend = ROIs , col=colour1, pch=1)
-  legend("bottomright", legend = ROIs, col=colour2, pch=1)
+  if (is.data.frame(TACtable2)) {
+    legend("bottomright", legend = ROIs, col=colour2, pch=1)
+  }
 } 
