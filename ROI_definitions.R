@@ -8,6 +8,14 @@
 
 # ROI definitions file.
 
+
+# create a class ROIset with two slots, one for each list of ROIs, so
+# that it can be returned as a single object
+ROIset <- setClass("ROIset", slots = c(hemilobe = "list", lobe = "list",
+totalcortical = "list", all = "vector",
+hemilobenames = "vector", lobenames = "vector"))
+
+
 # Function to generate an object containing lists that define your ROIs
 standardROIs <- function() {
   # Define your ROIs here (header names of columns of your TAC/BPnd files)
@@ -67,17 +75,6 @@ standardROIs <- function() {
   # allsubROIs
   allsubROIs <- c(frontal, temporal, parietal, occipital, cingulate, cerebellum)
 
-  # create a class ROIset with two slots, one for each list of ROIs, so
-  # that it can be returned as a single object
-  ROIset <- setClass("ROIset", slots = c(hemilobe = "list",
-                                         lobe = "list",
-                                         totalcortical = "list",
-                                         all = "vector",
-                                         hemilobenames = "vector",
-                                         lobenames = "vector"
-                                        )
-                    )
-  
   # an object to be returned containing all of the needed lists and vectors
   standardROIs <- ROIset()
   slot(standardROIs, "hemilobe") <- hemilobeROIs
@@ -146,7 +143,7 @@ fullROIs <- function() {
   brainstem <- c("Brainstem")
   ventricles <- c("FrontalHorn_l", "FrontalHorn_r", "TemporaHorn_r",
                   "TemporaHorn_l", "ThirdVentricl")
-  whitematter <- c("White_matter")
+  whitematter <- c("White_matter_l", "White_matter_r")
   lobeROIs <- list(frontal, temporal, parietal, occipital, cingulate,
     deep, corpus, cerebellum, brainstem, ventricles, whitematter)
   # a vector with the names of your ROIs, in the same order as the list
@@ -162,17 +159,6 @@ fullROIs <- function() {
   allsubROIs <- c(frontal, temporal, parietal, occipital, cingulate, deep,
     corpus, cerebellum, brainstem, ventricles, whitematter)
 
-  # create a class ROIset with two slots, one for each list of ROIs, so
-  # that it can be returned as a single object
-  ROIset <- setClass("ROIset", slots = c(hemilobe = "list",
-                                         lobe = "list",
-                                         totalcortical = "list",
-                                         all = "vector",
-                                         hemilobenames = "vector",
-                                         lobenames = "vector"
-                                        )
-                    )
-  
   # an object to be returned containing all of the needed lists and
   # vectors
   standardROIs <- ROIset()
@@ -185,3 +171,4 @@ fullROIs <- function() {
 
   return(standardROIs)
 }
+
