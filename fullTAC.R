@@ -103,8 +103,8 @@ plotTAC2 <- function(TACtable1, TACtable2=NULL, ROIs=c("totalcortical",
           col=colour1[ROI], 
           lwd=2)
     
-  # Only if a 2nd TAC table is provided, plots a second participant/group on 
-  # the same plot.
+    # Only if a 2nd TAC table is provided, plots a second participant/group on 
+    # the same plot.
     if (is.data.frame(TACtable2)) {
       lines(x=TACtable2$start/time_conversion, 
             y=TACtable2[,ROIs[ROI]], 
