@@ -2,7 +2,7 @@
 ## PET Analysis in R            ##
 ## ROI_definitions.R            ##
 ## Eric E. Brown                ##
-## PEAR v 0.1.8                 ##
+## PEAR v devel                 ##
 ## Beta version--check all work ##
 ##################################
 
@@ -11,164 +11,149 @@
 
 # create a class ROIset with two slots, one for each list of ROIs, so
 # that it can be returned as a single object
-ROIset <- setClass("ROIset", slots = c(hemilobe = "list", lobe = "list",
-totalcortical = "list", all = "vector",
-hemilobenames = "vector", lobenames = "vector"))
+ROIset <- setClass("ROIset", slots = c(
+                                       hemilobe = "list", lobe = "list",
+                                       totalcortical = "list", all = "vector"
+                                      ))
 
 
-# Function to generate an object containing lists that define your ROIs
+# Functions to generate an object of class ROIset, containing lists that define
+# your ROIs. Use these directly or as templates to define your ROIs (as made up
+# of header names of columns of your TAC files).
+
+# There must be 2 sets of ROIs: one that is specicific to L/R
+# ("hemilobe" e.g. L frontal) and one that is whole-brain (e.g. frontal)
+
+
+
+# standardROIs() includes all major cortical lobes
 standardROIs <- function() {
-  # Define your ROIs here (header names of columns of your TAC/BPnd files)
-  # There must be 2 sets of ROIs: one that is specicific to L/R
-  # ("hemilobe" e.g. L frontal) and one that is whole-brain (e.g. frontal)
-  # Additional ROIs can be defined, but each subROI only occur once per
-  # set (once in hemilobe and once in lobe)
-
-  #hemilobe (first list)
-  leftfrontal <- c("FL_mid_fr_G_l", "FL_precen_G_l", "FL_strai_G_l",
-    "FL_OFC_AOG_l", "FL_inf_fr_G_l", "FL_sup_fr_G_l",
-    "FL_OFC_MOG_l", "FL_OFC_LOG_l", "FL_OFC_POG_l",
-    "Subgen_antCing_l", "Subcall_area_l", "Presubgen_antCing_l")
-  rightfrontal <- c("FL_mid_fr_G_r", "FL_precen_G_r", "FL_strai_G_r",
-    "FL_OFC_AOG_r", "FL_inf_fr_G_r", "FL_sup_fr_G_r",
-    "FL_OFC_MOG_r", "FL_OFC_LOG_r", "FL_OFC_POG_r",
-    "Subgen_antCing_r", "Subcall_area_r", "Presubgen_antCing_r")
-  lefttemporal <- c("Hippocampus_l", "Amygdala_l", "Ant_TL_med_l",
-    "Ant_TL_inf_lat_l", "G_paraH_amb_l", "G_sup_temp_post_l",
-    "G_tem_midin_l", "G_fus_l", "Post_TL_l", "G_sup_temp_ant_l")
-  righttemporal <- c("Hippocampus_r", "Amygdala_r", "Ant_TL_med_r",
-    "Ant_TL_inf_lat_r", "G_paraH_amb_r", "G_sup_temp_post_r",
-    "G_tem_midin_r", "G_fus_r", "Post_TL_r", "G_sup_temp_ant_r")
-  leftparietal <- c("PL_postce_G_l", "PL_sup_pa_G_l", "PL_rest_l")
-  rightparietal <- c("PL_postce_G_r", "PL_sup_pa_G_r", "PL_rest_r")
-  leftoccipital <- c("OL_rest_lat_l", "OL_ling_G_l", "OL_cuneus_l")
-  rightoccipital <- c("OL_rest_lat_r", "OL_ling_G_r", "OL_cuneus_r")
-  leftcingulate <- c("G_cing_ant_l", "G_cing_post_l")
-  rightcingulate <- c("G_cing_ant_r", "G_cing_post_r")
-  hemilobeROIs <- list(leftfrontal, rightfrontal, lefttemporal, righttemporal,
-                       leftparietal, rightparietal, leftoccipital,
-                       rightoccipital, leftcingulate, rightcingulate)
+ 
+  frontal_def <- c("FL_mid_fr_G", "FL_precen_G", "FL_strai_G", "FL_OFC_AOG",
+  "FL_inf_fr_G", "FL_sup_fr_G", "FL_OFC_MOG", "FL_OFC_LOG", "FL_OFC_POG",
+  "Subgen_antCing", "Subcall_area", "Presubgen_antCing")
+  temporal_def <- c("Hippocampus", "Amygdala", "Ant_TL_med", "Ant_TL_inf_lat",
+  "G_paraH_amb", "G_sup_temp_post", "G_tem_midin", "G_fus", "Post_TL",
+  "G_sup_temp_ant")
+  parietal_def <- c("PL_postce_G", "PL_sup_pa_G", "PL_rest")
+  occipital_def <- c("OL_rest_lat", "OL_ling_G", "OL_cuneus")
+  cingulate_def <- c("G_cing_ant", "G_cing_post")
   
-  # vector with the names of your ROIs, in the same order as the list
-  # hemilobeROIs
-  hemilobenames <- c("leftfrontal", "rightfrontal", "lefttemporal",
-    "righttemporal", "leftparietal", "rightparietal",
-    "leftoccipital", "rightoccipital", "leftcingulate",
-    "rightcingulate")
-
-  #full lobe (second list)
+  leftfrontal <- paste(frontal_def, "_l")
+  rightfrontal <- paste(frontal_def, "_r")
   frontal <- c(leftfrontal, rightfrontal)
+  
+  lefttemporal <- paste(temporal_def, "_l")
+  righttemporal <- paste(temporal_def, "_r")
   temporal <- c(lefttemporal, righttemporal)
+  
+  leftparietal <- paste(parietal_def, "_l")
+  rightparietal <- paste(parietal_def, "_r")
   parietal <- c(leftparietal, rightparietal)
+  
+  leftoccipital <- paste(occipital_def, "_l")
+  rightoccipital <- paste(occipital_def, "_r")
   occipital <- c(leftoccipital, rightoccipital)
+  
+  leftcingulate <- paste(cingulate_def, "_l")
+  rightcingulate <- paste(cingulate_def, "_r")
   cingulate <- c(leftcingulate, rightcingulate)
+  
   cerebellum <- c("Cerebellum_l", "Cerebellum_r")
-  lobeROIs <- list(frontal, temporal, parietal, occipital, cingulate,
-                   cerebellum)
-  # a vector with the names of your ROIs, in the same order as the list lobeROIs
-  lobenames <- c("frontal", "temporal", "parietal", "occipital",
-                 "cingulate", "cerebellum")
-
-  # totalcortical
+  
+  hemilobeROIs <- list(leftfrontal = leftfrontal, rightfrontal=rightfrontal,
+  lefttemporal=lefttemporal, righttemporal=righttemporal,
+  leftparietal=leftparietal, rightparietal=rightparietal,
+  leftoccipital=leftoccipital, rightoccipital=rightoccipital,
+  leftcingulate=leftcingulate, rightcingulate=rightcingulate)
+  
+  lobeROIs <- list(frontal=frontal, temporal=temporal, parietal=parietal,
+  occipital=occipital, cingulate=cingulate,
+  cerebellum=cerebellum)
+  
   totalcortical <- list(c(frontal, temporal, parietal, occipital, cingulate))
-
-  # allsubROIs
+  
   allsubROIs <- c(frontal, temporal, parietal, occipital, cingulate, cerebellum)
-
-  # an object to be returned containing all of the needed lists and vectors
+  
   standardROIs <- ROIset()
   slot(standardROIs, "hemilobe") <- hemilobeROIs
   slot(standardROIs, "lobe") <- lobeROIs
   slot(standardROIs, "totalcortical") <- totalcortical
   slot(standardROIs, "all") <- allsubROIs
-  slot(standardROIs, "hemilobenames") <- hemilobenames
-  slot(standardROIs, "lobenames") <- lobenames
 
   return(standardROIs)
 }
 
 
-# Define your ROIs here (header names of columns of your TAC/BPnd files)
-# There must be 2 sets of ROIs: one that is specicific to L/R 
-# ("hemilobe" e.g. L frontal) and one that is whole-brain (e.g. frontal)
-# Additional ROIs can be defined, but each subROI only occur once per 
-# set (once in hemilobe and once in lobe)
 
 fullROIs <- function() {
   #hemilobe (first list)
-  leftfrontal <- c("FL_mid_fr_G_l", "FL_precen_G_l", "FL_strai_G_l",
-    "FL_OFC_AOG_l", "FL_inf_fr_G_l", "FL_sup_fr_G_l",
-    "FL_OFC_MOG_l", "FL_OFC_LOG_l", "FL_OFC_POG_l",
-    "Subgen_antCing_l", "Subcall_area_l", "Presubgen_antCing_l")
-  rightfrontal <- c("FL_mid_fr_G_r", "FL_precen_G_r", "FL_strai_G_r",
-    "FL_OFC_AOG_r", "FL_inf_fr_G_r", "FL_sup_fr_G_r",
-    "FL_OFC_MOG_r", "FL_OFC_LOG_r", "FL_OFC_POG_r",
-    "Subgen_antCing_r", "Subcall_area_r", "Presubgen_antCing_r")
-  lefttemporal <- c("Hippocampus_l", "Amygdala_l", "Ant_TL_med_l",
-    "Ant_TL_inf_lat_l", "G_paraH_amb_l", "G_sup_temp_post_l",
-    "G_tem_midin_l", "G_fus_l", "Post_TL_l", "G_sup_temp_ant_l")
-  righttemporal <- c("Hippocampus_r", "Amygdala_r", "Ant_TL_med_r",
-    "Ant_TL_inf_lat_r", "G_paraH_amb_r", "G_sup_temp_post_r",
-    "G_tem_midin_r", "G_fus_r", "Post_TL_r", "G_sup_temp_ant_r")
-  leftparietal <- c("PL_postce_G_l", "PL_sup_pa_G_l", "PL_rest_l")
-  rightparietal <- c("PL_postce_G_r", "PL_sup_pa_G_r", "PL_rest_r")
-  leftoccipital <- c("OL_rest_lat_l", "OL_ling_G_l", "OL_cuneus_l")
-  rightoccipital <- c("OL_rest_lat_r", "OL_ling_G_r", "OL_cuneus_r")
-  leftcingulate <- c("G_cing_ant_l", "G_cing_post_l")
-  rightcingulate <- c("G_cing_ant_r", "G_cing_post_r")
-  leftdeep <- c("CaudateNucl_l", "NuclAccumb_l", "Putamen_l",
-    "Thalamus_l", "Pallidum_l")
-  rightdeep <- c("CaudateNucl_r", "NuclAccumb_r", "Putamen_r",
-    "Thalamus_r", "Pallidum_r")
-  hemilobeROIs <- list(leftfrontal, rightfrontal, lefttemporal,
-    righttemporal, leftparietal, rightparietal, leftoccipital,
-    rightoccipital, leftcingulate, rightcingulate, leftdeep,
-    rightdeep)
-  # a vector with the names of your ROIs, in the same order as the list
-  # hemilobeROIs
-  hemilobenames <- c("leftfrontal", "rightfrontal", "lefttemporal",
-    "righttemporal", "leftparietal", "rightparietal",
-    "leftoccipital", "rightoccipital", "leftcingulate",
-    "rightcingulate", "leftdeep", "rightdeep")
 
-  #full lobe (second list)
+  frontal_def <- c("FL_mid_fr_G", "FL_precen_G", "FL_strai_G", "FL_OFC_AOG",
+  "FL_inf_fr_G", "FL_sup_fr_G", "FL_OFC_MOG", "FL_OFC_LOG", "FL_OFC_POG",
+  "Subgen_antCing", "Subcall_area", "Presubgen_antCing")
+  temporal_def <- c("Hippocampus", "Amygdala", "Ant_TL_med", "Ant_TL_inf_lat",
+  "G_paraH_amb", "G_sup_temp_post", "G_tem_midin", "G_fus", "Post_TL",
+  "G_sup_temp_ant")
+  parietal_def <- c("PL_postce_G", "PL_sup_pa_G", "PL_rest")
+  occipital_def <- c("OL_rest_lat", "OL_ling_G", "OL_cuneus")
+  cingulate_def <- c("G_cing_ant", "G_cing_post")
+  deep_def <- c("CaudateNucl", "NuclAccumb", "Putamen", "Thalamus", "Pallidum")
+  
+  leftfrontal <- paste(frontal_def, "_l")
+  rightfrontal <- paste(frontal_def, "_r")
   frontal <- c(leftfrontal, rightfrontal)
+  
+  lefttemporal <- paste(temporal_def, "_l")
+  righttemporal <- paste(temporal_def, "_r")
   temporal <- c(lefttemporal, righttemporal)
+  
+  leftparietal <- paste(parietal_def, "_l")
+  rightparietal <- paste(parietal_def, "_r")
   parietal <- c(leftparietal, rightparietal)
+  
+  leftoccipital <- paste(occipital_def, "_l")
+  rightoccipital <- paste(occipital_def, "_r")
   occipital <- c(leftoccipital, rightoccipital)
+  
+  leftcingulate <- paste(cingulate_def, "_l")
+  rightcingulate <- paste(cingulate_def, "_r")
   cingulate <- c(leftcingulate, rightcingulate)
+  
+  leftdeep <- paste(deep_def, "_l")
+  rightdeep <- paste(deep_def, "_r")
   deep <- c(leftdeep, rightdeep)
+  
   corpus <- c("Corp_Callosum")
   cerebellum <- c("Cerebellum_l", "Cerebellum_r")
   brainstem <- c("Brainstem")
   ventricles <- c("FrontalHorn_l", "FrontalHorn_r", "TemporaHorn_r",
                   "TemporaHorn_l", "ThirdVentricl")
   whitematter <- c("White_matter_l", "White_matter_r")
-  lobeROIs <- list(frontal, temporal, parietal, occipital, cingulate,
-    deep, corpus, cerebellum, brainstem, ventricles, whitematter)
-  # a vector with the names of your ROIs, in the same order as the list
-  # lobeROIs
-  lobenames <- c("frontal", "temporal", "parietal", "occipital",
-                 "cingulate", "deep", "corpus", "cerebellum", "brainstem",
-                 "ventricles", "whitematter")
-
-  # totalcortical
+  
+  hemilobeROIs <- list(leftfrontal=leftfrontal, rightfrontal=rightfrontal,
+                        lefttemporal=lefttemporal, righttemporal=righttemporal,
+                        leftparietal=leftparietal, rightparietal=rightparietal,
+                     leftoccipital=leftoccipital, rightoccipital=rightoccipital,
+                     leftcingulate=leftcingulate, rightcingulate=rightcingulate,
+                     leftdeep=leftdeep, rightdeep=rightdeep)
+  
+  lobeROIs <- list(frontal=frontal, temporal=temporal, parietal=parietal,
+                   occipital=occipital, cingulate=cingulate,deep=deep,
+                   corpus=corpus, cerebellum=cerebellum, brainstem=brainstem,
+                   ventricles=ventricles, whitematter=whitematter)
+  
   totalcortical <- list(c(frontal, temporal, parietal, occipital, cingulate))
 
-  #allsubROIs
   allsubROIs <- c(frontal, temporal, parietal, occipital, cingulate, deep,
     corpus, cerebellum, brainstem, ventricles, whitematter)
 
-  # an object to be returned containing all of the needed lists and
-  # vectors
-  standardROIs <- ROIset()
-  slot(standardROIs, "hemilobe") <- hemilobeROIs
-  slot(standardROIs, "lobe") <- lobeROIs
-  slot(standardROIs, "totalcortical") <- totalcortical
-  slot(standardROIs, "all") <- allsubROIs
-  slot(standardROIs, "hemilobenames") <- hemilobenames
-  slot(standardROIs, "lobenames") <- lobenames
 
-  return(standardROIs)
+  fullROIs <- ROIset()
+  slot(fullROIs, "hemilobe") <- hemilobeROIs
+  slot(fullROIs, "lobe") <- lobeROIs
+  slot(fullROIs, "totalcortical") <- totalcortical
+  slot(fullROIs, "all") <- allsubROIs
+
+  return(fullROIs)
 }
-
