@@ -25,9 +25,9 @@ calcTAC <- function(
   vols <- calcRelativeVolumes(volumesFromVoistatTAC(voistat_file), ROI_def)
   TACtable <- emptyTACtable(tac_file)
 
-  TACtable <- weighted_TAC(ROI_def@hemilobe, ROI_def@hemilobenames, tac, 
+  TACtable <- weighted_TAC(ROI_def@hemilobe, names(ROI_def@hemilobe), tac,
                           TACtable, "proportion_of_hemilobe", vols)
-  TACtable <- weighted_TAC(ROI_def@lobe, ROI_def@lobenames, tac, 
+  TACtable <- weighted_TAC(ROI_def@lobe, names(ROI_def@lobe), tac,
                           TACtable, "proportion_of_lobe", vols)
   TACtable <- weighted_TAC(ROI_def@totalcortical, "totalcortical", tac, 
                           TACtable, "proportion_of_total", vols)

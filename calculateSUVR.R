@@ -42,13 +42,10 @@ calcSUVR <- function(TAC_file, ROI_def, proportiontable, SUVR_def,
 
   SUVRtable <- weighted_average(ROI_def@hemilobe, names(ROI_def@hemilobe),
     means, SUVRtable, "SUVR", "proportion_of_hemilobe")
-  print(SUVRtable)
   SUVRtable <- weighted_average(ROI_def@lobe, names(ROI_def@lobe), means,
     SUVRtable, "SUVR", "proportion_of_lobe")
-  print(SUVRtable)
   SUVRtable <- weighted_average(ROI_def@totalcortical, "totalcortical", 
     means, SUVRtable, "SUVR", "proportion_of_total")
-  print(SUVRtable)
   # Gets the cerebellum value to use as reference and calculate SUVR with
   cerebellumreference <- (means["Cerebellum_l", "mean"] * 
                           means["Cerebellum_l", "proportion_of_lobe"]) + 
