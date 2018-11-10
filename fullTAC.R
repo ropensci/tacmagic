@@ -1,8 +1,8 @@
 ##################################
 ## PET Analysis in R            ##
 ## fullTAC.R                    ##
-## Eric E. Brown                ##
-## PEAR v 0.1.8                 ##
+## (C) Eric E. Brown  2018      ##
+## PEAR v devel                 ##
 ## Beta version--check all work ##
 ##################################
 

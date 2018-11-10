@@ -1,7 +1,7 @@
 ##################################
 ## PET Analysis in R            ##
 ## ROI_definitions.R            ##
-## Eric E. Brown                ##
+## (C) Eric E. Brown  2018      ##
 ## PEAR v devel                 ##
 ## Beta version--check all work ##
 ##################################

@@ -1,8 +1,8 @@
 ##################################
 ## PET Analysis in R            ##
 ## utilities.R                  ##
-## Eric E. Brown                ##
-## PEAR v 0.1.8                 ##
+## (C) Eric E. Brown  2018      ##
+## PEAR v devel                 ##
 ## Beta version--check all work ##
 ##################################
 
@@ -192,12 +192,6 @@ weighted_TAC <- function(ROI_def_val, ROI_def_names, tac, TACtable,
   return(TACtable)
 }
 
-
-# Check names
-#check_vars <- function(DF1, DF2) {
-#  all(names(DF1) == names(DF2))
-#
-#}
 
 
 ## SUVR and related functions.
