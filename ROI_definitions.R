@@ -39,24 +39,24 @@ standardROIs <- function() {
   occipital_def <- c("OL_rest_lat", "OL_ling_G", "OL_cuneus")
   cingulate_def <- c("G_cing_ant", "G_cing_post")
   
-  leftfrontal <- paste(frontal_def, "_l")
-  rightfrontal <- paste(frontal_def, "_r")
+  leftfrontal <- paste(frontal_def, "_l", sep="")
+  rightfrontal <- paste(frontal_def, "_r", sep="")
   frontal <- c(leftfrontal, rightfrontal)
   
-  lefttemporal <- paste(temporal_def, "_l")
-  righttemporal <- paste(temporal_def, "_r")
+  lefttemporal <- paste(temporal_def, "_l", sep="")
+  righttemporal <- paste(temporal_def, "_r", sep="")
   temporal <- c(lefttemporal, righttemporal)
   
-  leftparietal <- paste(parietal_def, "_l")
-  rightparietal <- paste(parietal_def, "_r")
+  leftparietal <- paste(parietal_def, "_l", sep="")
+  rightparietal <- paste(parietal_def, "_r", sep="")
   parietal <- c(leftparietal, rightparietal)
   
-  leftoccipital <- paste(occipital_def, "_l")
-  rightoccipital <- paste(occipital_def, "_r")
+  leftoccipital <- paste(occipital_def, "_l", sep="")
+  rightoccipital <- paste(occipital_def, "_r", sep="")
   occipital <- c(leftoccipital, rightoccipital)
   
-  leftcingulate <- paste(cingulate_def, "_l")
-  rightcingulate <- paste(cingulate_def, "_r")
+  leftcingulate <- paste(cingulate_def, "_l", sep="")
+  rightcingulate <- paste(cingulate_def, "_r", sep="")
   cingulate <- c(leftcingulate, rightcingulate)
   
   cerebellum <- c("Cerebellum_l", "Cerebellum_r")
@@ -100,28 +100,28 @@ fullROIs <- function() {
   cingulate_def <- c("G_cing_ant", "G_cing_post")
   deep_def <- c("CaudateNucl", "NuclAccumb", "Putamen", "Thalamus", "Pallidum")
   
-  leftfrontal <- paste(frontal_def, "_l")
-  rightfrontal <- paste(frontal_def, "_r")
+  leftfrontal <- paste(frontal_def, "_l", sep="")
+  rightfrontal <- paste(frontal_def, "_r", sep="")
   frontal <- c(leftfrontal, rightfrontal)
   
-  lefttemporal <- paste(temporal_def, "_l")
-  righttemporal <- paste(temporal_def, "_r")
+  lefttemporal <- paste(temporal_def, "_l", sep="")
+  righttemporal <- paste(temporal_def, "_r", sep="")
   temporal <- c(lefttemporal, righttemporal)
   
-  leftparietal <- paste(parietal_def, "_l")
-  rightparietal <- paste(parietal_def, "_r")
+  leftparietal <- paste(parietal_def, "_l", sep="")
+  rightparietal <- paste(parietal_def, "_r", sep="")
   parietal <- c(leftparietal, rightparietal)
   
-  leftoccipital <- paste(occipital_def, "_l")
-  rightoccipital <- paste(occipital_def, "_r")
+  leftoccipital <- paste(occipital_def, "_l", sep="")
+  rightoccipital <- paste(occipital_def, "_r", sep="")
   occipital <- c(leftoccipital, rightoccipital)
   
-  leftcingulate <- paste(cingulate_def, "_l")
-  rightcingulate <- paste(cingulate_def, "_r")
+  leftcingulate <- paste(cingulate_def, "_l", sep="")
+  rightcingulate <- paste(cingulate_def, "_r", sep="")
   cingulate <- c(leftcingulate, rightcingulate)
   
-  leftdeep <- paste(deep_def, "_l")
-  rightdeep <- paste(deep_def, "_r")
+  leftdeep <- paste(deep_def, "_l", sep="")
+  rightdeep <- paste(deep_def, "_r", sep="")
   deep <- c(leftdeep, rightdeep)
   
   corpus <- c("Corp_Callosum")

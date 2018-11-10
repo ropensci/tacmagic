@@ -93,8 +93,8 @@ correct <- function(PVC, subROI) {
 
 create_final_table <- function(ROI_def, header) {
   final_table <- data.frame(
-    row.names = c(ROI_def@hemilobenames, ROI_def@lobenames, "totalcortical"),
-    data_name = rep(0, length(c(ROI_def@hemilobenames, ROI_def@lobenames))+1))
+    row.names = c(names(ROI_def@hemilobe), names(ROI_def@lobe), "totalcortical"),
+    data_name = rep(0, length(c(names(ROI_def@hemilobe), names(ROI_def@lobe)))+1))
   names(final_table) <- header
   return(final_table)
 }
@@ -149,7 +149,7 @@ emptyTACtable <- function(tac_file, sep="", ROI_def=standardROIs(),
   names(TACtable) <- c("start", "end")
   frames <- length(TACtable$start)
 
-  ROIs <- c(ROI_def@hemilobenames, ROI_def@lobenames)
+  ROIs <- c(names(ROI_def@hemilobe), names(ROI_def@lobe))
   for (ROI in ROIs) {
     TACtable <- data.frame(TACtable, rep(0, frames))
     names(TACtable)[ncol(TACtable)] <- ROI
@@ -215,9 +215,10 @@ calcRelativeVolumes <- function(rawvolumes, ROI_def) {
   proportion_of_total <- rep(NA, length(rownames(rawvolumes)))
   proportiontable <- data.frame(row.names=rownames(rawvolumes), 
                 proportion_of_lobe, proportion_of_hemilobe, proportion_of_total)
-
+ 
   # first iterates through each ROI in hemilobe, for example "leftfrontal"
-  for (ROI in ROI_def@hemilobe) {  
+  
+  for (ROI in ROI_def@hemilobe) {
     # total is the sum of the ROI within hemilobe
     # e.g. total for "leftfrontal"
     total <- sum(rawvolumes[ROI, "Volume..ccm."])

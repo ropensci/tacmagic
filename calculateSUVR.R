@@ -40,13 +40,15 @@ calcSUVR <- function(TAC_file, ROI_def, proportiontable, SUVR_def,
   # the critical importance of both sources having the same order, so be 
   # cautious if changing the standardROIs() function.
 
-  SUVRtable <- weighted_average(ROI_def@hemilobe, ROI_def@hemilobenames, 
+  SUVRtable <- weighted_average(ROI_def@hemilobe, names(ROI_def@hemilobe),
     means, SUVRtable, "SUVR", "proportion_of_hemilobe")
-  SUVRtable <- weighted_average(ROI_def@lobe, ROI_def@lobenames, means,
+  print(SUVRtable)
+  SUVRtable <- weighted_average(ROI_def@lobe, names(ROI_def@lobe), means,
     SUVRtable, "SUVR", "proportion_of_lobe")
+  print(SUVRtable)
   SUVRtable <- weighted_average(ROI_def@totalcortical, "totalcortical", 
     means, SUVRtable, "SUVR", "proportion_of_total")
-  
+  print(SUVRtable)
   # Gets the cerebellum value to use as reference and calculate SUVR with
   cerebellumreference <- (means["Cerebellum_l", "mean"] * 
                           means["Cerebellum_l", "proportion_of_lobe"]) + 
@@ -74,8 +76,8 @@ voistatScraper <- function(voistat_file, ROI_def=standardROIs()) {
   proportiontable <- calcRelativeVolumes(rawvolumes, ROI_def)
   
   summarytable <- data.frame(
-    row.names = c(ROI_def@hemilobenames, ROI_def@lobenames, "totalcortical"),
-    VALUE = rep(0, length(c(ROI_def@hemilobenames, ROI_def@lobenames))+1)
+    row.names = c(names(ROI_def@hemilobe), names(ROI_def@lobe), "totalcortical"),
+    VALUE = rep(0, length(c(names(ROI_def@hemilobe), names(ROI_def@lobe)))+1)
     )
   
   # Creates a mean table (data.frame to store the means and relative 
@@ -85,9 +87,9 @@ voistatScraper <- function(voistat_file, ROI_def=standardROIs()) {
   
   VALUEtable <- create_final_table(ROI_def, "VALUE")
 
-  VALUEtable <- weighted_average(ROI_def@hemilobe, ROI_def@hemilobenames, 
+  VALUEtable <- weighted_average(ROI_def@hemilobe, names(ROI_def@hemilobe),
     means, VALUEtable, "VALUE", "proportion_of_hemilobe")
-  VALUEtable <- weighted_average(ROI_def@lobe, ROI_def@lobenames, means, 
+  VALUEtable <- weighted_average(ROI_def@lobe, names(ROI_def@lobe), means,
     VALUEtable, "VALUE", "proportion_of_lobe")
   VALUEtable <- weighted_average(ROI_def@totalcortical, "totalcortical", 
     means, VALUEtable, "VALUE", "proportion_of_total")  
@@ -154,9 +156,9 @@ peakSlopeROI <- function(slopes, ROI_def, proportiontable, corrected=TRUE) {
   # Data frame for final weighted slopes, which will be returned.
   slope_table <- create_final_table(ROI_def, "slope")
 
-  slope_table <- weighted_average(ROI_def@hemilobe, ROI_def@hemilobenames, 
+  slope_table <- weighted_average(ROI_def@hemilobe, names(ROI_def@hemilobe),
     means, slope_table, "slope", "proportion_of_hemilobe")
-  slope_table <- weighted_average(ROI_def@lobe, ROI_def@lobenames, means, 
+  slope_table <- weighted_average(ROI_def@lobe, names(ROI_def@lobe), means,
     slope_table, "slope", "proportion_of_lobe")
   slope_table <- weighted_average(ROI_def@totalcortical, "totalcortical", 
     means, slope_table, "slope", "proportion_of_total")
