@@ -11,7 +11,7 @@
 # formats to be easily integrated.
 
 
-# PMOD Files
+# TAC files
 
 
 # PMOD tac file; simple function because this file is prototype of TAC structure
@@ -22,6 +22,9 @@ loadTACfile <- function(filename, format="PMOD") {
     } else stop("Speficied format not supported.")
     return(tac)
 }
+
+
+# ROI volume data
 
 # BPnd data can be copied from PNEURO and saved as a CSV. It contains ROI volume
 # information. This extracts that.
@@ -46,6 +49,8 @@ volumesFromVoistatTAC <- function(voistat_file, commontime="30") {
     return(data.frame(ROIs, Volume..ccm., row.names=1))
 }
 
+
+# PET Model Data
 
 # .voistat files for each model (e.g Logan, not TAC) contain data for each
 # subROI, this extracts mean data for aggregate ROIs based on ROI_def.

@@ -118,11 +118,8 @@ weighted_average <- function(ROI_def_val, ROI_def_names, means, finaltable,
 
 # This creates a data.frame to hold the mean TAC from the ROIs specified in 
 # ROI_def. 
-emptyTACtable <- function(tac_file, sep="", ROI_def=standardROIs(), 
-  do_total_cortical=TRUE, merge=F) {
+emptyTACtable <- function(tac, ROI_def, do_total_cortical=TRUE, merge=F) {
   
-  tac <- read.csv(tac_file, sep=sep)
-
   #Warning: ensure the tac file has first 2 columns = start and end
   TACtable <- tac[1:2]
   names(TACtable) <- c("start", "end")
