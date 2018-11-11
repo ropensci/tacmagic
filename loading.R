@@ -6,9 +6,22 @@
 ## Beta version--check all work ##
 ##################################
 
+# A group of functions for loading files for analysis. File loading should be
+# done with these functions rather than in the other files to allow for new
+# formats to be easily integrated.
 
 
 # PMOD Files
+
+
+# PMOD tac file; simple function because this file is prototype of TAC structure
+# for PEAR.
+loadTACfile <- function(filename, format="PMOD") {
+    if (format == "PMOD") {
+        tac <- read.csv(filename, sep="")
+    } else stop("Speficied format not supported.")
+    return(tac)
+}
 
 # BPnd data can be copied from PNEURO and saved as a CSV. It contains ROI volume
 # information. This extracts that.
