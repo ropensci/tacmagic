@@ -9,14 +9,14 @@
 source("utilities.R")
 source("loading.R")
 
-# calcSUVR
-# Use relative volumes to calculate weighted SUVRs
-# tac is the tac data from loading function
-# volumes is the ROI volume data from loading function
-# SUVR_def is a vector of the start times for the TACs to be used in SUVR,
-# for example: c("3000", "3300", "3600", "3900")
-# corrected is TRUE for partial volume correction, where it is stored as _C in
-# the same tac file provided.
+#' Calculate weighted SUVRs for specified regions of interest
+#'
+#'@param tac The time-activity curve data from loading function.
+#'@param volumes The ROI volume data from loading function
+#'@param SUVR_def is a vector of the start times for window to be used in SUVR
+#'@param corrected For PVC, true where the data is stored as _C in same tac file.
+#'@return A table of SUVR values for the specified ROIs
+#'@examples calcSUVR(p1tac, p1vol, standardROIs(), c("3000", "3300", "3600", "3900"))
 calcSUVR <- function(tac, volumes, ROI_def, SUVR_def, corrected=TRUE) {
   
   tac <- data.frame(tac, row.names=1)

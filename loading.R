@@ -64,13 +64,14 @@ volumesFromVoistatTAC <- function(voistat_file, commontime="30") {
 voistatScraper <- function(voistat_file, ROI_def=standardROIs(), model="VALUE") {
     
     voistat <- read.csv(voistat_file, sep="\t", skip=6, header=T,
-    stringsAsFactors=F)
+                        stringsAsFactors=F)
     ROIs <- voistat$VoiName.Region...string.
     Volume..ccm. <- voistat$Volume..ccm.
     Averaged..1.1. <- voistat$Averaged..1.1.
     
     rawvolumes <- data.frame(ROIs, Volume..ccm., row.names=1)
     storedvalues <- data.frame(ROIs, Averaged..1.1., row.names=1)
+    
     # Calculate the relative volumes for the subROIs and ROIs
     proportiontable <- calcRelativeVolumes(rawvolumes, ROI_def)
     
