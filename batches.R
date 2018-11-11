@@ -10,48 +10,42 @@ source("calculateSUVR.R")
 source("fullTAC.R")
 source("utilities.R")
 source("ROI_definitions.R")
+source("loading.R")
 
 # This function runs the SUVR calculation on a list of participants specified in
-# a vector of participant IDs, where there are corresponding files called
-# ID_BPnd.csv and ID_TAC.tac. It returns the data frame and also saves a CSV
-# file (name in arguments)
-batchSUVR <- function(participants, ROI_def, SUVR_def, outputfilename,
-                      corrected=TRUE, volfromBPnd=FALSE, tacfilesuffix=".tac") {
+# a vector of participant IDs, where there are corresponding files named by
+# ID with a specified suffix. It returns the data frame and also saves a CSV
+# file (name in arguments).
+batchSUVR <- function(participants, tac_format="PMOD", tac_file_suffix=".tac",
+                      vol_format="Voistat", vol_file_suffix="_TAC.voistat",
+                      ROI_def, SUVR_def, outputfilename, corrected=TRUE) {
+                          
+  #Sets up the output file by using the first participant as a template.
+  vol_file = paste(participants[1], vol_file_suffix, sep="")
+  vols <- calcRelativeVolumes(loadVolumes(vol_file, format=vol_format),
+                              ROI_def)
 
-  if (volfromBPnd) {
-    BPnd_file = paste(participants[1], "_BPnd.csv", sep="")
-    vols <- calcRelativeVolumes(volumesFromBPndPaste(BPnd_file), ROI_def)
-  }  else {
-    voistat_file = paste(participants[1], ".voistat", sep="")
-    vols <- calcRelativeVolumes(volumesFromVoistatTAC(voistat_file), ROI_def)
-    }
-  TAC_file = paste(participants[1], tacfilesuffix, sep="")
+  TAC_file = paste(participants[1], tac_file_suffix, sep="")
   
   first <- calcSUVR(TAC_file, ROI_def, vols, SUVR_def, corrected)
   master <- t(first)
   master <- master[-1,]
 
+  # Runs through each participant to calculate the SUVR and store it.
   for (each in participants) {
     print(paste("Working on...", each))
-    TAC_file = paste(each, tacfilesuffix, sep="")
-  
-    if (volfromBPnd) {
-    BPnd_file = paste(each, "_BPnd.csv", sep="")
-    vols <- calcRelativeVolumes(volumesFromBPndPaste(BPnd_file), ROI_def)
-    }  else {
-      voistat_file = paste(each, ".voistat", sep="")
-      vols <- calcRelativeVolumes(volumesFromVoistatTAC(voistat_file), ROI_def)
-      }
+
+    tac <- loadTACfile(paste(each, tac_file_suffix, sep=""), tac_format)
+    vols <- calcRelativeVolumes(loadVolume(paste(each, vol_file_suffix, sep="")), ROI_def)
     
-    BPnd_file = paste(each, "_BPnd.csv", sep="")
-    
-    SUVR <- calcSUVR(TAC_file, ROI_def, vols, SUVR_def, corrected)
+    SUVR <- calcSUVR(tac, ROI_def, vols, SUVR_def, corrected)
     trans <- t(SUVR)
     row.names(trans) <- each
     master <- rbind(master,trans)
   }
+  
+  # Save file and return the data.
   write.csv(master, file = outputfilename)
-
   return(master)
 }
 

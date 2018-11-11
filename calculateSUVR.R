@@ -17,9 +17,9 @@ source("loading.R")
 # for example: c("3000", "3300", "3600", "3900")
 # corrected is TRUE for partial volume correction, where it is stored as _C in
 # the same tac file provided.
-calcSUVR <- function(TAC_file, volumes, ROI_def, SUVR_def, corrected=TRUE) {
+calcSUVR <- function(tac, volumes, ROI_def, SUVR_def, corrected=TRUE) {
   
-  tac <- data.frame(TAC_file, row.names=1)
+  tac <- data.frame(tac, row.names=1)
   proportiontable <- calcRelativeVolumes(volumes, ROI_def)
   denominator <- length(SUVR_def)
 
