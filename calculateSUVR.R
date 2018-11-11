@@ -11,7 +11,7 @@ source("utilities.R")
 # calcSUVR
 # Use relative volumes to calculate weighted SUVRs
 # proportiontable is the output of calcRelativeVolumes()
-# TAC_file is the name and path of the TAC_file
+# TAC_file is the name and path of the .TAC file
 # SUVR_def is a vector of the start times for the TACs to be used 
 # for example: c("3000", "3300", "3600", "3900")
 calcSUVR <- function(TAC_file, ROI_def, proportiontable, SUVR_def, 
@@ -55,45 +55,6 @@ calcSUVR <- function(TAC_file, ROI_def, proportiontable, SUVR_def,
 
   return(SUVRtable)
 }
-
-
-# .voistat files for each model contain data for each subROI, this 
-# extracts mean data.
-voistatScraper <- function(voistat_file, ROI_def=standardROIs()) {
-
-  voistat <- read.csv(voistat_file, sep="\t", skip=6, header=T, 
-                      stringsAsFactors=F)
-  ROIs <- voistat$VoiName.Region...string.
-  Volume..ccm. <- voistat$Volume..ccm.
-  Averaged..1.1. <- voistat$Averaged..1.1.  
-
-  rawvolumes <- data.frame(ROIs, Volume..ccm., row.names=1)
-  storedvalues <- data.frame(ROIs, Averaged..1.1., row.names=1)
-  # Calculate the relative volumes for the subROIs and ROIs
-  proportiontable <- calcRelativeVolumes(rawvolumes, ROI_def)
-  
-  summarytable <- data.frame(
-    row.names = c(names(ROI_def@hemilobe), names(ROI_def@lobe), "totalcortical"),
-    VALUE = rep(0, length(c(names(ROI_def@hemilobe), names(ROI_def@lobe)))+1)
-    )
-  
-  # Creates a mean table (data.frame to store the means and relative 
-  # volumes of each ROI), and fills it.
-  means <- fill_table(mean_table(ROI_def), storedvalues, ROI_def, 
-    proportiontable, headername="Averaged..1.1.")
-  
-  VALUEtable <- create_final_table(ROI_def, "VALUE")
-
-  VALUEtable <- weighted_average(ROI_def@hemilobe, names(ROI_def@hemilobe),
-    means, VALUEtable, "VALUE", "proportion_of_hemilobe")
-  VALUEtable <- weighted_average(ROI_def@lobe, names(ROI_def@lobe), means,
-    VALUEtable, "VALUE", "proportion_of_lobe")
-  VALUEtable <- weighted_average(ROI_def@totalcortical, "totalcortical", 
-    means, VALUEtable, "VALUE", "proportion_of_total")  
-
-  return(VALUEtable)
-}
-
 
 # A function to find the upslope of the TAC, from start to peak.
 peakSlope <- function(TAC_file) {
