@@ -6,8 +6,8 @@
 ## Beta version--check all work ##
 ##################################
 
-source("utilities.R")
-source("loading.R")
+#source("utilities.R")
+#source("loading.R")
 
 #' Calculate weighted SUVRs for specified regions of interest
 #'

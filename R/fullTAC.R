@@ -6,8 +6,8 @@
 ## Beta version--check all work ##
 ##################################
 
-source("utilities.R")
-source("loading.R")
+#source("utilities.R")
+#source("loading.R")
 
 # This function calculates the weighted time-activity curves for ROIs by 
 # combining smaller ROIs into larger ones as specified in ROI_def, by getting

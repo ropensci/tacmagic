@@ -6,11 +6,11 @@
 ## Beta version--check all work ##
 ##################################
 
-source("calculateSUVR.R")
-source("fullTAC.R")
-source("utilities.R")
-source("ROI_definitions.R")
-source("loading.R")
+#source("calculateSUVR.R")
+#source("fullTAC.R")
+#source("utilities.R")
+#source("ROI_definitions.R")
+#source("loading.R")
 
 # This function runs the SUVR calculation on a list of participants specified in
 # a vector of participant IDs, where there are corresponding files named by
