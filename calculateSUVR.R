@@ -7,6 +7,7 @@
 ##################################
 
 source("utilities.R")
+source("loading.R")
 
 # calcSUVR
 # Use relative volumes to calculate weighted SUVRs
@@ -16,9 +17,9 @@ source("utilities.R")
 # for example: c("3000", "3300", "3600", "3900")
 calcSUVR <- function(TAC_file, ROI_def, proportiontable, SUVR_def, 
                      corrected=TRUE) {
-  # Open the TAC file and get the number of TAC values in the SUVR definition 
-  # (e.g. SUVR40-60)
-  tac <- read.table(TAC_file, header=TRUE, row.names=1)
+  
+  tac <- data.frame(TAC_file, row.names=1)
+  
   denominator <- length(SUVR_def)
 
   # Creates a data.frame to store the means (over the SUVR window) and relative 

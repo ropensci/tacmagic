@@ -16,13 +16,13 @@ source("loading.R")
 # totalcortical ROIs. The main work is done by weighted_TAC, and this simply 
 # runs it 3 times. The user would only have to use this function.
 calcTAC <- function(
-    tac_file,   #tac file from loadTACfile() function.
-    voistat_file, #filename of the voistat file ("subject.voistat") 
+    tac,   #tacs from loadTACfile() function.
+    raw_volumes, #load raw volumes from loadVolumes()
     ROI_def=standardROIs(), #see ROI_definitions.R
     merge=F # combined table of the merged ROIs and the old individual ROIs
     ) {
-  vols <- calcRelativeVolumes(volumesFromVoistatTAC(voistat_file), ROI_def)
-  TACtable <- emptyTACtable(tac_file, ROI_def)
+  vols <- calcRelativeVolumes(raw_volumes, ROI_def)
+  TACtable <- emptyTACtable(tac, ROI_def)
 
   TACtable <- weighted_TAC(ROI_def@hemilobe, names(ROI_def@hemilobe), tac,
                           TACtable, "proportion_of_hemilobe", vols)

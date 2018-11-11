@@ -14,17 +14,24 @@
 # TAC files
 
 
-# PMOD tac file; simple function because this file is prototype of TAC structure
-# for PEAR.
+# Loads TAC information for use by other functions. Default is PMOD .tac format.
 loadTACfile <- function(filename, format="PMOD") {
     if (format == "PMOD") {
         tac <- read.csv(filename, sep="")
-    } else stop("Speficied format not supported.")
+    } else stop("Speficied format for tac not supported.")
     return(tac)
 }
 
 
 # ROI volume data
+
+loadVolumes <- function(filename, format="Voistat", commontime="30") {
+    if (format == "Voistat") {
+        volumes <- volumesFromVoistatTAC(filename, commontime)
+    } else if (format == "BPndPaste") {
+        volumes <- volumesFromBPndPaste(filename)
+    } else stop("Specified format for volume data not supported.")
+}
 
 # BPnd data can be copied from PNEURO and saved as a CSV. It contains ROI volume
 # information. This extracts that.
