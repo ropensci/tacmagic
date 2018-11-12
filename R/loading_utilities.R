@@ -31,3 +31,16 @@ volumesFromVoistatTAC <- function(voistat_file, commontime="30") {
     Volume..ccm. <- voistat[, "Volume..ccm."][u]
     return(data.frame(ROIs, Volume..ccm., row.names=1))
 }
+
+
+validateTACtable <- function(tac) {
+  # Checks to ensure there are start and stop times in the first 2 columns.  
+  if (FALSE == (startsWith(names(tac)[1], "start") && 
+                startsWith(names(tac)[2], "end"))) {
+    stop("The first two columns of the TAC file should be start and end times, 
+          with headers starting with 'start' and 'end'.")
+  }
+
+  return(TRUE)
+}
+

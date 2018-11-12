@@ -6,19 +6,27 @@
 ## Beta version--check all work ##
 ##################################
 
-#source("utilities.R")
-#source("loading.R")
-
 #' Calculate weighted SUVRs for specified regions of interest
+#'
+#' When smaller ROIs need to be combined into larger ROIs, e.g. when TACs have
+#' been calculated for components of the frontal lobe, but an SUVR is desired
+#' for the entire frontal lobe, the TACs need to be combined, and the relative
+#' volumes of each needs to be taken into account. This function calculates 
+#' those weighted means.
 #'
 #'@param tac The time-activity curve data from loading function.
 #'@param volumes The ROI volume data from loading function
 #'@param SUVR_def is a vector of the start times for window to be used in SUVR
-#'@param corrected For PVC, true where the data is stored as _C in same tac file.
+#'@param corrected For PVC, true where the data is stored as _C in same tac file
 #'@return A table of SUVR values for the specified ROIs
-#'@examples calcSUVR(p1tac, p1vol, standardROIs(), c("3000", "3300", "3600", "3900"))
+#'@examples 
+#' calcSUVR(p1tac, p1vol, standardROIs(), c("3000", "3300", "3600", "3900"))
 calcSUVR <- function(tac, volumes, ROI_def, SUVR_def, corrected=TRUE) {
-  
+
+  if (FALSE == verify_window_durations(tac, SUVR_def)) {
+    warning("Frames durations are of unequal length.")
+  }
+
   tac <- data.frame(tac, row.names=1)
   proportiontable <- calcRelativeVolumes(volumes, ROI_def)
   denominator <- length(SUVR_def)

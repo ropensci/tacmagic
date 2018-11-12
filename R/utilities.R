@@ -113,6 +113,17 @@ weighted_average <- function(ROI_def_val, ROI_def_names, means, finaltable,
   return(finaltable)
 }
 
+verify_window_durations <- function(tac, window) {
+
+  frame_durations <- tac$end - tac$start
+  window_durations <- frame_durations[tac$start.seconds. %in% window]
+  if (var(window_durations) == 0) { # 0 if all lengths are equal.
+    all_equal <- TRUE    
+  } else {
+    all_equal <- FALSE
+    }
+  return (all_equal) 
+}
 
 ### Utilities for TAC calculation.
 

@@ -14,23 +14,25 @@
 # TAC files
 
 
-#' Loads TAC from file for use by other functions. Default is PMOD .tac format.
+#' Loads TAC from file for use by other functions (default is PMOD .tac format)
 #'
 #'@param filename (e.g. participant.TAC)
 #'@param format (default, and only option currently, is .tac as from PMOD.
 #'@return data.frame with loaded TAC data
 #'@examples loadTACfile("/dir/participant1.tac")
 loadTACfile <- function(filename, format="PMOD") {
-    if (format == "PMOD") {
-        tac <- read.csv(filename, sep="")
-    } else stop("Speficied format for tac not supported.")
-    return(tac)
+  if (format == "PMOD") {
+      tac <- read.csv(filename, sep="")
+  } else stop("Speficied format for tac not supported.")
+
+  validateTACtable(tac)
+  return(tac)
 }
 
 
 # ROI volume data
 
-#' Loads ROI volumes from file for use by other functions.
+#' Loads ROI volumes from file for use by other functions
 #'
 #'@param filename (e.g. participant.voistat)
 #'@param format (default is the TAC .voistat format from PMOD).
