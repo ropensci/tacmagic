@@ -22,23 +22,23 @@ batchSUVR <- function(participants, tac_format="PMOD", tac_file_suffix=".tac",
                           
   #Sets up the output file by using the first participant as a template.
   vol_file = paste(participants[1], vol_file_suffix, sep="")
-  vols <- calcRelativeVolumes(loadVolumes(vol_file, format=vol_format),
-                              ROI_def)
-
-  TAC_file = paste(participants[1], tac_file_suffix, sep="")
-  
-  first <- calcSUVR(TAC_file, ROI_def, vols, SUVR_def, corrected)
+  vols <- loadVolumes(vol_file, format=vol_format)
+  print("Loading first tac to create template table.")
+  first_tac <- loadTACfile(paste(participants[1], tac_file_suffix, sep=""), tac_format)
+  print("Loaded first tac file. Calculating SUVR...")
+  first <- calcSUVR(tac=first_tac, volumes=vols, ROI_def=ROI_def, SUVR_def=SUVR_def, corrected=corrected)
+  print("First SUVRs calculated.")
   master <- t(first)
   master <- master[-1,]
-
+  print("Empty master table complete; iterating through all participants.")
   # Runs through each participant to calculate the SUVR and store it.
   for (each in participants) {
     print(paste("Working on...", each))
 
     tac <- loadTACfile(paste(each, tac_file_suffix, sep=""), tac_format)
-    vols <- calcRelativeVolumes(loadVolume(paste(each, vol_file_suffix, sep="")), ROI_def)
+    vols <- loadVolumes(paste(each, vol_file_suffix, sep=""))
     
-    SUVR <- calcSUVR(tac, ROI_def, vols, SUVR_def, corrected)
+    SUVR <- calcSUVR(tac, vols, ROI_def, SUVR_def, corrected)
     trans <- t(SUVR)
     row.names(trans) <- each
     master <- rbind(master,trans)
