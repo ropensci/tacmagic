@@ -6,19 +6,30 @@
 ## Beta version--check all work ##
 ##################################
 
-#source("calculateSUVR.R")
-#source("fullTAC.R")
-#source("utilities.R")
-#source("ROI_definitions.R")
-#source("loading.R")
 
-# This function runs the SUVR calculation on a list of participants specified in
-# a vector of participant IDs, where there are corresponding files named by
-# ID with a specified suffix. It returns the data frame and also saves a CSV
-# file (name in arguments).
+#' Calculate weighted SUVRs for specified ROIs in a participant batch
+#'
+#' For a vector of participant IDs and correspondingly named tac and volume 
+#' files, this calculates SUVR using calcSUVR and stores in a single table.
+#'
+#' See calcSUVR() for how SUVR is calculated.
+#'
+#'@param participants A vector of participant IDs
+#'@param tac_format See loadTACfile()
+#'@param tac_file_suffix This is how the ID corresponds to the TAC files
+#'@param vol_format See loadVolumes()
+#'@param vol_file_suffix This is how the ID corresponds to the volume files
+#'@param ROI_def Object that defines combined ROIs, see ROI_definitions.R
+#'@param SUVR_def is a vector of the start times for window to be used in SUVR
+#'@param corrected For PVC, true where the data is stored as _C in same tac file
+#'@param outputfilename Specify a filename to save the data.
+#'@param corrected See calcSUVR() to determine whether this applies.
+#'@return A table of SUVR values for the specified ROIs for all participants.
+#'@examples 
+#' batchSUVR(participants, ROI_def=standardROIs(), SUVR_def=c("3000", "3300", "3600", "3900"), outputfilename="batch1.csv")
 batchSUVR <- function(participants, tac_format="PMOD", tac_file_suffix=".tac",
                       vol_format="Voistat", vol_file_suffix="_TAC.voistat",
-                      ROI_def, SUVR_def, outputfilename, corrected=TRUE) {
+                      ROI_def, SUVR_def, outputfilename, corrected=FALSE) {
                           
   #Sets up the output file by using the first participant as a template.
   vol_file = paste(participants[1], vol_file_suffix, sep="")
