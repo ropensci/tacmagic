@@ -64,13 +64,8 @@ batchSUVR <- function(participants, tac_format="PMOD", tac_file_suffix=".tac",
 batchSlope <- function(participants, ROI_def, outputfilename, corrected=TRUE,
                        volfromBPnd=FALSE, tacfilesuffix=".tac") {
 
-  if (volfromBPnd) {
-    BPnd_file = paste(participants[1], "_BPnd.csv", sep="")
-    vols <- calcRelativeVolumes(volumesFromBPndPaste(BPnd_file), ROI_def)
-  }  else {
-    voistat_file = paste(participants[1], ".voistat", sep="")
-    vols <- calcRelativeVolumes(volumesFromVoistatTAC(voistat_file), ROI_def)
-    }
+  vols <- calcRelativeVolumes(loadVolumes(BPnd_file), ROI_def)
+
   TAC_file = paste(participants[1], tacfilesuffix, sep="")
   
   cat("Current TAC file:", TAC_file)
@@ -84,14 +79,8 @@ batchSlope <- function(participants, ROI_def, outputfilename, corrected=TRUE,
     print(paste("Working on...", each))
     TAC_file = paste(each, tacfilesuffix, sep="")
   
-    if (volfromBPnd) {
-    BPnd_file = paste(each, "_BPnd.csv", sep="")
-    vols <- calcRelativeVolumes(volumesFromBPndPaste(BPnd_file), ROI_def)
-    }  else {
-      voistat_file = paste(each, ".voistat", sep="")
-      vols <- calcRelativeVolumes(volumesFromVoistatTAC(voistat_file), ROI_def)
-      }
-    
+    vols <- calcRelativeVolumes(loadVolumes(BPnd_file), ROI_def)
+   
     BPnd_file = paste(each, "_BPnd.csv", sep="")
     
     slope <- peakSlope(TAC_file)
