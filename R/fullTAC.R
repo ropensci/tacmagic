@@ -6,9 +6,6 @@
 ## Beta version--check all work ##
 ##################################
 
-#source("utilities.R")
-#source("loading.R")
-
 #' Calculate weighted time-activity curves for specified regions of interest
 #'
 #'@param tac The time-activity curve data from loading function.
@@ -35,23 +32,6 @@ calcTAC <- function(tac, volumes, ROI_def, merge=F) {
     }
     
     return(calculated_TACs)
-}
-
-legacy_calcTAC <- function(tac, raw_volumes, ROI_def, merge=F) {
-    vols <- calcRelativeVolumes(raw_volumes, ROI_def)
-    TACtable <- emptyTACtable(tac, ROI_def)
-    
-    TACtable <- weighted_TAC(ROI_def@hemilobe, names(ROI_def@hemilobe), tac,
-    TACtable, "proportion_of_hemilobe", vols)
-    TACtable <- weighted_TAC(ROI_def@lobe, names(ROI_def@lobe), tac,
-    TACtable, "proportion_of_lobe", vols)
-    TACtable <- weighted_TAC(ROI_def@totalcortical, "totalcortical", tac,
-    TACtable, "proportion_of_total", vols)
-    if (merge) {
-        TACtable <- data.frame(TACtable, tac)
-        
-    }
-    return(TACtable)
 }
 
 #' Calculate group mean TAC for a list of participants in weighted average ROIs.
