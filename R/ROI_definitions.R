@@ -11,7 +11,7 @@
 # New ROI definitions, as list, because simplified functions using
 # weighted.average() do not need the structure from the old standardROIs().
 # This will replace the old one when all functions are updated.
-standardROIs <- function(PVC=F) {
+standardROIs <- function() {
     
   frontal_def <- c("FL_mid_fr_G", "FL_precen_G", "FL_strai_G", "FL_OFC_AOG",
   "FL_inf_fr_G", "FL_sup_fr_G", "FL_OFC_MOG", "FL_OFC_LOG", "FL_OFC_POG",
@@ -58,12 +58,7 @@ standardROIs <- function(PVC=F) {
   occipital=occipital, cingulate=cingulate,
     
   cerebellum=cerebellum, totalcortical=totalcortical)
-    
-  if (PVC) {
-    for (i in 1:length(ROIs)) ROIs[i] <- lapply(ROIs[i], paste, "_C", sep="")
-    names(ROIs) <- paste(names(ROIs), "_C", sep="")
-  }
-
+  
   return(ROIs)
 }
 

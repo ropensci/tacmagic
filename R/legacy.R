@@ -270,3 +270,143 @@ legacy_fullROIs <- function() {
     
     return(fullROIs)
 }
+
+
+# These steps calculate weighted avg for each hemilobe/lobe by iterating through
+# each ROI name (from hemilobe names) and ROI in ROI_def@hemilobe/lobe. This
+# speaks to the critical importance of both sources having the same order, so be
+# cautious if changing the standardROIs()/fullROIs() function.
+legacy_weighted_average <- function(ROI_def_val, ROI_def_names, means, finaltable,
+headername, proportion_of_text) {
+    counter <- 1
+    temp <- 0
+    
+    for (ROI in ROI_def_val) {
+        for (subROI in ROI) {
+            temp <- temp + (means[subROI, "mean"] * means[subROI, proportion_of_text])
+        }
+        
+        finaltable[ROI_def_names[counter], headername] <- temp
+        temp <- 0
+        counter <- counter + 1
+    }
+    
+    return(finaltable)
+}
+
+verify_window_durations <- function(tac, window) {
+    
+    frame_durations <- tac$end - tac$start
+    window_durations <- frame_durations[tac$start.seconds. %in% window]
+    if (var(window_durations) == 0) { # 0 if all lengths are equal.
+        all_equal <- TRUE
+    } else {
+        all_equal <- FALSE
+    }
+    return (all_equal)
+}
+
+
+### Utilities for TAC calculation.
+
+# This creates a data.frame to hold the mean TAC from the ROIs specified in
+# ROI_def.
+legacy_emptyTACtable <- function(tac, ROI_def, do_total_cortical=TRUE, merge=F) {
+    
+    #Warning: ensure the tac file has first 2 columns = start and end
+    TACtable <- tac[1:2]
+    names(TACtable) <- c("start", "end")
+    frames <- length(TACtable$start)
+    
+    ROIs <- c(names(ROI_def@hemilobe), names(ROI_def@lobe))
+    for (ROI in ROIs) {
+        TACtable <- data.frame(TACtable, rep(0, frames))
+        names(TACtable)[ncol(TACtable)] <- ROI
+    }
+    
+    if (do_total_cortical) {
+        totalcortical <- rep(0, frames)
+        TACtable <- data.frame(TACtable, totalcortical)
+    }
+    
+    if (merge) {
+        TACtable <- data.frame(TACtable, (tac*0))
+    }
+    
+    return(TACtable)
+}
+
+
+# This creates TACs for ROIs as specified in ROI_def, i.e. takes the weighted
+# average of TACs of each region that makes up the ROI.
+legacy_weighted_TAC <- function(ROI_def_val, ROI_def_names, tac, TACtable,
+proportion_of_text, vols) {
+    # number of time points in the TAC
+    frames <- length(TACtable$start)
+    
+    counter <- 1
+    temp <- 0
+    
+    for (ROI in ROI_def_val) {
+        for (subROI in ROI) {
+            temp <- temp + (tac[subROI] * vols[subROI, proportion_of_text])
+        }
+        
+        names(temp) <- ROI_def_names[counter]
+        TACtable[, ROI_def_names[counter]] <- temp
+        temp <- rep(0, frames)
+        counter <- counter + 1
+    }
+    
+    return(TACtable)
+}
+
+
+
+## SUVR and related functions.
+
+# In order to find the average SUVR, BPnd, or other value for an ROI, the
+# relative size of each region must be calculated so that the average is
+# weighted appropriately. This function calculates the weigtings.
+# For ROI definitions, use ROI_definitions.R
+# For rawvolumes, use utilities.R (volumesFromBPndPaste, volumesFromVoistatTAC)
+legacy_calcRelativeVolumes <- function(rawvolumes, ROI_def) {
+    
+    # Prepare the output table.
+    proportion_of_hemilobe <- rep(NA, length(rownames(rawvolumes)))
+    proportion_of_lobe <- rep(NA, length(rownames(rawvolumes)))
+    proportion_of_total <- rep(NA, length(rownames(rawvolumes)))
+    proportiontable <- data.frame(row.names=rownames(rawvolumes),
+    proportion_of_lobe, proportion_of_hemilobe, proportion_of_total)
+    
+    # first iterates through each ROI in hemilobe, for example "leftfrontal"
+    
+    for (ROI in ROI_def@hemilobe) {
+        # total is the sum of the ROI within hemilobe
+        # e.g. total for "leftfrontal"
+        total <- sum(rawvolumes[ROI, "Volume..ccm."])
+        # now going within e.g. leftfrontal, to get the proportion
+        # each atlas ROI makes of e.g. leftfrontal
+        for (subROI in ROI) {
+            proportiontable[subROI, "proportion_of_hemilobe"] <- rawvolumes[subROI,
+            "Volume..ccm."] / total
+        }
+    }
+    
+    for (ROI in ROI_def@lobe) {
+        lobetotal <- sum(rawvolumes[ROI, "Volume..ccm."])
+        for (subROI in ROI) {
+            proportiontable[subROI, "proportion_of_lobe"] <- rawvolumes[subROI,
+            "Volume..ccm."] / lobetotal
+        }
+    }
+    
+    totalcort <- sum(rawvolumes[unlist(ROI_def@totalcortical), "Volume..ccm."])
+    
+    for (subROI in ROI_def@totalcortical) {
+        proportiontable[subROI, "proportion_of_total"] <- rawvolumes[subROI,
+        "Volume..ccm."] / totalcort
+    }
+    
+    return(proportiontable)
+}

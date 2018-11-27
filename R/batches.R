@@ -29,7 +29,7 @@
 #' batchSUVR(participants, ROI_def=standardROIs(), SUVR_def=c("3000", "3300", "3600", "3900"), outputfilename="batch1.csv")
 batchSUVR <- function(participants, tac_format="PMOD", tac_file_suffix=".tac",
                       vol_format="Voistat", vol_file_suffix="_TAC.voistat",
-                      ROI_def, SUVR_def, outputfilename, corrected=FALSE) {
+                      ROI_def, SUVR_def, outputfilename) {
                           
   #Sets up the output file by using the first participant as a template.
   vol_file = paste(participants[1], vol_file_suffix, sep="")
@@ -37,7 +37,7 @@ batchSUVR <- function(participants, tac_format="PMOD", tac_file_suffix=".tac",
   print("Loading first tac to create template table.")
   first_tac <- loadTACfile(paste(participants[1], tac_file_suffix, sep=""), tac_format)
   print("Loaded first tac file. Calculating SUVR...")
-  first <- calcSUVR(tac=first_tac, volumes=vols, ROI_def=ROI_def, SUVR_def=SUVR_def, corrected=corrected)
+  first <- calcSUVR(tac=first_tac, volumes=vols, ROI_def=ROI_def, SUVR_def=SUVR_def)
   print("First SUVRs calculated.")
   master <- t(first)
   master <- master[-1,]
@@ -49,7 +49,7 @@ batchSUVR <- function(participants, tac_format="PMOD", tac_file_suffix=".tac",
     tac <- loadTACfile(paste(each, tac_file_suffix, sep=""), tac_format)
     vols <- loadVolumes(paste(each, vol_file_suffix, sep=""))
     
-    SUVR <- calcSUVR(tac, vols, ROI_def, SUVR_def, corrected)
+    SUVR <- calcSUVR(tac, vols, ROI_def, SUVR_def)
     trans <- t(SUVR)
     row.names(trans) <- each
     master <- rbind(master,trans)
@@ -61,7 +61,7 @@ batchSUVR <- function(participants, tac_format="PMOD", tac_file_suffix=".tac",
 }
 
 #Batch slope
-batchSlope <- function(participants, ROI_def, outputfilename, corrected=TRUE,
+batchSlope <- function(participants, ROI_def, outputfilename,
                        volfromBPnd=FALSE, tacfilesuffix=".tac") {
 
   vols <- calcRelativeVolumes(loadVolumes(BPnd_file), ROI_def)
@@ -70,23 +70,15 @@ batchSlope <- function(participants, ROI_def, outputfilename, corrected=TRUE,
   
   cat("Current TAC file:", TAC_file)
 
-  firstslope <- peakSlope(TAC_file)
-  first <- peakSlopeROI(firstslope, ROI_def, vols, corrected)
+  first <- peakSlope(TAC_file)
   master <- t(first)
   master <- master[-1,]
   
   for (each in participants) {
     print(paste("Working on...", each))
     TAC_file = paste(each, tacfilesuffix, sep="")
-  
-    vols <- calcRelativeVolumes(loadVolumes(BPnd_file), ROI_def)
-   
-    BPnd_file = paste(each, "_BPnd.csv", sep="")
-    
     slope <- peakSlope(TAC_file)
-    slopeROI <- peakSlopeROI(slope, ROI_def, vols, corrected)
-
-    trans <- t(slopeROI)
+    trans <- t(slope)
     row.names(trans) <- each
     master <- rbind(master,trans)
   }
@@ -95,8 +87,7 @@ batchSlope <- function(participants, ROI_def, outputfilename, corrected=TRUE,
 }
 
 #A function to run voistatScraper on a list of participants
-batchVoistat <- function(participants, ROI_def=standardROIs(), outputfilename,
-                         filesuffix) {
+batchVoistat <- function(participants, ROI_def, outputfilename, filesuffix) {
 
   voistat_file = paste(participants[1], filesuffix, ".voistat", sep="")
 

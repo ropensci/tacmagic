@@ -14,14 +14,21 @@
 #'@param merge If true, includes the original ROIs in the output data.
 #'@return Time-activity curves for the specified ROIs
 #'@examples calcTAC(p1tac, p1vol, standardROIs(), merge=T)
-calcTAC <- function(tac, volumes, ROI_def, merge=F) {
+calcTAC <- function(tac, volumes, ROI_def, merge=F, PVC=F) {
+    
+    ROI_PVC <- ROI_def
+    
+    if (PVC) {
+        for (i in 1:length(ROI_PVC)) ROI_PVC[i] <- lapply(ROI_PVC[i], paste, "_C", sep="")
+    }
+    
     # Setup the output data.frame
     m <- matrix(nrow=length(tac[,1]), ncol=length(ROI_def))
     calculated_TACs <- as.data.frame(m)
     names(calculated_TACs) <- names(ROI_def)
     # Calculate the weighted mean TACs for each ROI in the definition list.
     for (i in 1:length(ROI_def)) {
-        calculated_TACs[i] <- apply(tac[,ROI_def[[i]]], 1,  weighted.mean, volumes[ROI_def[[i]],])
+        calculated_TACs[i] <- apply(tac[,ROI_PVC[[i]]], 1,  weighted.mean, volumes[ROI_def[[i]],])
     }
     
     # Prepare the output data frame.
