@@ -12,28 +12,26 @@
 #' Calculate weighted time-activity curves for specified regions of interest
 #'
 #'@param tac The time-activity curve data from loading function.
-#'@param raw_volumes The ROI volume data from loading function
+#'@param volumes The ROI volume data from loading function
 #'@param ROI_def The definition of ROIs by combining smaller ROIs from TAC file.
 #'@param merge If true, includes the original ROIs in the output data.
 #'@return Time-activity curves for the specified ROIs
 #'@examples calcTAC(p1tac, p1vol, standardROIs(), merge=T)
-calcTAC <- function(tac, raw_volumes, ROI_def, merge=F) {
-  vols <- calcRelativeVolumes(raw_volumes, ROI_def)
-  TACtable <- emptyTACtable(tac, ROI_def)
-
-  TACtable <- weighted_TAC(ROI_def@hemilobe, names(ROI_def@hemilobe), tac,
-                          TACtable, "proportion_of_hemilobe", vols)
-  TACtable <- weighted_TAC(ROI_def@lobe, names(ROI_def@lobe), tac,
-                          TACtable, "proportion_of_lobe", vols)
-  TACtable <- weighted_TAC(ROI_def@totalcortical, "totalcortical", tac, 
-                          TACtable, "proportion_of_total", vols)
-  if (merge) {
-    TACtable <- data.frame(TACtable, tac)
-    
+calcTac <- function(tac, volumes, ROI_def, merge=F) {
+  # Setup the output data.frame
+  m <- matrix(nrow=length(tac[,1]), ncol=length(ROI_def))
+  calculated_TACs <- as.data.frame(m)
+  names(calculated_TACs) <- names(ROI_def)
+  # Calculate the weighted mean TACs for each ROI in the definition list.
+  for (i in 1:length(ROI_def)) {
+    calculated_TACs[i] <- apply(tac[,ROI_def[[i]]], 1,  weighted.mean, volumes[ROI_def[[i]],])
   }
-  return(TACtable)
-}
 
+  if (merge) {
+    calculated_TACs <- data.frame(calculated_TACs, tac)
+  }    
+  return(calculated_TACs)
+}
 
 #' Calculate group mean TAC for a list of participants in weighted average ROIs.
 #'
