@@ -17,20 +17,41 @@
 #'@param merge If true, includes the original ROIs in the output data.
 #'@return Time-activity curves for the specified ROIs
 #'@examples calcTAC(p1tac, p1vol, standardROIs(), merge=T)
-calcTac <- function(tac, volumes, ROI_def, merge=F) {
-  # Setup the output data.frame
-  m <- matrix(nrow=length(tac[,1]), ncol=length(ROI_def))
-  calculated_TACs <- as.data.frame(m)
-  names(calculated_TACs) <- names(ROI_def)
-  # Calculate the weighted mean TACs for each ROI in the definition list.
-  for (i in 1:length(ROI_def)) {
-    calculated_TACs[i] <- apply(tac[,ROI_def[[i]]], 1,  weighted.mean, volumes[ROI_def[[i]],])
-  }
+calcTAC <- function(tac, volumes, ROI_def, merge=F) {
+    # Setup the output data.frame
+    m <- matrix(nrow=length(tac[,1]), ncol=length(ROI_def))
+    calculated_TACs <- as.data.frame(m)
+    names(calculated_TACs) <- names(ROI_def)
+    # Calculate the weighted mean TACs for each ROI in the definition list.
+    for (i in 1:length(ROI_def)) {
+        calculated_TACs[i] <- apply(tac[,ROI_def[[i]]], 1,  weighted.mean, volumes[ROI_def[[i]],])
+    }
+    
+    # Prepare the output data frame.
+    if (merge) {
+      calculated_TACs <- data.frame(tac, calculated_TACs)
+    } else {
+        calculated_TACs <- data.frame(tac[1:2], calculated_TACs)
+    }
+    
+    return(calculated_TACs)
+}
 
-  if (merge) {
-    calculated_TACs <- data.frame(calculated_TACs, tac)
-  }    
-  return(calculated_TACs)
+legacy_calcTAC <- function(tac, raw_volumes, ROI_def, merge=F) {
+    vols <- calcRelativeVolumes(raw_volumes, ROI_def)
+    TACtable <- emptyTACtable(tac, ROI_def)
+    
+    TACtable <- weighted_TAC(ROI_def@hemilobe, names(ROI_def@hemilobe), tac,
+    TACtable, "proportion_of_hemilobe", vols)
+    TACtable <- weighted_TAC(ROI_def@lobe, names(ROI_def@lobe), tac,
+    TACtable, "proportion_of_lobe", vols)
+    TACtable <- weighted_TAC(ROI_def@totalcortical, "totalcortical", tac,
+    TACtable, "proportion_of_total", vols)
+    if (merge) {
+        TACtable <- data.frame(TACtable, tac)
+        
+    }
+    return(TACtable)
 }
 
 #' Calculate group mean TAC for a list of participants in weighted average ROIs.
