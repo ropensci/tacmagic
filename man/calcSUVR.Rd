@@ -4,26 +4,25 @@
 \alias{calcSUVR}
 \title{Calculate weighted SUVRs for specified regions of interest}
 \usage{
-calcSUVR(tac, volumes, ROI_def, SUVR_def, corrected = TRUE)
+calcSUVR(tac, volumes, ROI_def, SUVR_def, reference = "cerebellum")
 }
 \arguments{
-\item{tac}{The time-activity curve data from loading function.}
+\item{tac}{The time-activity curve data from loading function}
 
 \item{volumes}{The ROI volume data from loading function}
 
 \item{SUVR_def}{is a vector of the start times for window to be used in SUVR}
-
-\item{corrected}{For PVC, true where the data is stored as _C in same tac file}
 }
 \value{
-A table of SUVR values for the specified ROIs
+A data.frame of SUVR values for the specified ROIs
 }
 \description{
 When smaller ROIs need to be combined into larger ROIs, e.g. when TACs have
 been calculated for components of the frontal lobe, but an SUVR is desired
 for the entire frontal lobe, the TACs need to be combined, and the relative
-volumes of each needs to be taken into account. This function calculates 
-those weighted means.
+volumes of each needs to be taken into account. This function calculates
+those weighted means. It also takes into account potentially different
+frame durations.
 }
 \examples{
 calcSUVR(p1tac, p1vol, standardROIs(), c("3000", "3300", "3600", "3900"))

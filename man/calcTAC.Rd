@@ -4,12 +4,12 @@
 \alias{calcTAC}
 \title{Calculate weighted time-activity curves for specified regions of interest}
 \usage{
-calcTAC(tac, raw_volumes, ROI_def, merge = F)
+calcTAC(tac, volumes, ROI_def, merge = F, PVC = F)
 }
 \arguments{
 \item{tac}{The time-activity curve data from loading function.}
 
-\item{raw_volumes}{The ROI volume data from loading function}
+\item{volumes}{The ROI volume data from loading function}
 
 \item{ROI_def}{The definition of ROIs by combining smaller ROIs from TAC file.}
 

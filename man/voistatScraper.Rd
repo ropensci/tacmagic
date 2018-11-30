@@ -4,7 +4,7 @@
 \alias{voistatScraper}
 \title{Loads model data from file for use by other functions.}
 \usage{
-voistatScraper(voistat_file, ROI_def = standardROIs(), model = "VALUE")
+voistatScraper(voistat_file, ROI_def, model = "VALUE")
 }
 \arguments{
 \item{filename}{(e.g. participant_logan.voistat)}
