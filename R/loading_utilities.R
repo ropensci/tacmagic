@@ -128,3 +128,12 @@ loadACQtimes <- function(acqtimes_file) {
 checkACQtimes <- function(start, end, mid) {
   return(all(mid == ((start + end) / 2)))
 }
+
+# To convert the voistat TAC file to a .tac file, check the header names to
+# ensure it matches.
+voistat_to_TAC <- function(voistat_file, acqtimes_file, output_file, header_names=c("start[seconds]", "end[kBq/cc]") {
+  tac <- loadTACvoistat(voistat_file, acqtimes_file)
+  tac <- tac[-3]
+  names(tac)[1:2] <- headernames
+  write.table(x=tac, file=output_file, quote=F, sep="\t", row.names=F)
+}
