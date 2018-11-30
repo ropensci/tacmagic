@@ -19,11 +19,11 @@
 #'@param format (default, and only option currently, is .tac as from PMOD.
 #'@return data.frame with loaded TAC data
 #'@examples loadTACfile("/dir/participant1.tac")
-loadTACfile <- function(filename, format="PMOD") {
+loadTACfile <- function(filename, format="PMOD", acqtimes=NULL) {
   if (format == "PMOD") {
-      tac <- read.csv(filename, sep="")
+      tac <- loadTACPMOD(filename)
   } else if (format == "voistat") {
-      tac <- loadTACvoistat(filename)
+      tac <- loadTACvoistat(filename, acqtimes)
   } else stop("Speficied format for tac not supported.")
 
   validateTACtable(tac)

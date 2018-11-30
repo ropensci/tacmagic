@@ -6,7 +6,6 @@
 ## Beta version--check all work ##
 ##################################
 
-
 # Loading utility functions
 
 
@@ -34,18 +33,32 @@ volumesFromVoistatTAC <- function(voistat_file) {
 }
 
 
-
 ## TAC INFORMATION
 
-loadTACvoistat <- function(voistat_file) {
+loadTACPMOD <- function(tac_file) {
+
+  tac <- read.csv(tac_file, sep="")
+
+  if (all(c(
+            startsWith(names(tac)[1], "start"), 
+            startsWith(names(tac)[2], "end")
+           ))) {
+    names(tac)[1:2] <- c("start", "end")
+  } else stop("The first 2 columns should have start and end times.")
+
+  return(tac)
+}
+
+
+loadTACvoistat <- function(voistat_file, acqtimes) {
   voistat <- read.csv(voistat_file, sep="\t", skip=6, header=T,
   stringsAsFactors=F)
 
   voistat_type <- validateTACvoistat(voistat)
   
-  if (voistat_type == "invalid") error("Invalid voistat TAC file.")
+  if (voistat_type == "invalid") stop("Invalid voistat TAC file.")
 
-  ROIs <- unique(test$VoiName.Region...string.)
+  ROIs <- unique(voistat$VoiName.Region...string.)
 
   variables <- c("time", ROIs)
   if (voistat_type == "C") variables <- c(variables, paste(ROIs, "_C", sep=""))
@@ -64,11 +77,17 @@ loadTACvoistat <- function(voistat_file) {
       tac[,paste(ROIs[i], "_C", sep="")] <- voistat[voistat$VoiName.Region...string. == ROIs[i], ][, "PVC..kBq.cc."]
     }
   }
+
+  startend <- loadACQtimes(acqtimes)
+  if (checkACQtimes(startend$start, startend$end, tac$time)) {
+	tac <- data.frame(startend, tac) 
+  } else error("Supplied acqtimes do not match midframe time data.")
+
   return(tac)
 }
 
+# Checks to ensure there are start and end times in the first 2 columns.
 validateTACtable <- function(tac) {
-  # Checks to ensure there are start and stop times in the first 2 columns.  
   if (FALSE == (startsWith(names(tac)[1], "start") && 
                 startsWith(names(tac)[2], "end"))) {
     stop("The first two columns of the TAC file should be start and end times, 
@@ -96,3 +115,16 @@ validateTACvoistat <- function(voistat) {
   return(type)
 }
 
+# A .acqtimes file can be saved from PMOD, or created, and contains start and 
+# end times of each frame. Returns a data frame with 2 columns with start, end
+# in seconds.
+loadACQtimes <- function(acqtimes_file) {
+  aq <- read.csv(acqtimes_file, sep="\t", skip=2, header=F)
+  names(aq) <- c("start", "end")
+  return(aq)
+}
+
+# Ensures consistency between start/end and mid-frame times.
+checkACQtimes <- function(start, end, mid) {
+  return(all(mid == ((start + end) / 2)))
+}
