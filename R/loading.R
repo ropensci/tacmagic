@@ -13,7 +13,6 @@
 
 # TAC files
 
-
 #' Loads TAC from file for use by other functions (default is PMOD .tac format)
 #'
 #'@param filename (e.g. participant.TAC)
@@ -23,6 +22,8 @@
 loadTACfile <- function(filename, format="PMOD") {
   if (format == "PMOD") {
       tac <- read.csv(filename, sep="")
+  } else if (format == "voistat") {
+      tac <- loadTACvoistat(filename)
   } else stop("Speficied format for tac not supported.")
 
   validateTACtable(tac)
@@ -38,9 +39,9 @@ loadTACfile <- function(filename, format="PMOD") {
 #'@param format (default is the TAC .voistat format from PMOD).
 #'@return data.frame with loaded TAC data
 #'@examples loadVolumes("/dir/participant1_TAC.voistat")
-loadVolumes <- function(filename, format="Voistat", commontime="30") {
+loadVolumes <- function(filename, format="Voistat") {
   if (format == "Voistat") {
-      volumes <- volumesFromVoistatTAC(filename, commontime)
+      volumes <- volumesFromVoistatTAC(filename)
   } else if (format == "BPndPaste") {
       volumes <- volumesFromBPndPaste(filename)
   } else stop("Specified format for volume data not supported.")
@@ -50,7 +51,6 @@ loadVolumes <- function(filename, format="Voistat", commontime="30") {
 
 
 # PET Model Data
-
 
 #' Loads model data from file for use by other functions.
 #'
