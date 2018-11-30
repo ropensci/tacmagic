@@ -8,9 +8,10 @@
 
 # ROI definitions file.
 
-# New ROI definitions, as list, because simplified functions using
-# weighted.average() do not need the structure from the old standardROIs().
-# This will replace the old one when all functions are updated.
+#' Return a list of larger ROIs made up of the ROIs in the Hammer's atlas (see references()).
+#'
+#'@return A list of lists, where each list is an ROI (e.g.) frontal lobe that specifies the atomic ROIs from the atlas that make it up.
+#'@examples standardROIs()
 standardROIs <- function() {
     
   frontal_def <- c("FL_mid_fr_G", "FL_precen_G", "FL_strai_G", "FL_OFC_AOG",
@@ -62,6 +63,13 @@ standardROIs <- function() {
   return(ROIs)
 }
 
+#' Return a list of larger ROIs made up of the ROIs in the Hammer's atlas.
+#'
+#' This includes the cortical regions of standardROIs() but also other regions.
+#' It can be modified to suit the user's needs.
+#'
+#'@return A list of lists, where each list is an ROI (e.g.) frontal lobe that specifies the atomic ROIs from the atlas that make it up.
+#'@examples standardROIs()
 fullROIs <- function() {
     #hemilobe (first list)
     
