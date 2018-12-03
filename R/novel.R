@@ -20,7 +20,7 @@ peakSlope <- function(TAC) {
             # (There should be just one, and only the first is needed.)
             TAC_maximum_bool <- TAC[,i] == TAC_maximum
             # returns the value for the end of the time frame of that maximum value
-            frame_of_maximum <- TAC[TAC_maximum_bool,]$end.kBq.cc.
+            frame_of_maximum <- TAC[TAC_maximum_bool,]$end
             
             #slope = rise over run = TAC_maximum - TAC_first / frame_of_maximum
             slope <- (TAC_maximum - TAC[1, i]) / frame_of_maximum[1]

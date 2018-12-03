@@ -60,31 +60,44 @@ batchSUVR <- function(participants, tac_format="PMOD", tac_file_suffix=".tac",
   return(master)
 }
 
-#Batch slope
-batchSlope <- function(participants, ROI_def, outputfilename,
-                       volfromBPnd=FALSE, tacfilesuffix=".tac") {
 
-  vols <- calcRelativeVolumes(loadVolumes(BPnd_file), ROI_def)
-
-  TAC_file = paste(participants[1], tacfilesuffix, sep="")
-  
-  cat("Current TAC file:", TAC_file)
-
-  first <- peakSlope(TAC_file)
-  master <- t(first)
-  master <- master[-1,]
-  
-  for (each in participants) {
-    print(paste("Working on...", each))
-    TAC_file = paste(each, tacfilesuffix, sep="")
-    slope <- peakSlope(TAC_file)
-    trans <- t(slope)
-    row.names(trans) <- each
-    master <- rbind(master,trans)
-  }
-  write.csv(master, file = outputfilename)
-  return(master)
+batchSlope <- function(participants, tac_format="PMOD", dir="", tac_file_suffix=".tac",
+                       vol_format="Voistat", vol_file_suffix="_TAC.voistat",
+                       ROI_def, outputfilename) {
+    
+    #Sets up the output file by using the first participant as a template.
+    vol_file = paste(dir, participants[1], vol_file_suffix, sep="")
+    vols <- loadVolumes(vol_file, format=vol_format)
+    message("Loading first tac to create template table.")
+    first_tac_raw <- loadTACfile(paste(dir, participants[1], tac_file_suffix, sep=""), tac_format)
+    first_tac <- calcTAC(first_tac_raw, vols, ROI_def=ROI_def)
+    message("Loaded first tac file. Calculating SUVR...")
+    
+    first <- peakSlope(first_tac)
+    message("First slopes calculated.")
+    master <- t(first)
+    master <- master[-1,]
+    message("Empty master table complete; iterating through all participants.")
+    
+    # Runs through each participant to calculate the SUVR and store it.
+    for (each in participants) {
+        message(paste("Working on...", each))
+        
+        tac_raw <- loadTACfile(paste(dir, each, tac_file_suffix, sep=""), tac_format)
+        vols <- loadVolumes(paste(dir, each, vol_file_suffix, sep=""), format=vol_format)
+        tac <- calcTAC(tac_raw, vols, ROI_def=ROI_def)
+        
+        SLOPE <- peakSlope(tac)
+        trans <- t(SLOPE)
+        row.names(trans) <- each
+        master <- rbind(master,trans)
+    }
+    
+    # Save file and return the data.
+    write.csv(master, file = outputfilename)
+    return(master)
 }
+
 
 #A function to run voistatScraper on a list of participants
 batchVoistat <- function(participants, ROI_def, outputfilename, filesuffix) {
@@ -105,4 +118,19 @@ batchVoistat <- function(participants, ROI_def, outputfilename, filesuffix) {
   }
   write.csv(master, file = outputfilename)
   return(master)
+}
+
+# Counts ROIs in tac file of each listed participant; returns as dataframe.
+QC_count_ROIs <- function(participants, tac_format="PMOD", dir="",
+                          tac_file_suffix=".tac") {
+    
+    output <- data.frame(row.names=participants,
+                         ROIs=rep(NA, length(participants)))
+    for (each in participants) {
+        message(paste("Working on...", each))
+        tac_raw <- loadTACfile(paste(dir, each, tac_file_suffix, sep=""),
+                               tac_format)
+        output[each, ] <- length(tac_raw)
+    }
+    return(output)
 }
