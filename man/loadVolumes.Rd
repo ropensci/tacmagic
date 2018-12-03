@@ -4,7 +4,7 @@
 \alias{loadVolumes}
 \title{Loads ROI volumes from file for use by other functions}
 \usage{
-loadVolumes(filename, format = "Voistat", commontime = "30")
+loadVolumes(filename, format = "Voistat")
 }
 \arguments{
 \item{filename}{(e.g. participant.voistat)}

@@ -2,17 +2,19 @@
 % Please edit documentation in R/fullTAC.R
 \name{groupTAC}
 \alias{groupTAC}
-\title{Calculate group mean TAC for a list of participants in weighted average ROIs.}
+\title{Calculate group mean TAC for a list of participants in weighted average ROIs}
 \usage{
 groupTAC(participantlist, directory = "", ROI_def = standardROIs(),
   merge = F)
 }
 \arguments{
-\item{ROI_def}{The definition of ROIs by combining smaller ROIs from TAC file.}
+\item{participantlist}{A vector of participant IDs}
 
-\item{merge}{If true, includes the original ROIs in the output data.}
+\item{ROI_def}{The definition of ROIs by combining smaller ROIs from TAC file}
 
-\item{tac}{The time-activity curve data from loading function.}
+\item{merge}{If true, includes the original ROIs in the output data}
+
+\item{tac}{The time-activity curve data from loading function}
 
 \item{raw_volumes}{The ROI volume data from loading function}
 }
@@ -20,7 +22,7 @@ groupTAC(participantlist, directory = "", ROI_def = standardROIs(),
 Time-activity curves for the specified ROIs
 }
 \description{
-Calculate group mean TAC for a list of participants in weighted average ROIs.
+Calculate group mean TAC for a list of participants in weighted average ROIs
 }
 \examples{
 calcTAC(p1tac, p1vol, standardROIs(), merge=T)

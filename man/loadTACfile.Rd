@@ -4,7 +4,7 @@
 \alias{loadTACfile}
 \title{Loads TAC from file for use by other functions (default is PMOD .tac format)}
 \usage{
-loadTACfile(filename, format = "PMOD")
+loadTACfile(filename, format = "PMOD", acqtimes = NULL)
 }
 \arguments{
 \item{filename}{(e.g. participant.TAC)}
