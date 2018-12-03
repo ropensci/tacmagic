@@ -60,7 +60,7 @@ batchSUVR <- function(participants, tac_format="PMOD", tac_file_suffix=".tac",
   return(master)
 }
 
-
+# Batch as in calcSUVR but for the novel slope measure.
 batchSlope <- function(participants, tac_format="PMOD", dir="", tac_file_suffix=".tac",
                        vol_format="Voistat", vol_file_suffix="_TAC.voistat",
                        ROI_def, outputfilename) {
@@ -99,10 +99,23 @@ batchSlope <- function(participants, tac_format="PMOD", dir="", tac_file_suffix=
 }
 
 
-#A function to run voistatScraper on a list of participants
-batchVoistat <- function(participants, ROI_def, outputfilename, filesuffix) {
 
-  voistat_file = paste(participants[1], filesuffix, ".voistat", sep="")
+#' Obtain values from voistat files (using voistatScraper() for a batch.
+#'
+#' For a vector of participant IDs and correspondingly named .voistat files,
+#' this extracts the value from the files for the specified ROIs.
+#'
+#' See voistatScraper() for specifics.
+#'
+#'@param participants A vector of participant IDs
+#'@param ROI_def Object that defines combined ROIs, see ROI_definitions.R
+#'@param outputfilename Specify a filename to save the data.
+#'@return A table of values for the specified ROIs for all participants.
+#'@examples
+#' batchVoistat(participants, ROI_def=standardROIs(), outputfilename="batch1.csv")
+batchVoistat <- function(participants, ROI_def, outputfilename, dir="", filesuffix) {
+
+  voistat_file = paste(dir, participants[1], filesuffix, ".voistat", sep="")
 
   first <- voistatScraper(voistat_file, ROI_def)
   master <- t(first)
@@ -110,7 +123,7 @@ batchVoistat <- function(participants, ROI_def, outputfilename, filesuffix) {
 
   for (each in participants) {
     print(paste("Working on...", each))
-    voistat_file = paste(each, filesuffix, ".voistat", sep="")
+    voistat_file = paste(dir, each, filesuffix, ".voistat", sep="")
     VALUE <- voistatScraper(voistat_file, ROI_def)
     trans <- t(VALUE)
     row.names(trans) <- each
