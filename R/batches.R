@@ -123,14 +123,26 @@ batchVoistat <- function(participants, ROI_def, outputfilename, filesuffix) {
 # Counts ROIs in tac file of each listed participant; returns as dataframe.
 QC_count_ROIs <- function(participants, tac_format="PMOD", dir="",
                           tac_file_suffix=".tac") {
-    
+    trip <- 0
     output <- data.frame(row.names=participants,
                          ROIs=rep(NA, length(participants)))
     for (each in participants) {
         message(paste("Working on...", each))
         tac_raw <- loadTACfile(paste(dir, each, tac_file_suffix, sep=""),
                                tac_format)
+        if (trip == 0) {
+            headers <- names(tac_raw)
+            trip <- 1
+        } else {
+            if (!all(names(tac_raw) == headers)) {
+                warning(paste(each, ": ROIs do not match first participant."))
+            }
+        }
         output[each, ] <- length(tac_raw)
     }
+    if ( (length(unique(output$ROIs))) > 1 ) {
+        warning(paste("Unique numbers of ROIs:", as.character(unique(output$ROIs))))
+    }
+    
     return(output)
 }
