@@ -2,7 +2,7 @@
 ## PET Analysis in R            ##
 ## PIB_pos.R                    ##
 ## Eric E. Brown                ##
-## PEAR v 0.1.8                 ##
+## PEAR v devel                 ##
 ## Beta version--check all work ##
 ##################################
 

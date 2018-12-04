@@ -12,10 +12,10 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
-This is a beta version of a group of scripts to help with analysis of PET data.
+This is a beta version of an R package to analyzed processed positron emission tomography (PET) data.
 
-In its current form, these scripts may be useful in analyzing the output files 
-from PMOD (https://www.pmod.com), and the suite of software (PNEURO, PKIN). 
+The main purpose is to load processed PET data, such as TAC, ROI volumes and ROI statistics (e.g. Logan, R1, etc.) in a common format regardless of the software that created them (e.g. PMOD). This then enables subsequent statistical calculations, such as calculating weighted mean TACs for ROIs made of small ROIs, calculating SUVR, group-wise means, cut-off values, etc.
+
 These scripts are in NO WAY affiliated with or endorsed by PMOD Technologies. 
 
 There is no warranty and they are to be considered in beta, and have not been 

@@ -1,0 +1,12 @@
+Package: PEAR
+Type: Package
+Title: PET Analysis in R
+Version: 0.8.0
+Author: Eric E. Brown
+Maintainer: Eric E. Brown <eb@ericebrown.com>
+Description: This is a beta version of a group of scripts to help with analysis of PET data. In its current form, these scripts may be useful in analyzing the output files 
+from PMOD (https: //www.pmod.com), and the suite of software (PNEURO, PKIN). These scripts are in NO WAY affiliated with or endorsed by PMOD Technologies. 
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1

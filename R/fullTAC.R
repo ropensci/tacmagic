@@ -1,47 +1,55 @@
 ##################################
 ## PET Analysis in R            ##
 ## fullTAC.R                    ##
-## Eric E. Brown                ##
-## PEAR v 0.1.8                 ##
+## (C) Eric E. Brown  2018      ##
+## PEAR v devel                 ##
 ## Beta version--check all work ##
 ##################################
 
-source("utilities.R")
-
-
-# This function calculates the weighted time-activity curves for ROIs by 
-# combining smaller ROIs into larger ones as specified in ROI_def, by getting
-# the weighted average.
-# This uses weighted_TAC (from utilities.R) 3 times for hemilobes, lobes and 
-# totalcortical ROIs. The main work is done by weighted_TAC, and this simply 
-# runs it 3 times. The user would only have to use this function.
-calcTAC <- function(
-    tac_file,   #filename of the tac file ("subject.tac")
-    voistat_file, #filename of the voistat file ("subject.voistat") 
-    ROI_def=standardROIs(), #see ROI_definitions.R
-    merge=F # combined table of the merged ROIs and the old individual ROIs
-    ) {
-  tac <- read.csv(tac_file, sep="")
-  vols <- calcRelativeVolumes(volumesFromVoistatTAC(voistat_file), ROI_def)
-  TACtable <- emptyTACtable(tac_file)
-
-  TACtable <- weighted_TAC(ROI_def@hemilobe, ROI_def@hemilobenames, tac, 
-                          TACtable, "proportion_of_hemilobe", vols)
-  TACtable <- weighted_TAC(ROI_def@lobe, ROI_def@lobenames, tac, 
-                          TACtable, "proportion_of_lobe", vols)
-  TACtable <- weighted_TAC(ROI_def@totalcortical, "totalcortical", tac, 
-                          TACtable, "proportion_of_total", vols)
-
-  if (merge) {
-    TACtable <- data.frame(TACtable, tac)
-  }
-
-  return(TACtable)
+#' Calculate weighted time-activity curves for specified regions of interest
+#'
+#'@param tac The time-activity curve data from loading function.
+#'@param volumes The ROI volume data from loading function
+#'@param ROI_def The definition of ROIs by combining smaller ROIs from TAC file.
+#'@param merge If true, includes the original ROIs in the output data.
+#'@return Time-activity curves for the specified ROIs
+#'@examples calcTAC(p1tac, p1vol, standardROIs(), merge=T)
+calcTAC <- function(tac, volumes, ROI_def, merge=F, PVC=F) {
+    
+    ROI_PVC <- ROI_def
+    
+    if (PVC) {
+        for (i in 1:length(ROI_PVC)) ROI_PVC[i] <- lapply(ROI_PVC[i], paste, "_C", sep="")
+    }
+    
+    # Setup the output data.frame
+    m <- matrix(nrow=length(tac[,1]), ncol=length(ROI_def))
+    calculated_TACs <- as.data.frame(m)
+    names(calculated_TACs) <- names(ROI_def)
+    # Calculate the weighted mean TACs for each ROI in the definition list.
+    for (i in 1:length(ROI_def)) {
+        calculated_TACs[i] <- apply(tac[,ROI_PVC[[i]]], 1,  weighted.mean, volumes[ROI_def[[i]],])
+    }
+    
+    # Prepare the output data frame.
+    if (merge) {
+      calculated_TACs <- data.frame(tac, calculated_TACs)
+    } else {
+        calculated_TACs <- data.frame(tac[1:2], calculated_TACs)
+    }
+    
+    return(calculated_TACs)
 }
 
-
-# A function to get average TAC for a list of participants in weighted average 
-# ROIs.
+#' Calculate group mean TAC for a list of participants in weighted average ROIs
+#'
+#'@param participantlist A vector of participant IDs
+#'@param tac The time-activity curve data from loading function
+#'@param raw_volumes The ROI volume data from loading function
+#'@param ROI_def The definition of ROIs by combining smaller ROIs from TAC file
+#'@param merge If true, includes the original ROIs in the output data
+#'@return Time-activity curves for the specified ROIs
+#'@examples calcTAC(p1tac, p1vol, standardROIs(), merge=T)
 groupTAC <- function(participantlist, directory="", ROI_def=standardROIs(), 
                      merge=F) {
   groupTACtable <- emptyTACtable(paste(directory, participantlist[1], ".tac", 
@@ -65,11 +73,15 @@ groupTAC <- function(participantlist, directory="", ROI_def=standardROIs(),
   return(groupTACtable)
 }
 
-# Plots time activity curves from 1 or 2 participants or group means.
-# Note this works with the output of groupTAC and calcTAC, as well as simply 
-# .tac files. Further, you can add together the original TAC file and the 
-# weighted TACs as they are simple data frames.
-# e.g. merged <- data.frame(individualtac, weightedTACtable)
+#' Plots time activity curves from 1 or 2 participants or groups.
+#'
+#'@param TACtable1 (e.g. from calcTAC() or groupTAC(), or simply loadTACfile())
+#'@param TACtable2 An optional, second TAC, to plot for comparison.
+#'@param ROIs A vector of ROIs to plot, names matching the TAC headers.
+#'@param ymax The maximum value on the y-axis.
+#'@param seconds_to_mins If true, converts time from TAC from sec to min.
+#'@return Creates a plot.
+#'@examples plotTAC2(controls_tac, treatment_tac)
 plotTAC2 <- function(TACtable1, TACtable2=NULL, ROIs=c("totalcortical", 
   "cerebellum"), ymax=25, seconds_to_mins=FALSE) {
   
@@ -103,8 +115,8 @@ plotTAC2 <- function(TACtable1, TACtable2=NULL, ROIs=c("totalcortical",
           col=colour1[ROI], 
           lwd=2)
     
-  # Only if a 2nd TAC table is provided, plots a second participant/group on 
-  # the same plot.
+    # Only if a 2nd TAC table is provided, plots a second participant/group on 
+    # the same plot.
     if (is.data.frame(TACtable2)) {
       lines(x=TACtable2$start/time_conversion, 
             y=TACtable2[,ROIs[ROI]], 
