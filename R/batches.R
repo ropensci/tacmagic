@@ -26,50 +26,53 @@
 #'@param corrected See calcSUVR() to determine whether this applies.
 #'@return A table of SUVR values for the specified ROIs for all participants.
 #'@examples 
-#' batchSUVR(participants, ROI_def=standardROIs(), SUVR_def=c("3000", "3300", "3600", "3900"), outputfilename="batch1.csv")
-batchSUVR <- function(participants, tac_format="PMOD", tac_file_suffix=".tac",
-                      vol_format="Voistat", vol_file_suffix="_TAC.voistat",
-                      ROI_def, SUVR_def, outputfilename) {
+#' batchSUVR(participants, ROI_def=standardROIs(),
+#'           SUVR_def=c(3000, 3300, 3600, 3900), outputfilename="batch1.csv")
+batchSUVR <- function(participants, dir="", tac_format="PMOD",
+                      tac_file_suffix=".tac", vol_format="Voistat",
+                      vol_file_suffix="_TAC.voistat", ROI_def, SUVR_def,
+                      outputfilename) {
                           
   #Sets up the output file by using the first participant as a template.
-  vol_file = paste(participants[1], vol_file_suffix, sep="")
+  vol_file = paste(dir, participants[1], vol_file_suffix, sep="")
   vols <- loadVolumes(vol_file, format=vol_format)
-  print("Loading first tac to create template table.")
-  first_tac <- loadTACfile(paste(participants[1], tac_file_suffix, sep=""), tac_format)
-  print("Loaded first tac file. Calculating SUVR...")
-  first <- calcSUVR(tac=first_tac, volumes=vols, ROI_def=ROI_def, SUVR_def=SUVR_def)
-  print("First SUVRs calculated.")
+  message("Loading first tac to create template table.")
+  first_tac <- loadTACfile(paste(dir, participants[1], tac_file_suffix, sep=""),
+                           tac_format)
+  first <- calcSUVR(tac=first_tac, volumes=vols, ROI_def=ROI_def,
+                    SUVR_def=SUVR_def)
   master <- t(first)
   master <- master[-1,]
-  print("Empty master table complete; iterating through all participants.")
+  message("Empty master table complete; iterating through all participants.")
   # Runs through each participant to calculate the SUVR and store it.
   for (each in participants) {
     print(paste("Working on...", each))
 
-    tac <- loadTACfile(paste(each, tac_file_suffix, sep=""), tac_format)
-    vols <- loadVolumes(paste(each, vol_file_suffix, sep=""))
+    tac <- loadTACfile(paste(dir, each, tac_file_suffix, sep=""), tac_format)
+    vols <- loadVolumes(paste(dir, each, vol_file_suffix, sep=""))
     
     SUVR <- calcSUVR(tac, vols, ROI_def, SUVR_def)
     trans <- t(SUVR)
     row.names(trans) <- each
     master <- rbind(master,trans)
   }
-  
   # Save file and return the data.
   write.csv(master, file = outputfilename)
-  return(master)
+  return(as.data.frame(master))
 }
 
 # Batch as in calcSUVR but for the novel slope measure.
-batchSlope <- function(participants, tac_format="PMOD", dir="", tac_file_suffix=".tac",
-                       vol_format="Voistat", vol_file_suffix="_TAC.voistat",
-                       ROI_def, outputfilename) {
+batchSlope <- function(participants, tac_format="PMOD", dir="",
+                       tac_file_suffix=".tac", vol_format="Voistat",
+                       vol_file_suffix="_TAC.voistat", ROI_def,
+                       outputfilename) {
     
     #Sets up the output file by using the first participant as a template.
     vol_file = paste(dir, participants[1], vol_file_suffix, sep="")
     vols <- loadVolumes(vol_file, format=vol_format)
     message("Loading first tac to create template table.")
-    first_tac_raw <- loadTACfile(paste(dir, participants[1], tac_file_suffix, sep=""), tac_format)
+    first_tac_raw <- loadTACfile(paste(dir, participants[1], tac_file_suffix,
+                                       sep=""), tac_format)
     first_tac <- calcTAC(first_tac_raw, vols, ROI_def=ROI_def)
     message("Loaded first tac file. Calculating SUVR...")
     
@@ -83,8 +86,10 @@ batchSlope <- function(participants, tac_format="PMOD", dir="", tac_file_suffix=
     for (each in participants) {
         message(paste("Working on...", each))
         
-        tac_raw <- loadTACfile(paste(dir, each, tac_file_suffix, sep=""), tac_format)
-        vols <- loadVolumes(paste(dir, each, vol_file_suffix, sep=""), format=vol_format)
+        tac_raw <- loadTACfile(paste(dir, each, tac_file_suffix, sep=""),
+                                     tac_format)
+        vols <- loadVolumes(paste(dir, each, vol_file_suffix, sep=""),
+                                  format=vol_format)
         tac <- calcTAC(tac_raw, vols, ROI_def=ROI_def)
         
         SLOPE <- peakSlope(tac)
@@ -95,7 +100,7 @@ batchSlope <- function(participants, tac_format="PMOD", dir="", tac_file_suffix=
     
     # Save file and return the data.
     write.csv(master, file = outputfilename)
-    return(master)
+    return(as.data.frame(master))
 }
 
 
@@ -154,7 +159,7 @@ QC_count_ROIs <- function(participants, tac_format="PMOD", dir="",
         output[each, ] <- length(tac_raw)
     }
     if ( (length(unique(output$ROIs))) > 1 ) {
-        warning(paste("Unique numbers of ROIs:", as.character(unique(output$ROIs))))
+        warning(paste("Unique ROI sets:", as.character(unique(output$ROIs))))
     }
     
     return(output)
