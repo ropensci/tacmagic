@@ -35,6 +35,7 @@ volumesFromVoistatTAC <- function(voistat_file) {
 
 ## TAC INFORMATION
 
+#' @noRd
 loadTACPMOD <- function(tac_file) {
 
   tac <- read.csv(tac_file, sep="")
@@ -49,7 +50,7 @@ loadTACPMOD <- function(tac_file) {
   return(tac)
 }
 
-
+#' @noRd
 loadTACvoistat <- function(voistat_file, acqtimes) {
   voistat <- read.csv(voistat_file, sep="\t", skip=6, header=T,
   stringsAsFactors=F)
@@ -87,6 +88,7 @@ loadTACvoistat <- function(voistat_file, acqtimes) {
 }
 
 # Checks to ensure there are start and end times in the first 2 columns.
+#' @noRd
 validateTACtable <- function(tac) {
   if (FALSE == (startsWith(names(tac)[1], "start") && 
                 startsWith(names(tac)[2], "end"))) {
@@ -99,6 +101,7 @@ validateTACtable <- function(tac) {
 # Checks the headers of the TAC voistat file to ensure they are as expected,
 # and returns C if there is a PVC value, NC if not, and invalid if headers
 # are not as expected.
+#' @noRd
 validateTACvoistat <- function(voistat) {
 
   PVC <- c("X...Component..string.", "File..string.", "PatientName..string.", 
@@ -118,6 +121,7 @@ validateTACvoistat <- function(voistat) {
 # A .acqtimes file can be saved from PMOD, or created, and contains start and 
 # end times of each frame. Returns a data frame with 2 columns with start, end
 # in seconds.
+#' @noRd
 loadACQtimes <- function(acqtimes_file) {
   aq <- read.csv(acqtimes_file, sep="\t", skip=2, header=F)
   names(aq) <- c("start", "end")
@@ -125,12 +129,14 @@ loadACQtimes <- function(acqtimes_file) {
 }
 
 # Ensures consistency between start/end and mid-frame times.
+#' @noRd
 checkACQtimes <- function(start, end, mid) {
   return(all(mid == ((start + end) / 2)))
 }
 
 # To convert the voistat TAC file to a .tac file, check the header names to
 # ensure it matches.
+#' @noRd
 voistat_to_TAC <- function(voistat_file, acqtimes_file, output_file, header_names=c("start[seconds]", "end[kBq/cc]")) {
   tac <- loadTACvoistat(voistat_file, acqtimes_file)
   tac <- tac[-3]
