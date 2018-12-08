@@ -1,17 +1,10 @@
-# PET Analysis in R - PEAR
+# PET Analysis in R
 
-
-This is a beta version of an R package to process and analyze time-activity curve (TAC) data from positron emission tomography (PET) studies.
+This is a beta version (not fully tested; use at own risk) of an R package to process and analyze time-activity curve (TAC) data from positron emission tomography (PET) studies.
 
 The package provides loading functions to work with processed PET data, such as TAC, ROI volumes and ROI statistics (e.g. Logan, R1, etc.) in a common format regardless of the software that created them (e.g. PMOD). This then enables subsequent statistical calculations.
 
-There is functionality to combine regions of interest (ROIs) weighted by volume.
-
-Model calculation includes SUVR and non-invasive reference-tissue Logan graphical analysis. 
-
 These scripts are in NO WAY affiliated with or endorsed by PMOD Technologies. 
-
-There is no warranty and they are to be considered in beta, and have not been thoroughly tested. Use at your own risk.
 
 If you are interested in these scripts, or have any questions, suggestions, and especially if you see any problems, please contact me at eric.brown@utoronto.ca. I am interested in improving these scripts and making them more useful. If you 
 do use them, please acknowledge/cite this in your work.
@@ -20,11 +13,11 @@ do use them, please acknowledge/cite this in your work.
 
 ### Data loading and weighted-averages
 
+Supports formats exported from the PMOD suite of software. Combines atlas-based ROIs into larger ROIs as defined in standardROIs() or fullROIs() (or by the user), weighted for volume.
+
 ### SUVR calculation
 
-Calculate standardized uptake value ratios (SUVR) for regions of interest 
-(ROIs). For large ROIs made up of several smaller ROIs, calculates the mean SUVR 
-weighted the subROIs by volume.
+Calculate standardized uptake value ratios (SUVR) for regions of interest (ROIs). For large ROIs made up of several smaller ROIs, calculates the mean SUVR weighted the subROIs by volume. It also weights the SUVR by frame length.
 
 ### Logan 
 
@@ -36,8 +29,7 @@ Calculates SUVR and other statistics for groups of participants.
 
 ### Time-activity curve calculation and plotting
 
-Calculates time-activity curves for individual ROIs, individual participants, 
-groups, and has basic plotting functions for 1 or more TACs.
+Calculates time-activity curves for individual ROIs, individual participants, groups, and has basic plotting functions for 1 or more TACs.
 
 
 ## Licence
