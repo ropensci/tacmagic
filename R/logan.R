@@ -129,7 +129,17 @@ DVR_all_reference_Logan <- function(tac_data, ref, k2prime, t_star=0,
     return(DVRtable)
 }
 
-# 2 plots to visualize the non-invasive Logan graphical analysis model.
+#' Non-invasive reference Logan plot
+#'
+#' This plots the non-invasive Logan plot.
+#'
+#'@param tac_data The time-activity curve data from calcTAC()
+#'@param ref The reference region, e.g. "cerebellum"
+#'@param k2prime A fixed value for k2' must be specified (e.g. 0.2)
+#'@param t_star If 0, t* will be calculated using find_t_star()
+#'@param method Method of inntegration, "trapz" or "integrate"
+#'@return No return
+#'@examples
 plot_reference_Logan <- function(tac_data, target, ref, k2prime, t_star=0,
                                  method="trapz") {
     model <- reference_Logan_lm(tac_data, target, ref, k2prime, t_star, method)
