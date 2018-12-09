@@ -6,17 +6,9 @@
 ## Beta version--check all work ##
 ##################################
 
-# Loading utility functions
-
 
 ## VOLUME INFORMATION
 
-# BPnd data can be copied from PNEURO and saved as a CSV. It contains ROI volume
-# information. This extracts that.
-volumesFromBPndPaste <- function(BPnd_file) {
-    BPnd <- read.csv(BPnd_file, header=TRUE, row.names=1)
-    return(BPnd["Volume..ccm."])
-}
 
 # TAC .voistat files contain volume information for each ROI. This extracts it. 
 volumesFromVoistatTAC <- function(voistat_file) {
@@ -30,6 +22,14 @@ volumesFromVoistatTAC <- function(voistat_file) {
     # create a list of the volumes for each ROI.
     Volume..ccm. <- voistat[, "Volume..ccm."][u]
     return(data.frame(ROIs, Volume..ccm., row.names=1))
+}
+
+# BPnd data can be copied from PNEURO and saved as a CSV. It contains ROI volume
+# information. This extracts that. Not needed unless volume information is
+# otherwise unavailable.
+volumesFromBPndPaste <- function(BPnd_file) {
+    BPnd <- read.csv(BPnd_file, header=TRUE, row.names=1)
+    return(BPnd["Volume..ccm."])
 }
 
 

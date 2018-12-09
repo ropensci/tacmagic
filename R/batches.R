@@ -88,12 +88,12 @@ participant_batch <- function(participants, models=c("SUVR", "Logan", "eslope"),
 #'@param ROI_def Object that defines combined ROIs, see ROI_definitions.R
 #'@param dir Directory and/or filename prefix of the files
 #'@param filesuffix Optional filename characters between ID and ".voistat"
-#'@param master A data.frame of the same format to add the new data to
+#'@param otherdata A data.frame of the same participants to add the new data to
 #'@param outfile Specify a filename to save the data.
 #'@param varname The name of the variable being exctracted, e.g. "SRTM".
 #'@return A table of values for the specified ROIs for all participants.
 #'@examples
-#' batchVoistat(participants, ROI_def=standardROIs(), outfile="batch1.csv")
+#'
 batchVoistat <- function(participants, ROI_def, dir="", filesuffix, varname,
                          otherdata=NULL, outfile) {
 
@@ -104,7 +104,7 @@ batchVoistat <- function(participants, ROI_def, dir="", filesuffix, varname,
   master <- master[-1,]
 
   for (each in participants) {
-    print(paste("Working on...", each))
+    message(paste("Working on...", each))
     voistat_file = paste(dir, each, filesuffix, ".voistat", sep="")
     VALUE <- voistatScraper(voistat_file, ROI_def)
     trans <- t(VALUE)

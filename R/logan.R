@@ -11,18 +11,20 @@
 # Helper function to use integrate() with sapply(), simply re-arranging the
 # arguments of integrate() so that upper is the first argument, and returns
 # just the integrate() value.
+#' @noRd
 vintegrate <- function(upper, lower, fn) {
     v <- integrate(fn, lower=lower, upper=upper, stop.on.error=F)
     return(v$value)
 }
 
-
+#' @noRd
 vAUC <- function(frames,x,y) {
     AUC <- pracma::trapz(x[1:frames], y[1:frames])
     return(AUC)
 }
 
 # The non-invasive reference Logan method
+#' @noRd
 reference_Logan_xy <- function(tac, target, ref, k2prime, method) {
     
   mid_time <- (tac$start + tac$end) / 2
@@ -58,6 +60,7 @@ reference_Logan_xy <- function(tac, target, ref, k2prime, method) {
 }
 
 # The non-invasive reference Logan method -- linear model starting from t*
+#' @noRd
 reference_Logan_lm <- function(tac_data, target, ref, k2prime, t_star, method) {
     
   xy <- reference_Logan_xy(tac_data, target, ref, k2prime, method)
@@ -72,7 +75,19 @@ reference_Logan_lm <- function(tac_data, target, ref, k2prime, t_star, method) {
   return(model)
 }
 
-# The coefficient from the non-invasive Logan method, equal to DVR
+#' Non-invasive reference Logan method
+#'
+#' This calculates the coefficient from the non-invasive Logan method, which
+#' is equal to DVR.
+#'
+#'@param tac_data The time-activity curve data from calcTAC()
+#'@param target The name of the target ROI, e.g. "frontal"
+#'@param ref The reference region, e.g. "cerebellum"
+#'@param k2prime A fixed value for k2' must be specified (e.g. 0.2)
+#'@param t_star If 0, t* will be calculated using find_t_star()
+#'@param method Method of inntegration, "trapz" or "integrate"
+#'@return Data frame with calculate DVRs for all ROIs
+#'@examples
 DVR_reference_Logan <- function(tac_data, target, ref, k2prime, t_star,
                                 method="trapz") {
     model <- reference_Logan_lm(tac_data, target, ref, k2prime, t_star, method)
@@ -80,7 +95,19 @@ DVR_reference_Logan <- function(tac_data, target, ref, k2prime, t_star,
     return(DVR)
 }
 
-# The non-invasive reference Logan method for all ROIs in tac_data.
+
+#' Non-invasive reference Logan method for all ROIs in tac data
+#'
+#' This calculates the DVR using the non-invasive reference Logan method for
+#' all TACs in a supplied tac file. It uses DVR_reference_Logan.
+#'
+#'@param tac_data The time-activity curve data from calcTAC()
+#'@param ref The reference region, e.g. "cerebellum"
+#'@param k2prime A fixed value for k2' must be specified (e.g. 0.2)
+#'@param t_star If 0, t* will be calculated using find_t_star()
+#'@param method Method of inntegration, "trapz" or "integrate"
+#'@return Data frame with calculate DVRs for all ROIs
+#'@examples
 DVR_all_reference_Logan <- function(tac_data, ref, k2prime, t_star=0,
                                     method="trapz") {
     
@@ -124,6 +151,7 @@ plot_reference_Logan <- function(tac_data, target, ref, k2prime, t_star=0,
 # The Logan graphical analysis method finds the slope after a point t*; this
 # function calculates t* as the earliest time in which all residuals are less
 # than the specified proportion (default 0.10 or 10%) of the actual value.
+#' @noRd
 find_t_star <- function(x, y, error=0.10) {
     
     frames <- length(y)
