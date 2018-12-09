@@ -82,7 +82,7 @@ fullROIs <- function() {
     "TemporaHorn_l", "ThirdVentricl")
     whitematter <- c("White_matter_l", "White_matter_r")
     
-    ROIs <- c(standardROIs(), list(leeftdeep=leftdeep, rightdeep=rightdeep,
+    ROIs <- c(standardROIs(), list(leftdeep=leftdeep, rightdeep=rightdeep,
               deep=deep, ventricles=ventricles, whitematter=whitematter))
     
     return(ROIs)

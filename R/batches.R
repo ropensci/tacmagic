@@ -6,99 +6,76 @@
 ## Beta version--check all work ##
 ##################################
 
-
-#' Calculate weighted SUVRs for specified ROIs in a participant batch
+#' Calculate multiple models for a batch of participants
 #'
-#' For a vector of participant IDs and correspondingly named tac and volume 
-#' files, this calculates SUVR using calcSUVR and stores in a single table.
+#' For a vector of participant IDs and correspondingly named tac and volume
+#' files, this produces SUVR, DVR, and upslope in a tidy data.frame. Current
+#' model options are "SUVR", "Logan" and "eslope".
 #'
-#' See calcSUVR() for how SUVR is calculated.
+#' For further details about how the models are calculated, see the indiviudal
+#' functions that they rely on. "SUVR" uses calcSUVR(), "Logan" uses
+#' DVR_all_reference_Logan(), and "eslope" uses peaksSlope().
 #'
 #'@param participants A vector of participant IDs
-#'@param tac_format See loadTACfile()
-#'@param tac_file_suffix This is how the ID corresponds to the TAC files
-#'@param vol_format See loadVolumes()
-#'@param vol_file_suffix This is how the ID corresponds to the volume files
+#'@param models A vector of names of the models to calculate
+#'@param tac_format Format of tac files provided: See loadTACfile()
+#'@param dir A directory and/or file name prefix for the tac/volume files
+#'@param tac_file_suffix How participant IDs corresponds to the TAC files
+#'@param vol_format The file format that includes volumes: See loadVolumes()
+#'@param vol_file_suffix How participant IDs correspond to volume files
 #'@param ROI_def Object that defines combined ROIs, see ROI_definitions.R
 #'@param SUVR_def is a vector of the start times for window to be used in SUVR
-#'@param corrected For PVC, true where the data is stored as _C in same tac file
-#'@param outputfilename Specify a filename to save the data.
-#'@param corrected See calcSUVR() to determine whether this applies.
-#'@return A table of SUVR values for the specified ROIs for all participants.
-#'@examples 
-#' batchSUVR(participants, ROI_def=standardROIs(), SUVR_def=c("3000", "3300", "3600", "3900"), outputfilename="batch1.csv")
-batchSUVR <- function(participants, tac_format="PMOD", tac_file_suffix=".tac",
-                      vol_format="Voistat", vol_file_suffix="_TAC.voistat",
-                      ROI_def, SUVR_def, outputfilename) {
-                          
-  #Sets up the output file by using the first participant as a template.
-  vol_file = paste(participants[1], vol_file_suffix, sep="")
-  vols <- loadVolumes(vol_file, format=vol_format)
-  print("Loading first tac to create template table.")
-  first_tac <- loadTACfile(paste(participants[1], tac_file_suffix, sep=""), tac_format)
-  print("Loaded first tac file. Calculating SUVR...")
-  first <- calcSUVR(tac=first_tac, volumes=vols, ROI_def=ROI_def, SUVR_def=SUVR_def)
-  print("First SUVRs calculated.")
-  master <- t(first)
-  master <- master[-1,]
-  print("Empty master table complete; iterating through all participants.")
-  # Runs through each participant to calculate the SUVR and store it.
-  for (each in participants) {
-    print(paste("Working on...", each))
-
-    tac <- loadTACfile(paste(each, tac_file_suffix, sep=""), tac_format)
-    vols <- loadVolumes(paste(each, vol_file_suffix, sep=""))
-    
-    SUVR <- calcSUVR(tac, vols, ROI_def, SUVR_def)
-    trans <- t(SUVR)
-    row.names(trans) <- each
-    master <- rbind(master,trans)
+#'@param PVC For PVC, true where the data is stored as _C in same tac file
+#'@param reference The name of the reference region for DVR/SUVR calculation
+#'@param k2prime Fixed k2' for DVR calculation
+#'@param t_star Change from 0 to manually specify a t* for DVR calculation
+#'@param outfile Specify a filename to save the data
+#'@return A table of SUVR values for the specified ROIs for all participants
+#'@examples
+#'
+participant_batch <- function(participants, models=c("SUVR", "Logan", "eslope"),
+                        dir="", tac_format="PMOD", tac_file_suffix=".tac",
+                        vol_file_suffix="_TAC.voistat", vol_format="Voistat",
+                        ROI_def, SUVR_def=NULL, PVC=F, reference="cerebellum",
+                        k2prime=NULL, t_star=0, master=NULL, outfile=NULL) {
+  
+  all_models <- c("SUVR", "Logan", "eslope")
+  if (!(all(models %in% all_models))) stop("Invalid model name(s) supplied.")
+  
+  if ("SUVR" %in% models) {
+      # TODO check to ensure all required parameters are available
+      SUVR <- batchSUVR(participants=participants, dir=dir,
+                          tac_format=tac_format,
+                          tac_file_suffix=tac_file_suffix,
+                          vol_format=vol_format,
+                          vol_file_suffix=vol_file_suffix,
+                          ROI_def=ROI_def, SUVR_def=SUVR_def, PVC=PVC,
+                          reference=reference, outfile=NULL)
+     names(SUVR) <- lapply(names(SUVR), paste, "_SUVR", sep="")
+     if (is.null(master)) master <- SUVR else master <- data.frame(master, SUVR)
   }
   
-  # Save file and return the data.
-  write.csv(master, file = outputfilename)
+  if ("Logan" %in% models) {
+      # TODO check to ensure all required parameters are available
+      DVR <- batchDVR(participants, dir, tac_format, tac_file_suffix,
+                      vol_format, vol_file_suffix, ROI_def, k2prime, t_star,
+                      reference, PVC, outfile=NULL)
+      names(DVR) <- lapply(names(DVR), paste, "_DVR", sep="")
+      if (is.null(master)) master <- DVR else master <- data.frame(master, DVR)
+  }
+
+  if ("eslope" %in% models) {
+      # TODO check to ensure all required parameters are available
+      eslope <- batchSlope(participants, tac_format, dir, tac_file_suffix,
+                           vol_format, vol_file_suffix, ROI_def,
+                           outfile=NULL)
+      names(eslope) <- lapply(names(eslope), paste, "_eslope", sep="")
+      if (is.null(master)) master <- eslope else master <- data.frame(master,
+                                                                      eslope)
+  }
+  if (!(is.null(outfile))) write.csv(master, file = outfile)
   return(master)
 }
-
-# Batch as in calcSUVR but for the novel slope measure.
-batchSlope <- function(participants, tac_format="PMOD", dir="", tac_file_suffix=".tac",
-                       vol_format="Voistat", vol_file_suffix="_TAC.voistat",
-                       ROI_def, outputfilename) {
-    
-    #Sets up the output file by using the first participant as a template.
-    vol_file = paste(dir, participants[1], vol_file_suffix, sep="")
-    vols <- loadVolumes(vol_file, format=vol_format)
-    message("Loading first tac to create template table.")
-    first_tac_raw <- loadTACfile(paste(dir, participants[1], tac_file_suffix, sep=""), tac_format)
-    first_tac <- calcTAC(first_tac_raw, vols, ROI_def=ROI_def)
-    message("Loaded first tac file. Calculating SUVR...")
-    
-    first <- peakSlope(first_tac)
-    message("First slopes calculated.")
-    master <- t(first)
-    master <- master[-1,]
-    message("Empty master table complete; iterating through all participants.")
-    
-    # Runs through each participant to calculate the SUVR and store it.
-    for (each in participants) {
-        message(paste("Working on...", each))
-        
-        tac_raw <- loadTACfile(paste(dir, each, tac_file_suffix, sep=""), tac_format)
-        vols <- loadVolumes(paste(dir, each, vol_file_suffix, sep=""), format=vol_format)
-        tac <- calcTAC(tac_raw, vols, ROI_def=ROI_def)
-        
-        SLOPE <- peakSlope(tac)
-        trans <- t(SLOPE)
-        row.names(trans) <- each
-        master <- rbind(master,trans)
-    }
-    
-    # Save file and return the data.
-    write.csv(master, file = outputfilename)
-    return(master)
-}
-
-
 
 #' Obtain values from voistat files (using voistatScraper() for a batch.
 #'
@@ -109,11 +86,16 @@ batchSlope <- function(participants, tac_format="PMOD", dir="", tac_file_suffix=
 #'
 #'@param participants A vector of participant IDs
 #'@param ROI_def Object that defines combined ROIs, see ROI_definitions.R
-#'@param outputfilename Specify a filename to save the data.
+#'@param dir Directory and/or filename prefix of the files
+#'@param filesuffix Optional filename characters between ID and ".voistat"
+#'@param master A data.frame of the same format to add the new data to
+#'@param outfile Specify a filename to save the data.
+#'@param varname The name of the variable being exctracted, e.g. "SRTM".
 #'@return A table of values for the specified ROIs for all participants.
 #'@examples
-#' batchVoistat(participants, ROI_def=standardROIs(), outputfilename="batch1.csv")
-batchVoistat <- function(participants, ROI_def, outputfilename, dir="", filesuffix) {
+#' batchVoistat(participants, ROI_def=standardROIs(), outfile="batch1.csv")
+batchVoistat <- function(participants, ROI_def, dir="", filesuffix, varname,
+                         otherdata=NULL, outfile) {
 
   voistat_file = paste(dir, participants[1], filesuffix, ".voistat", sep="")
 
@@ -129,7 +111,10 @@ batchVoistat <- function(participants, ROI_def, outputfilename, dir="", filesuff
     row.names(trans) <- each
     master <- rbind(master,trans)
   }
-  write.csv(master, file = outputfilename)
+  master <- as.data.frame(master)
+  names(master) <- lapply(names(master), paste, "_", varname, sep="")
+  if (!(is.null(otherdata))) master <- data.frame(otherdata, master)
+  if (!(is.null(outfile))) write.csv(master, file = outfile)
   return(master)
 }
 
@@ -154,7 +139,7 @@ QC_count_ROIs <- function(participants, tac_format="PMOD", dir="",
         output[each, ] <- length(tac_raw)
     }
     if ( (length(unique(output$ROIs))) > 1 ) {
-        warning(paste("Unique numbers of ROIs:", as.character(unique(output$ROIs))))
+        warning(paste("Unique ROI sets:", as.character(unique(output$ROIs))))
     }
     
     return(output)

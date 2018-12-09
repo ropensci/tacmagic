@@ -4,12 +4,10 @@
 \alias{calcSUVR}
 \title{Calculate weighted SUVRs for specified regions of interest}
 \usage{
-calcSUVR(tac, volumes, ROI_def, SUVR_def, reference = "cerebellum")
+calcSUVR(tac, SUVR_def, reference = "cerebellum", ROI_def)
 }
 \arguments{
-\item{tac}{The time-activity curve data from loading function}
-
-\item{volumes}{The ROI volume data from loading function}
+\item{tac}{The time-activity curve data from calcTAC()}
 
 \item{SUVR_def}{is a vector of the start times for window to be used in SUVR}
 }
@@ -25,5 +23,5 @@ those weighted means. It also takes into account potentially different
 frame durations.
 }
 \examples{
-calcSUVR(p1tac, p1vol, standardROIs(), c("3000", "3300", "3600", "3900"))
+calcSUVR(p1tac, c("3000", "3300", "3600", "3900"))
 }

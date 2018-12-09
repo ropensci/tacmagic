@@ -15,13 +15,12 @@
 #' those weighted means. It also takes into account potentially different
 #' frame durations.
 #'
-#'@param tac The time-activity curve data from loading function
-#'@param volumes The ROI volume data from loading function
+#'@param tac The time-activity curve data from calcTAC()
 #'@param SUVR_def is a vector of the start times for window to be used in SUVR
 #'@return A data.frame of SUVR values for the specified ROIs
 #'@examples
-#' calcSUVR(p1tac, p1vol, standardROIs(), c("3000", "3300", "3600", "3900"))
-calcSUVR <- function(tac, volumes, ROI_def, SUVR_def, reference="cerebellum") {
+#' calcSUVR(p1tac, c("3000", "3300", "3600", "3900"))
+calcSUVR <- function(tac, SUVR_def, reference="cerebellum", ROI_def) {
     
     SUVR <- rep(NA, length(ROI_def))
     SUVRtable <- data.frame(row.names=names(ROI_def), SUVR)
@@ -30,11 +29,9 @@ calcSUVR <- function(tac, volumes, ROI_def, SUVR_def, reference="cerebellum") {
     frames <- match(SUVR_def, tac$start)
     frame_weights <- tac$end[frames] - tac$start[frames]
     
-    weighted_tacs <- calcTAC(tac, volumes, ROI_def)
-    
     for (ROI in names(ROI_def)) {
-        rich <- weighted.mean(weighted_tacs[frames,][,ROI], frame_weights)
-        poor <- weighted.mean(weighted_tacs[frames,][,reference], frame_weights)
+        rich <- weighted.mean(tac[frames,][,ROI], frame_weights)
+        poor <- weighted.mean(tac[frames,][,reference], frame_weights)
         SUVRtable[ROI, "SUVR"] <-  rich/poor
     }
     
