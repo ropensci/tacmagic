@@ -28,7 +28,8 @@ reference_Logan_xy <- function(tac, target, ref, k2prime, method) {
   mid_time <- (tac$start + tac$end) / 2
   
   # Derive functions for TACs by interpolation.
-  target_tac <- approxfun(x=mid_time, y=tac[,target], method = "constant", rule=2)
+  target_tac <- approxfun(x=mid_time, y=tac[,target], method = "constant",
+                          rule=2)
   ref_tac <- approxfun(x=mid_time, y=tac[,ref], method = "constant", rule=2)
   
   
@@ -37,11 +38,13 @@ reference_Logan_xy <- function(tac, target, ref, k2prime, method) {
 
     frames <- 1:length(mid_time)
     yA <- sapply(frames, FUN=vAUC, x=mid_time, y=tac[,target])
-    xA <- sapply(frames, FUN=vAUC, x=mid_time, y=tac[,ref]) + (tac[,ref] / k2prime)
+    xA <- sapply(frames, FUN=vAUC, x=mid_time, y=tac[,ref]) + (tac[,ref] /
+                                                                    k2prime)
   } else if (method == "integrate") {
     message("Integration function is integrate().")
     yA <- sapply(mid_time, FUN=vintegrate, lower=mid_time[1], f=target_tac)
-    xA <- sapply(mid_time, FUN=vintegrate, lower=mid_time[1], f=ref_tac) + (tac[,ref] / k2prime)
+    xA <- sapply(mid_time, FUN=vintegrate, lower=mid_time[1], f=ref_tac) + (
+                                                            tac[,ref] / k2prime)
   }
 
   yB <- tac[,target]
@@ -70,14 +73,16 @@ reference_Logan_lm <- function(tac_data, target, ref, k2prime, t_star, method) {
 }
 
 # The coefficient from the non-invasive Logan method, equal to DVR
-DVR_reference_Logan <- function(tac_data, target, ref, k2prime, t_star, method="trapz") {
+DVR_reference_Logan <- function(tac_data, target, ref, k2prime, t_star,
+                                method="trapz") {
     model <- reference_Logan_lm(tac_data, target, ref, k2prime, t_star, method)
     DVR <- model$coefficients[[2]]
     return(DVR)
 }
 
 # The non-invasive reference Logan method for all ROIs in tac_data.
-DVR_all_reference_Logan <- function(tac_data, ref, k2prime, t_star=0, method="trapz") {
+DVR_all_reference_Logan <- function(tac_data, ref, k2prime, t_star=0,
+                                    method="trapz") {
     
     ROIs <- names(tac_data)[3:length(names(tac_data))]
     
@@ -86,7 +91,9 @@ DVR_all_reference_Logan <- function(tac_data, ref, k2prime, t_star=0, method="tr
     
     for (ROI in ROIs) {
         message(paste("Trying", ROI))
-        attempt <- DVR_reference_Logan(tac_data, target=ROI, ref=ref, k2prime=k2prime, t_star=t_star, method=method)
+        attempt <- DVR_reference_Logan(tac_data, target=ROI, ref=ref,
+                                       k2prime=k2prime, t_star=t_star,
+                                       method=method)
         if (class(attempt) == "try-error") {
             attempt <- NA
         }
@@ -96,7 +103,8 @@ DVR_all_reference_Logan <- function(tac_data, ref, k2prime, t_star=0, method="tr
 }
 
 # 2 plots to visualize the non-invasive Logan graphical analysis model.
-plot_reference_Logan <- function(tac_data, target, ref, k2prime, t_star=0, method="trapz") {
+plot_reference_Logan <- function(tac_data, target, ref, k2prime, t_star=0,
+                                 method="trapz") {
     model <- reference_Logan_lm(tac_data, target, ref, k2prime, t_star, method)
     xy <- reference_Logan_xy(tac_data, target, ref, k2prime, method)
     x <- xy$x

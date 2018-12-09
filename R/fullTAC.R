@@ -19,7 +19,8 @@ calcTAC <- function(tac, volumes, ROI_def, merge=F, PVC=F) {
     ROI_PVC <- ROI_def
     
     if (PVC) {
-        for (i in 1:length(ROI_PVC)) ROI_PVC[i] <- lapply(ROI_PVC[i], paste, "_C", sep="")
+        for (i in 1:length(ROI_PVC)) ROI_PVC[i] <- lapply(ROI_PVC[i], paste,
+                                                          "_C", sep="")
     }
     
     # Setup the output data.frame
@@ -28,7 +29,8 @@ calcTAC <- function(tac, volumes, ROI_def, merge=F, PVC=F) {
     names(calculated_TACs) <- names(ROI_def)
     # Calculate the weighted mean TACs for each ROI in the definition list.
     for (i in 1:length(ROI_def)) {
-        calculated_TACs[i] <- apply(tac[,ROI_PVC[[i]]], 1,  weighted.mean, volumes[ROI_def[[i]],])
+        calculated_TACs[i] <- apply(tac[,ROI_PVC[[i]]], 1,  weighted.mean,
+                                    volumes[ROI_def[[i]],])
     }
     
     # Prepare the output data frame.

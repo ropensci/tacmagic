@@ -46,9 +46,13 @@ participant_batch <- function(participants, models=c("SUVR", "Logan", "eslope"),
   
   if ("SUVR" %in% models) {
       # TODO check to ensure all required parameters are available
-      master <- batchSUVR(participants=participants, dir=dir, tac_format=tac_format, tac_file_suffix=tac_file_suffix,
-                        vol_format=vol_format, vol_file_suffix=vol_file_suffix, ROI_def=ROI_def, SUVR_def=SUVR_def, PVC=PVC, reference=reference,
-                        outfile=NULL)
+      master <- batchSUVR(participants=participants, dir=dir,
+                          tac_format=tac_format,
+                          tac_file_suffix=tac_file_suffix,
+                          vol_format=vol_format,
+                          vol_file_suffix=vol_file_suffix,
+                          ROI_def=ROI_def, SUVR_def=SUVR_def, PVC=PVC,
+                          reference=reference, outfile=NULL)
   }
   
   if ("Logan" %in% models) {
@@ -111,9 +115,11 @@ batchSUVR <- function(participants, dir="", tac_format="PMOD",
   vols <- loadVolumes(vol_file, format=vol_format)
   message("Loading first tac to create template table.")
   first_tac <- calcTAC(loadTACfile(paste(dir, participants[1], tac_file_suffix,
-                                   sep=""), tac_format), volumes=vols, ROI_def=ROI_def, PVC=PVC)
+                                   sep=""), tac_format), volumes=vols,
+                                   ROI_def=ROI_def, PVC=PVC)
 
-  first <- calcSUVR(first_tac, SUVR_def=SUVR_def, reference=reference, ROI_def=ROI_def)
+  first <- calcSUVR(first_tac, SUVR_def=SUVR_def, reference=reference,
+                    ROI_def=ROI_def)
   master <- t(first)
   master <- master[-1,]
   message("Empty master table complete; iterating through all participants.")
@@ -148,7 +154,8 @@ batchDVR <- function(participants, dir="", tac_format="PMOD",
   first_tac <- calcTAC(loadTACfile(paste(dir, participants[1], tac_file_suffix,
                     sep=""), tac_format), volumes=vols, ROI_def=ROI_def, PVC=PVC)
   
-  first <- DVR_all_reference_Logan(first_tac, ref=reference, k2prime=k2prime, t_star=t_star)
+  first <- DVR_all_reference_Logan(first_tac, ref=reference, k2prime=k2prime,
+                                   t_star=t_star)
   master <- t(first)
   master <- master[-1,]
   message("Empty master table complete; iterating through all participants.")
@@ -159,7 +166,9 @@ batchDVR <- function(participants, dir="", tac_format="PMOD",
     vols <- loadVolumes(paste(dir, each, vol_file_suffix, sep=""))
     
     tac_data <- calcTAC(loadTACfile(paste(dir, each, tac_file_suffix,
-                sep=""), tac_format), volumes=vols, ROI_def=ROI_def, PVC=PVC)
+                                          sep=""),
+                                    tac_format), volumes=vols, ROI_def=ROI_def,
+                                    PVC=PVC)
     
     DVR <- DVR_all_reference_Logan(tac_data, reference, k2prime, t_star)
     trans <- t(DVR)
@@ -182,7 +191,8 @@ batchSlope <- function(participants, tac_format="PMOD", dir="",
     vols <- loadVolumes(vol_file, format=vol_format)
     message("Loading first tac to create template table.")
     first_tac_raw <- loadTACfile(paste(dir, participants[1], tac_file_suffix,
-                                       sep=""), tac_format)
+                                       sep=""),
+                                 tac_format)
     first_tac <- calcTAC(first_tac_raw, vols, ROI_def=ROI_def)
     message("Loaded first tac file. Calculating SUVR...")
     
