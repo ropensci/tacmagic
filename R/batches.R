@@ -37,22 +37,22 @@ participant_batch <- function(participants, models=c("SUVR", "Logan", "eslope"),
                         dir="", tac_format="PMOD", tac_file_suffix=".tac",
                         vol_file_suffix="_TAC.voistat", vol_format="Voistat",
                         ROI_def, SUVR_def=NULL, PVC=F, reference="cerebellum",
-                        k2prime=NULL, t_star=0, outfile=NULL) {
+                        k2prime=NULL, t_star=0, master=NULL, outfile=NULL) {
   
   all_models <- c("SUVR", "Logan", "eslope")
-  if (!(all(models %in% all_models))) error("Invalid model name(s) supplied.")
-  
-  master <- NULL
+  if (!(all(models %in% all_models))) stop("Invalid model name(s) supplied.")
   
   if ("SUVR" %in% models) {
       # TODO check to ensure all required parameters are available
-      master <- batchSUVR(participants=participants, dir=dir,
+      SUVR <- batchSUVR(participants=participants, dir=dir,
                           tac_format=tac_format,
                           tac_file_suffix=tac_file_suffix,
                           vol_format=vol_format,
                           vol_file_suffix=vol_file_suffix,
                           ROI_def=ROI_def, SUVR_def=SUVR_def, PVC=PVC,
                           reference=reference, outfile=NULL)
+     names(SUVR) <- lapply(names(SUVR), paste, "_SUVR", sep="")
+     if (is.null(master)) master <- SUVR else master <- data.frame(master, SUVR)
   }
   
   if ("Logan" %in% models) {
@@ -60,11 +60,8 @@ participant_batch <- function(participants, models=c("SUVR", "Logan", "eslope"),
       DVR <- batchDVR(participants, dir, tac_format, tac_file_suffix,
                       vol_format, vol_file_suffix, ROI_def, k2prime, t_star,
                       reference, PVC, outfile=NULL)
-      if (is.null(master)) {
-          master <- DVR
-      } else {
-          merge(master, DVR)
-      }
+      names(DVR) <- lapply(names(DVR), paste, "_DVR", sep="")
+      if (is.null(master)) master <- DVR else master <- data.frame(master, DVR)
   }
 
   if ("eslope" %in% models) {
@@ -72,11 +69,9 @@ participant_batch <- function(participants, models=c("SUVR", "Logan", "eslope"),
       eslope <- batchSlope(participants, tac_format, dir, tac_file_suffix,
                            vol_format, vol_file_suffix, ROI_def,
                            outfile=NULL)
-      if (is.null(master)) {
-        master <- eslope
-      } else {
-        merge(master, eslope)
-      }
+      names(eslope) <- lapply(names(eslope), paste, "_eslope", sep="")
+      if (is.null(master)) master <- eslope else master <- data.frame(master,
+                                                                      eslope)
   }
   if (!(is.null(outfile))) write.csv(master, file = outfile)
   return(master)
