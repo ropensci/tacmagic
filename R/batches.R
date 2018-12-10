@@ -67,7 +67,7 @@ participant_batch <- function(participants, models=c("SUVR", "Logan", "eslope"),
   if ("eslope" %in% models) {
       # TODO check to ensure all required parameters are available
       eslope <- batchSlope(participants, tac_format, dir, tac_file_suffix,
-                           vol_format, vol_file_suffix, ROI_def,
+                           vol_format, vol_file_suffix, ROI_def, PVC=PVC,
                            outfile=NULL)
       names(eslope) <- lapply(names(eslope), paste, "_eslope", sep="")
       if (is.null(master)) master <- eslope else master <- data.frame(master,

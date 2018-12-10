@@ -108,14 +108,11 @@ reference_Logan_xy <- function(tac, target, ref, k2prime, method) {
   
   
   if (method == "trapz") {
-    message("Integration function is trapz().")
-
     frames <- 1:length(mid_time)
     yA <- sapply(frames, FUN=vAUC, x=mid_time, y=tac[,target])
     xA <- sapply(frames, FUN=vAUC, x=mid_time, y=tac[,ref]) + (tac[,ref] /
                                                                     k2prime)
   } else if (method == "integrate") {
-    message("Integration function is integrate().")
     yA <- sapply(mid_time, FUN=vintegrate, lower=mid_time[1], f=target_tac)
     xA <- sapply(mid_time, FUN=vintegrate, lower=mid_time[1], f=ref_tac) + (
                                                             tac[,ref] / k2prime)

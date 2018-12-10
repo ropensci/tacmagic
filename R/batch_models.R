@@ -37,12 +37,13 @@ reference, PVC, outfile=NULL) {
     vol_file = paste(dir, participants[1], vol_file_suffix, sep="")
     vols <- loadVolumes(vol_file, format=vol_format)
     message("Loading first tac to create template table.")
-    first_tac <- calcTAC(loadTACfile(paste(dir, participants[1], tac_file_suffix,
-    sep=""), tac_format), volumes=vols,
-    ROI_def=ROI_def, PVC=PVC)
+    first_tac <- calcTAC(loadTACfile(paste(dir, participants[1],
+                                           tac_file_suffix, sep=""),
+                                     tac_format), volumes=vols, ROI_def=ROI_def,
+                                     PVC=PVC)
     
     first <- calcSUVR(first_tac, SUVR_def=SUVR_def, reference=reference,
-    ROI_def=ROI_def)
+                      ROI_def=ROI_def)
     master <- t(first)
     master <- master[-1,]
     message("Empty master table complete; iterating through all participants.")
@@ -52,7 +53,7 @@ reference, PVC, outfile=NULL) {
         
         vols <- loadVolumes(paste(dir, each, vol_file_suffix, sep=""))
         tac <- calcTAC(loadTACfile(paste(dir, each, tac_file_suffix, sep=""),
-        tac_format), vols, ROI_def)
+        tac_format), vols, ROI_def, PVC=PVC)
         
         SUVR <- calcSUVR(tac, SUVR_def, reference, ROI_def=ROI_def)
         trans <- t(SUVR)
@@ -106,8 +107,9 @@ t_star=0, reference="cerebellum", PVC=F, outfile=NULL) {
 
 # Batch as in calcSUVR but for the novel slope measure.
 batchSlope <- function(participants, tac_format="PMOD", dir="",
-tac_file_suffix=".tac", vol_format="Voistat",
-vol_file_suffix="_TAC.voistat", ROI_def, outfile=NULL) {
+                       tac_file_suffix=".tac", vol_format="Voistat",
+                       vol_file_suffix="_TAC.voistat", ROI_def, outfile=NULL,
+                       PVC) {
     
     #Sets up the output file by using the first participant as a template.
     vol_file = paste(dir, participants[1], vol_file_suffix, sep="")
@@ -116,7 +118,7 @@ vol_file_suffix="_TAC.voistat", ROI_def, outfile=NULL) {
     first_tac_raw <- loadTACfile(paste(dir, participants[1], tac_file_suffix,
     sep=""),
     tac_format)
-    first_tac <- calcTAC(first_tac_raw, vols, ROI_def=ROI_def)
+    first_tac <- calcTAC(first_tac_raw, vols, ROI_def=ROI_def, PVC=PVC)
     message("Loaded first tac file. Calculating SUVR...")
     
     first <- peakSlope(first_tac)
@@ -133,7 +135,7 @@ vol_file_suffix="_TAC.voistat", ROI_def, outfile=NULL) {
         tac_format)
         vols <- loadVolumes(paste(dir, each, vol_file_suffix, sep=""),
         format=vol_format)
-        tac <- calcTAC(tac_raw, vols, ROI_def=ROI_def)
+        tac <- calcTAC(tac_raw, vols, ROI_def=ROI_def, PVC=PVC)
         
         SLOPE <- peakSlope(tac)
         trans <- t(SLOPE)
