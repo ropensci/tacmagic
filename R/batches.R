@@ -18,8 +18,8 @@
 #'
 #'@param participants A vector of participant IDs
 #'@param models A vector of names of the models to calculate
-#'@param tac_format Format of tac files provided: See loadTACfile()
 #'@param dir A directory and/or file name prefix for the tac/volume files
+#'@param tac_format Format of tac files provided: See loadTACfile()
 #'@param tac_file_suffix How participant IDs corresponds to the TAC files
 #'@param vol_format The file format that includes volumes: See loadVolumes()
 #'@param vol_file_suffix How participant IDs correspond to volume files
@@ -88,9 +88,9 @@ participant_batch <- function(participants, models=c("SUVR", "Logan", "eslope"),
 #'@param ROI_def Object that defines combined ROIs, see ROI_definitions.R
 #'@param dir Directory and/or filename prefix of the files
 #'@param filesuffix Optional filename characters between ID and ".voistat"
+#'@param varname The name of the variable being exctracted, e.g. "SRTM"
 #'@param otherdata A data.frame of the same participants to add the new data to
-#'@param outfile Specify a filename to save the data.
-#'@param varname The name of the variable being exctracted, e.g. "SRTM".
+#'@param outfile Specify a filename to save the data
 #'@return A table of values for the specified ROIs for all participants.
 #'@examples
 #'
