@@ -22,14 +22,14 @@
 #' calcSUVR(p1tac, c("3000", "3300", "3600", "3900"))
 calcSUVR <- function(tac, SUVR_def, reference="cerebellum", ROI_def) {
     
-    SUVR <- rep(NA, length(ROI_def))
-    SUVRtable <- data.frame(row.names=names(ROI_def), SUVR)
+    SUVR <- rep(NA, (length(names(tac)) - 2))
+    SUVRtable <- data.frame(row.names=names(tac)[-(1:2)], SUVR)
     
     # will need to validate that t1$start and t2$end are numeric
     frames <- match(SUVR_def, tac$start)
     frame_weights <- tac$end[frames] - tac$start[frames]
     
-    for (ROI in names(ROI_def)) {
+    for (ROI in names(tac)[-(1:2)]) {
         rich <- weighted.mean(tac[frames,][,ROI], frame_weights)
         poor <- weighted.mean(tac[frames,][,reference], frame_weights)
         SUVRtable[ROI, "SUVR"] <-  rich/poor

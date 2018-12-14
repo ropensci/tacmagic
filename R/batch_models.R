@@ -29,7 +29,7 @@
 #'@examples
 #'
 batchSUVR <- function(participants, dir="", tac_format="PMOD",
-                      tac_file_suffix=".tac", vol_format="Voistat",
+                      tac_file_suffix=".tac", merge, vol_format="Voistat",
                       vol_file_suffix="_TAC.voistat", ROI_def, SUVR_def,
                       reference, PVC, outfile=NULL) {
     
@@ -42,7 +42,7 @@ batchSUVR <- function(participants, dir="", tac_format="PMOD",
     message("Loading first tac to create template table.")
     vol1 <- loadVolumes(vol_files[1], format=vol_format)
     tac1 <- loadTACfile(tac_files[1], tac_format)
-    first_tac <- calcTAC(tac1, volumes=vol1, ROI_def=ROI_def, PVC=PVC)
+    first_tac <- calcTAC(tac1, volumes=vol1, ROI_def=ROI_def, PVC=PVC, merge=merge)
     
     first <- calcSUVR(first_tac, SUVR_def=SUVR_def, reference=reference,
                       ROI_def=ROI_def)
@@ -55,7 +55,7 @@ batchSUVR <- function(participants, dir="", tac_format="PMOD",
         
         voli <- loadVolumes(vol_files[i], vol_format)
         taci <- loadTACfile(tac_files[i], tac_format)
-        tac_data <- calcTAC(taci, voli, ROI_def=ROI_def, PVC=PVC)
+        tac_data <- calcTAC(taci, voli, ROI_def=ROI_def, PVC=PVC, merge=merge)
         
         SUVR <- calcSUVR(tac_data, SUVR_def, reference, ROI_def=ROI_def)
         trans <- t(SUVR)
@@ -89,7 +89,7 @@ batchSUVR <- function(participants, dir="", tac_format="PMOD",
 #'@examples
 #'
 batchDVR <- function(participants, dir="", tac_format="PMOD",
-                     tac_file_suffix=".tac", vol_format="Voistat",
+                     tac_file_suffix=".tac", merge=F, vol_format="Voistat",
                      vol_file_suffix="_TAC.voistat", ROI_def, k2prime,
                      t_star=0, reference="cerebellum", PVC, outfile=NULL) {
     
@@ -102,7 +102,7 @@ batchDVR <- function(participants, dir="", tac_format="PMOD",
     
     vol1 <- loadVolumes(vol_files[1], format=vol_format)
     tac1 <- loadTACfile(tac_files[1], tac_format)
-    first_tac <- calcTAC(tac1, volumes=vol1, ROI_def=ROI_def, PVC=PVC)
+    first_tac <- calcTAC(tac1, volumes=vol1, ROI_def=ROI_def, PVC=PVC, merge=merge)
     
     first <- DVR_all_reference_Logan(first_tac, ref=reference, k2prime=k2prime,
                                      t_star=t_star)
@@ -116,7 +116,7 @@ batchDVR <- function(participants, dir="", tac_format="PMOD",
         
         voli <- loadVolumes(vol_files[i], format=vol_format)
         taci <- loadTACfile(tac_files[i], tac_format)
-        tac_data <- calcTAC(taci, volumes=voli, ROI_def=ROI_def, PVC=PVC)
+        tac_data <- calcTAC(taci, volumes=voli, ROI_def=ROI_def, PVC=PVC, merge=merge)
         
         DVR <- DVR_all_reference_Logan(tac_data, reference, k2prime, t_star)
         trans <- t(DVR)
@@ -131,7 +131,7 @@ batchDVR <- function(participants, dir="", tac_format="PMOD",
 
 # Batch as in calcSUVR but for the novel slope measure.
 batchSlope <- function(participants, tac_format="PMOD", dir="",
-                       tac_file_suffix=".tac", vol_format="Voistat",
+                       tac_file_suffix=".tac", merge, vol_format="Voistat",
                        vol_file_suffix="_TAC.voistat", ROI_def, outfile=NULL,
                        PVC) {
     
@@ -143,7 +143,7 @@ batchSlope <- function(participants, tac_format="PMOD", dir="",
     vol1 <- loadVolumes(vol_files[1], format=vol_format)
     message("Loading first tac to create template table.")
     tac1 <- loadTACfile(tac_files[1], tac_format)
-    first_tac <- calcTAC(tac1, volumes=vol1, ROI_def=ROI_def, PVC=PVC)
+    first_tac <- calcTAC(tac1, volumes=vol1, ROI_def=ROI_def, PVC=PVC, merge=merge)
     message("Loaded first tac file. Calculating SUVR...")
     
     first <- peakSlope(first_tac)
@@ -158,7 +158,7 @@ batchSlope <- function(participants, tac_format="PMOD", dir="",
         
         taci <- loadTACfile(tac_files[i], tac_format)
         voli <- loadVolumes(vol_files[i], format=vol_format)
-        tac_data <- calcTAC(taci, voli, ROI_def=ROI_def, PVC=PVC)
+        tac_data <- calcTAC(taci, voli, ROI_def=ROI_def, PVC=PVC, merge=merge)
         
         SLOPE <- peakSlope(tac_data)
         trans <- t(SLOPE)

@@ -14,7 +14,7 @@
 #'@param merge If true, includes the original ROIs in the output data.
 #'@return Time-activity curves for the specified ROIs
 #'@examples calcTAC(p1tac, p1vol, standardROIs(), merge=T)
-calcTAC <- function(tac, volumes, ROI_def, merge=F, PVC) {
+calcTAC <- function(tac, volumes, ROI_def, merge, PVC) {
     
     ROI_PVC <- ROI_def
     

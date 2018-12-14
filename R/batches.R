@@ -34,7 +34,7 @@
 #'@examples
 #'
 participant_batch <- function(participants, models=c("SUVR", "Logan", "eslope"),
-                        dir="", tac_format="PMOD", tac_file_suffix=".tac",
+                        dir="", tac_format="PMOD", tac_file_suffix=".tac", merge=F,
                         vol_file_suffix="_TAC.voistat", vol_format="Voistat",
                         ROI_def, SUVR_def=NULL, PVC=F, reference="cerebellum",
                         k2prime=NULL, t_star=0, master=NULL, outfile=NULL) {
@@ -47,6 +47,7 @@ participant_batch <- function(participants, models=c("SUVR", "Logan", "eslope"),
       SUVR <- batchSUVR(participants=participants, dir=dir,
                           tac_format=tac_format,
                           tac_file_suffix=tac_file_suffix,
+                          merge=merge,
                           vol_format=vol_format,
                           vol_file_suffix=vol_file_suffix,
                           ROI_def=ROI_def, SUVR_def=SUVR_def, PVC=PVC,
@@ -59,7 +60,7 @@ participant_batch <- function(participants, models=c("SUVR", "Logan", "eslope"),
       # TODO check to ensure all required parameters are available
       DVR <- batchDVR(participants, dir, tac_format, tac_file_suffix,
                       vol_format, vol_file_suffix, ROI_def, k2prime, t_star,
-                      reference, PVC, outfile=NULL)
+                      reference, PVC, outfile=NULL, merge=merge)
       names(DVR) <- lapply(names(DVR), paste, "_DVR", sep="")
       if (is.null(master)) master <- DVR else master <- data.frame(master, DVR)
   }
@@ -68,7 +69,7 @@ participant_batch <- function(participants, models=c("SUVR", "Logan", "eslope"),
       # TODO check to ensure all required parameters are available
       eslope <- batchSlope(participants, tac_format, dir, tac_file_suffix,
                            vol_format, vol_file_suffix, ROI_def, PVC=PVC,
-                           outfile=NULL)
+                           outfile=NULL, merge=merge)
       names(eslope) <- lapply(names(eslope), paste, "_eslope", sep="")
       if (is.null(master)) master <- eslope else master <- data.frame(master,
                                                                       eslope)

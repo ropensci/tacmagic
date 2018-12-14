@@ -51,9 +51,9 @@ method="trapz") {
     
     for (ROI in ROIs) {
         message(paste("Trying", ROI))
-        attempt <- DVR_reference_Logan(tac_data, target=ROI, ref=ref,
-        k2prime=k2prime, t_star=t_star,
-        method=method)
+        attempt <- try(DVR_reference_Logan(tac_data, target=ROI, ref=ref,
+                                           k2prime=k2prime, t_star=t_star,
+                                           method=method))
         if (class(attempt) == "try-error") {
             attempt <- NA
         }
