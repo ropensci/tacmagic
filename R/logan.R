@@ -35,14 +35,14 @@ method="trapz") {
 #' all TACs in a supplied tac file. It uses DVR_reference_Logan.
 #'
 #'@param tac_data The time-activity curve data from calcTAC()
-#'@param ref The reference region, e.g. "cerebellum"
+#'@param reference The reference region, e.g. "cerebellum"
 #'@param k2prime A fixed value for k2' must be specified (e.g. 0.2)
 #'@param t_star If 0, t* will be calculated using find_t_star()
 #'@param method Method of inntegration, "trapz" or "integrate"
 #'@return Data frame with calculate DVRs for all ROIs
 #'@examples
-DVR_all_reference_Logan <- function(tac_data, ref, k2prime, t_star=0,
-method="trapz") {
+DVR_all_reference_Logan <- function(tac_data, reference, k2prime, t_star=0,
+                                    method="trapz") {
     
     ROIs <- names(tac_data)[3:length(names(tac_data))]
     
@@ -51,7 +51,7 @@ method="trapz") {
     
     for (ROI in ROIs) {
         message(paste("Trying", ROI))
-        attempt <- try(DVR_reference_Logan(tac_data, target=ROI, ref=ref,
+        attempt <- try(DVR_reference_Logan(tac_data, target=ROI, ref=reference,
                                            k2prime=k2prime, t_star=t_star,
                                            method=method))
         if (class(attempt) == "try-error") {
@@ -75,7 +75,7 @@ method="trapz") {
 #'@return No return
 #'@examples
 plot_reference_Logan <- function(tac_data, target, ref, k2prime, t_star=0,
-method="trapz") {
+                                 method="trapz") {
     model <- reference_Logan_lm(tac_data, target, ref, k2prime, t_star, method)
     xy <- reference_Logan_xy(tac_data, target, ref, k2prime, method)
     x <- xy$x
@@ -133,7 +133,8 @@ reference_Logan_xy <- function(tac, target, ref, k2prime, method) {
 #' @noRd
 reference_Logan_lm <- function(tac_data, target, ref, k2prime, t_star, method) {
     
-  xy <- reference_Logan_xy(tac_data, target, ref, k2prime, method)
+  xy <- reference_Logan_xy(tac_data, target=target, ref=ref, k2prime=k2prime, 
+                           method=method)
   
   x <- xy$x
   y <- xy$y

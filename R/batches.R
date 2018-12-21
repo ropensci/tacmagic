@@ -6,7 +6,7 @@
 ## Beta version--check all work ##
 ##################################
 
-#' Calculate multiple models for a batch of participants
+#' Calculate one or more models for a batch of participants
 #'
 #' For a vector of participant IDs and correspondingly named tac and volume
 #' files, this produces SUVR, DVR, and upslope in a tidy data.frame. Current
@@ -33,47 +33,56 @@
 #'@return A table of SUVR values for the specified ROIs for all participants
 #'@examples
 #'
-participant_batch <- function(participants, models=c("SUVR", "Logan", "eslope"),
-                        dir="", tac_format="PMOD", tac_file_suffix=".tac", merge=F,
-                        vol_file_suffix="_TAC.voistat", vol_format="Voistat",
-                        ROI_def, SUVR_def=NULL, PVC=F, reference="cerebellum",
-                        k2prime=NULL, t_star=0, master=NULL, outfile=NULL) {
+tm_batch <- function(participants, models=c("SUVR", "Logan", "eslope"),
+                     dir="", tac_format="PMOD", tac_file_suffix=".tac", 
+                     vol_file_suffix="_TAC.voistat", 
+                     vol_format="Voistat", ROI_def=NULL, SUVR_def=NULL, 
+                     PVC=F, reference="cerebellum", merge=F,
+                     k2prime=NULL, t_star=0, master=NULL, outfile=NULL) {
   
-  all_models <- c("SUVR", "Logan", "eslope")
+  file_info <- list(dir=dir, tac_format=tac_format, 
+                    tac_file_suffix=tac_file_suffix, vol_format=vol_format,
+                    vol_file_suffix=vol_file_suffix)
+
+  all_models <- c("SUVR", "Logan", "eslope", "max")
   if (!(all(models %in% all_models))) stop("Invalid model name(s) supplied.")
   
   if ("SUVR" %in% models) {
-      # TODO check to ensure all required parameters are available
-      SUVR <- batchSUVR(participants=participants, dir=dir,
-                          tac_format=tac_format,
-                          tac_file_suffix=tac_file_suffix,
-                          merge=merge,
-                          vol_format=vol_format,
-                          vol_file_suffix=vol_file_suffix,
-                          ROI_def=ROI_def, SUVR_def=SUVR_def, PVC=PVC,
-                          reference=reference, outfile=NULL)
-     names(SUVR) <- lapply(names(SUVR), paste, "_SUVR", sep="")
-     if (is.null(master)) master <- SUVR else master <- data.frame(master, SUVR)
+    # TODO check to ensure all required parameters are available
+    SUVR <- model_batch(participants=participants, model="SUVR", PVC=PVC,
+                        SUVR_def=SUVR_def, reference=reference, merge=merge, 
+                        file_info=file_info, ROI_def=ROI_def)
+    names(SUVR) <- lapply(names(SUVR), paste, "_SUVR", sep="")
+    if (is.null(master)) master <- SUVR else master <- data.frame(master, SUVR)
   }
   
   if ("Logan" %in% models) {
-      # TODO check to ensure all required parameters are available
-      DVR <- batchDVR(participants, dir, tac_format, tac_file_suffix,
-                      vol_format, vol_file_suffix, ROI_def, k2prime, t_star,
-                      reference, PVC, outfile=NULL, merge=merge)
-      names(DVR) <- lapply(names(DVR), paste, "_DVR", sep="")
-      if (is.null(master)) master <- DVR else master <- data.frame(master, DVR)
+    # TODO check to ensure all required parameters are available
+    DVR <- model_batch(participants=participants, model="Logan", PVC=PVC,
+                       file_info=file_info, ROI_def=ROI_def, k2prime=k2prime,
+                       t_star=t_star, reference=reference, merge=merge)
+                       
+    names(DVR) <- lapply(names(DVR), paste, "_DVR", sep="")
+    if (is.null(master)) master <- DVR else master <- data.frame(master, DVR)
   }
 
   if ("eslope" %in% models) {
-      # TODO check to ensure all required parameters are available
-      eslope <- batchSlope(participants, tac_format, dir, tac_file_suffix,
-                           vol_format, vol_file_suffix, ROI_def, PVC=PVC,
-                           outfile=NULL, merge=merge)
-      names(eslope) <- lapply(names(eslope), paste, "_eslope", sep="")
-      if (is.null(master)) master <- eslope else master <- data.frame(master,
+    # TODO check to ensure all required parameters are available
+    eslope <- model_batch(participants, mode="eslope", file_info=file_info,
+                          ROI_def=ROI_def, PVC=PVC, merge=merge)
+    names(eslope) <- lapply(names(eslope), paste, "_eslope", sep="")
+    if (is.null(master)) master <- eslope else master <- data.frame(master,
                                                                       eslope)
   }
+
+  if ("max" %in% models) {
+    # TODO check to ensure all required parameters are available
+    maxv <- model_batch(participants, mode="max", file_info=file_info,
+                        ROI_def=ROI_def, PVC=PVC, merge=merge)
+    names(maxv) <- lapply(names(maxv), paste, "_max", sep="")
+    if (is.null(master)) master <- maxv else master <- data.frame(master, maxv)
+  }
+
   if (!(is.null(outfile))) write.csv(master, file = outfile)
   return(master)
 }
@@ -122,26 +131,29 @@ batchVoistat <- function(participants, ROI_def, dir="", filesuffix, varname,
 # Counts ROIs in tac file of each listed participant; returns as dataframe.
 QC_count_ROIs <- function(participants, tac_format="PMOD", dir="",
                           tac_file_suffix=".tac") {
-    trip <- 0
-    output <- data.frame(row.names=participants,
-                         ROIs=rep(NA, length(participants)))
-    for (each in participants) {
-        message(paste("Working on...", each))
-        tac_raw <- loadTACfile(paste(dir, each, tac_file_suffix, sep=""),
-                               tac_format)
-        if (trip == 0) {
-            headers <- names(tac_raw)
-            trip <- 1
-        } else {
-            if (!all(names(tac_raw) == headers)) {
-                warning(paste(each, ": ROIs do not match first participant."))
-            }
+  trip <- 0
+  output <- data.frame(row.names=participants,
+                       ROIs=rep(NA, length(participants)))
+  for (each in participants) {
+    message(paste("Working on...", each))
+    tac_raw <- loadTACfile(paste(dir, each, tac_file_suffix, sep=""), 
+                           tac_format)
+    if (trip == 0) {
+      headers <- names(tac_raw)
+      trip <- 1
+    } else {
+        if (!all(names(tac_raw) == headers)) {
+          warning(paste(each, ": ROIs do not match first participant."))
         }
-        output[each, ] <- length(tac_raw)
-    }
-    if ( (length(unique(output$ROIs))) > 1 ) {
-        warning(paste("Unique ROI sets:", as.character(unique(output$ROIs))))
-    }
+      }
     
-    return(output)
+    output[each, ] <- length(tac_raw)
+    
+  }
+    
+  if ( (length(unique(output$ROIs))) > 1 ) {
+    warning(paste("Unique ROI sets:", as.character(unique(output$ROIs))))
+  }
+    
+  return(output)
 }

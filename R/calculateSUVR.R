@@ -17,15 +17,16 @@
 #'
 #'@param tac The time-activity curve data from calcTAC()
 #'@param SUVR_def is a vector of the start times for window to be used in SUVR
+#'@param reference is a string, e.g. "cerbellum", to specify reference region
 #'@return A data.frame of SUVR values for the specified ROIs
 #'@examples
-#' calcSUVR(p1tac, c("3000", "3300", "3600", "3900"))
-calcSUVR <- function(tac, SUVR_def, reference="cerebellum", ROI_def) {
-    
+#' calcSUVR(p1tac, c(3000, 3300, 3600, 3900))
+calcSUVR <- function(tac, SUVR_def, reference) {
+
     SUVR <- rep(NA, (length(names(tac)) - 2))
     SUVRtable <- data.frame(row.names=names(tac)[-(1:2)], SUVR)
     
-    # will need to validate that t1$start and t2$end are numeric
+    # TODO validate that t1$start and t2$end are numeric
     frames <- match(SUVR_def, tac$start)
     frame_weights <- tac$end[frames] - tac$start[frames]
     
@@ -34,7 +35,5 @@ calcSUVR <- function(tac, SUVR_def, reference="cerebellum", ROI_def) {
         poor <- weighted.mean(tac[frames,][,reference], frame_weights)
         SUVRtable[ROI, "SUVR"] <-  rich/poor
     }
-    
     return(SUVRtable)
-    
 }

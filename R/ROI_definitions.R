@@ -8,9 +8,11 @@
 
 # ROI definitions file.
 
-#' Return a list of larger ROIs made up of the ROIs in the Hammer's atlas (see references()).
+#' Return a list of larger ROIs made up of the ROIs in the Hammer's atlas (see 
+#' references()).
 #'
-#'@return A list of lists, where each list is an ROI (e.g.) frontal lobe that specifies the atomic ROIs from the atlas that make it up.
+#'@return A list of lists, where each list is an ROI (e.g.) frontal lobe that 
+#' specifies the atomic ROIs from the atlas that make it up.
 #'@examples standardROIs()
 standardROIs <- function() {
     
@@ -68,11 +70,13 @@ standardROIs <- function() {
 #' This includes the cortical regions of standardROIs() but also other regions.
 #' It can be modified to suit the user's needs.
 #'
-#'@return A list of lists, where each list is an ROI (e.g.) frontal lobe that specifies the atomic ROIs from the atlas that make it up.
+#'@return A list of lists, where each list is an ROI (e.g.) frontal lobe that 
+#' specifies the atomic ROIs from the atlas that make it up.
 #'@examples standardROIs()
 fullROIs <- function() {
 
-    deep_def <- c("CaudateNucl", "NuclAccumb",  "Putamen", "Thalamus", "Pallidum")
+    deep_def <- c("CaudateNucl", "NuclAccumb",  "Putamen", "Thalamus", 
+                  "Pallidum")
     
     leftdeep <- paste(deep_def, "_l", sep="")
     rightdeep <- paste(deep_def, "_r", sep="")
