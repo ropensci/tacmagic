@@ -4,12 +4,14 @@
 \alias{calcSUVR}
 \title{Calculate weighted SUVRs for specified regions of interest}
 \usage{
-calcSUVR(tac, SUVR_def, reference = "cerebellum", ROI_def)
+calcSUVR(tac, SUVR_def, reference)
 }
 \arguments{
 \item{tac}{The time-activity curve data from calcTAC()}
 
 \item{SUVR_def}{is a vector of the start times for window to be used in SUVR}
+
+\item{reference}{is a string, e.g. "cerbellum", to specify reference region}
 }
 \value{
 A data.frame of SUVR values for the specified ROIs
@@ -23,5 +25,5 @@ those weighted means. It also takes into account potentially different
 frame durations.
 }
 \examples{
-calcSUVR(p1tac, c("3000", "3300", "3600", "3900"))
+calcSUVR(p1tac, c(3000, 3300, 3600, 3900))
 }

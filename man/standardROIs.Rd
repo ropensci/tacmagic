@@ -2,15 +2,18 @@
 % Please edit documentation in R/ROI_definitions.R
 \name{standardROIs}
 \alias{standardROIs}
-\title{Return a list of larger ROIs made up of the ROIs in the Hammer's atlas (see references()).}
+\title{Return a list of larger ROIs made up of the ROIs in the Hammer's atlas (see 
+references()).}
 \usage{
 standardROIs()
 }
 \value{
-A list of lists, where each list is an ROI (e.g.) frontal lobe that specifies the atomic ROIs from the atlas that make it up.
+A list of lists, where each list is an ROI (e.g.) frontal lobe that 
+specifies the atomic ROIs from the atlas that make it up.
 }
 \description{
-Return a list of larger ROIs made up of the ROIs in the Hammer's atlas (see references()).
+Return a list of larger ROIs made up of the ROIs in the Hammer's atlas (see 
+references()).
 }
 \examples{
 standardROIs()

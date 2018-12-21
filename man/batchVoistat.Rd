@@ -16,11 +16,11 @@ batchVoistat(participants, ROI_def, dir = "", filesuffix, varname,
 
 \item{filesuffix}{Optional filename characters between ID and ".voistat"}
 
-\item{varname}{The name of the variable being exctracted, e.g. "SRTM".}
+\item{varname}{The name of the variable being exctracted, e.g. "SRTM"}
 
 \item{otherdata}{A data.frame of the same participants to add the new data to}
 
-\item{outfile}{Specify a filename to save the data.}
+\item{outfile}{Specify a filename to save the data}
 }
 \value{
 A table of values for the specified ROIs for all participants.

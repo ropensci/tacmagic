@@ -4,13 +4,13 @@
 \alias{DVR_all_reference_Logan}
 \title{Non-invasive reference Logan method for all ROIs in tac data}
 \usage{
-DVR_all_reference_Logan(tac_data, ref, k2prime, t_star = 0,
+DVR_all_reference_Logan(tac_data, reference, k2prime, t_star = 0,
   method = "trapz")
 }
 \arguments{
 \item{tac_data}{The time-activity curve data from calcTAC()}
 
-\item{ref}{The reference region, e.g. "cerebellum"}
+\item{reference}{The reference region, e.g. "cerebellum"}
 
 \item{k2prime}{A fixed value for k2' must be specified (e.g. 0.2)}
 

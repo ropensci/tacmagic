@@ -4,7 +4,7 @@
 \alias{calcTAC}
 \title{Calculate weighted time-activity curves for specified regions of interest}
 \usage{
-calcTAC(tac, volumes, ROI_def, merge = F, PVC = F)
+calcTAC(tac, volumes, ROI_def, merge, PVC)
 }
 \arguments{
 \item{tac}{The time-activity curve data from loading function.}

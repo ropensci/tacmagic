@@ -7,7 +7,8 @@
 fullROIs()
 }
 \value{
-A list of lists, where each list is an ROI (e.g.) frontal lobe that specifies the atomic ROIs from the atlas that make it up.
+A list of lists, where each list is an ROI (e.g.) frontal lobe that 
+specifies the atomic ROIs from the atlas that make it up.
 }
 \description{
 This includes the cortical regions of standardROIs() but also other regions.
