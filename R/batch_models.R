@@ -31,47 +31,25 @@ model_batch <- function(participants, model, file_info, merge, ROI_def, PVC,
 	                    reference=NULL, SUVR_def=NULL, k2prime=NULL, 
 	                    t_star=NULL) {
 
-  # Specify the function to use (except Logan, which needs different params)
-	
-  if (model == "SUVR") {
-    model_function <- calcSUVR
-  } else if (model == "eslope") { 
-	  model_function <- peakSlope
-	  } else if (model == "max") {
-		  model_function <- maxTAC
-	    } else if (model == "Logan") {
-	    	message("Using the Logan model.")
-	      } else {
-	    	  error("An invalid mode was specified for batchTACvalue().")
-	        }
+  # Specify function to use (except Logan, which needs different params) -------
+  if (model != "Logan") {
+  	model_function <- set_model(model)
+  } else message("Using the Logan model.")
 
-  # Generate the file names
+
+  # Generate the file names ----------------------------------------------------
   tac_files <- paste(file_info$dir, participants, file_info$tac_file_suffix, 
     	               sep="")
   vol_files <- paste(file_info$dir, participants, file_info$vol_file_suffix, 
     				   sep="")
-    
-  #Set up the output file by using the first participant as a template.
-  vol1 <- loadVolumes(vol_files[1], format=file_info$vol_format)
-  message("Loading first tac to create template table.")
-  tac1 <- loadTACfile(tac_files[1], file_info$tac_format)
-  first_tac <- calcTAC(tac1, volumes=vol1, ROI_def=ROI_def, PVC=PVC,
-  	                   merge=merge)
-  message(paste("Loaded first tac file. Calculating", model))
-    
-  if (model == "Logan") {
-    first <- DVR_all_reference_Logan(first_tac, reference=reference,
-    						               k2prime=k2prime, t_star=t_star)
-   } else {
-       first <- model_function(first_tac, 
-         	                   SUVR_def=SUVR_def, reference=reference) 
-     }
-    		
-  message("First participant calculated.")
-  master <- t(first)[-1,]
-  message("Empty master table complete; iterating through all participants.")
-    
-  # Runs through each participant to calculate the model and store the values.
+   
+  # Empty data.frame to store the calculated values-----------------------------   
+  master <- as.data.frame(matrix(nrow = length(participants), 
+  								 ncol=length(names(ROI_def)) ) )
+  names(master) <- names(ROI_def)
+  row.names(master) <- participants
+
+  # Runs through each participant to calculate the model and store the values---
   for (i in 1:length(participants)) {
       message(paste("Working on...", participants[i]))
         
@@ -87,9 +65,23 @@ model_batch <- function(participants, model, file_info, merge, ROI_def, PVC,
                                   SUVR_def=SUVR_def, reference=reference) 
           }
       trans <- t(VALUE)
-      row.names(trans) <- participants[i]
-      master <- rbind(master,trans)
+      master[participants[i], ] <- trans
     }
  
     return(as.data.frame(master))
 }
+
+set_model <- function(model_name) {
+
+  if (model_name == "SUVR") {
+    model_function <- calcSUVR
+  } else if (model_name == "eslope") { 
+	  model_function <- peakSlope
+	  } else if (model_name == "max") {
+		  model_function <- maxTAC
+	    } else {
+	    	  error("An invalid mode was specified for batchTACvalue().")
+	        }
+  return(model_function)
+}
+

@@ -1,7 +1,7 @@
 Package: tacmagic
 Type: Package
 Title: PET Time Activity Curve Analysis in R
-Version: 0.9.0
+Version: 0.1.9
 Authors@R: person("Eric", "Brown", email="eb@ericebrown.com", role=c("aut", "cre"))
 Description: This is a beta package of functions to analyze of PET time activity 
     curve (tac) data, including merging ROIs, calculating SUVR, and plotting. 

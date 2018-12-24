@@ -44,11 +44,9 @@ method="trapz") {
 DVR_all_reference_Logan <- function(tac_data, reference, k2prime, t_star=0,
                                     method="trapz") {
     
+    DVRtable <- new_table(tac_data, "DVR")
+    
     ROIs <- names(tac_data)[3:length(names(tac_data))]
-    
-    DVR <- rep(NA, length(ROIs))
-    DVRtable <- data.frame(row.names=ROIs, DVR)
-    
     for (ROI in ROIs) {
         message(paste("Trying", ROI))
         attempt <- try(DVR_reference_Logan(tac_data, target=ROI, ref=reference,

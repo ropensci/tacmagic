@@ -23,8 +23,7 @@
 #' calcSUVR(p1tac, c(3000, 3300, 3600, 3900))
 calcSUVR <- function(tac, SUVR_def, reference) {
 
-    SUVR <- rep(NA, (length(names(tac)) - 2))
-    SUVRtable <- data.frame(row.names=names(tac)[-(1:2)], SUVR)
+    SUVRtable <- new_table(tac, "SUVR")
     
     # TODO validate that t1$start and t2$end are numeric
     frames <- match(SUVR_def, tac$start)
@@ -37,3 +36,4 @@ calcSUVR <- function(tac, SUVR_def, reference) {
     }
     return(SUVRtable)
 }
+

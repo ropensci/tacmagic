@@ -10,9 +10,9 @@
 
 # A function to find the upslope of the TAC, from start to peak.
 peakSlope <- function(TAC, SUVR_def=NULL, reference=NULL) {
-  SLOPE <- rep(NA, length(names(TAC)))
-  SLOPEtable <- data.frame(row.names=names(TAC), SLOPE)
-    
+  
+  SLOPEtable <- new_table(TAC, "SLOPE")
+
   for (i in 3:length(names(TAC))) { #3 to skip start/end time columns
     TAC_maximum <- max(TAC[,i])
     if (!is.na(TAC_maximum)) {
@@ -34,8 +34,8 @@ peakSlope <- function(TAC, SUVR_def=NULL, reference=NULL) {
 
 # A function to find the upslope of the TAC, from 0 to peak.
 peakSlope_from0 <- function(TAC, SUVR_def=NULL, reference=NULL) {
-  SLOPE <- rep(NA, length(names(TAC)))
-  SLOPEtable <- data.frame(row.names=names(TAC), SLOPE)
+
+  SLOPEtable <- new_table(TAC, "SLOPE")
     
   for (i in 3:length(names(TAC))) { #3 to skip start/end time columns
     TAC_maximum <- max(TAC[,i])
@@ -58,8 +58,8 @@ peakSlope_from0 <- function(TAC, SUVR_def=NULL, reference=NULL) {
 
 # Find the maximum value for each tac.
 maxTAC <- function(TAC, SUVR_def=NULL, reference=NULL) {
-  MAX <- rep(NA, length(names(TAC)))
-  MAXtable <- data.frame(row.names=names(TAC), MAX)
+
+  MAXtable <- new_table(TAC, "MAX")
     
   for (i in 3:length(names(TAC))) { #3 to skip start/end time columns
     TAC_maximum <- max(TAC[,i])
