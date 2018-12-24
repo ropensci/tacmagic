@@ -11,8 +11,9 @@
 #' Non-invasive reference Logan method
 #'
 #' This calculates the coefficient from the non-invasive Logan method, which
-#' is equal to DVR.
+#' is equal to DVR. Works for a single tac (target).
 #'
+#'@export
 #'@param tac_data The time-activity curve data from calcTAC()
 #'@param target The name of the target ROI, e.g. "frontal"
 #'@param ref The reference region, e.g. "cerebellum"
@@ -34,6 +35,7 @@ method="trapz") {
 #' This calculates the DVR using the non-invasive reference Logan method for
 #' all TACs in a supplied tac file. It uses DVR_reference_Logan.
 #'
+#'@export
 #'@param tac_data The time-activity curve data from calcTAC()
 #'@param reference The reference region, e.g. "cerebellum"
 #'@param k2prime A fixed value for k2' must be specified (e.g. 0.2)
@@ -65,6 +67,7 @@ DVR_all_reference_Logan <- function(tac_data, reference, k2prime, t_star=0,
 #'
 #' This plots the non-invasive Logan plot.
 #'
+#'@export
 #'@param tac_data The time-activity curve data from calcTAC()
 #'@param ref The reference region, e.g. "cerebellum"
 #'@param k2prime A fixed value for k2' must be specified (e.g. 0.2)

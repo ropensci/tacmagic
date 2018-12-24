@@ -25,5 +25,5 @@ Data frame with calculate DVRs for all ROIs
 }
 \description{
 This calculates the coefficient from the non-invasive Logan method, which
-is equal to DVR.
+is equal to DVR. Works for a single tac (target).
 }

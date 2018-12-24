@@ -16,6 +16,7 @@
 #' functions that they rely on. "SUVR" uses calcSUVR(), "Logan" uses
 #' DVR_all_reference_Logan(), and "eslope" uses peaksSlope().
 #'
+#'@export
 #'@param participants A vector of participant IDs
 #'@param models A vector of names of the models to calculate
 #'@param dir A directory and/or file name prefix for the tac/volume files
@@ -26,61 +27,42 @@
 #'@param ROI_def Object that defines combined ROIs, see ROI_definitions.R
 #'@param SUVR_def is a vector of the start times for window to be used in SUVR
 #'@param PVC For PVC, true where the data is stored as _C in same tac file
-#'@param reference The name of the reference region for DVR/SUVR calculation
+#'@param ref The name of the reference region for DVR/SUVR calculation
 #'@param k2prime Fixed k2' for DVR calculation
 #'@param t_star Change from 0 to manually specify a t* for DVR calculation
 #'@param outfile Specify a filename to save the data
 #'@return A table of SUVR values for the specified ROIs for all participants
 #'@examples
 #'
-tm_batch <- function(participants, models=c("SUVR", "Logan", "eslope"),
+tm_batch <- function(participants, models=c("SUVR", "Logan", "eslope"), PVC=F,
                      dir="", tac_format="PMOD", tac_file_suffix=".tac", 
-                     vol_file_suffix="_TAC.voistat", 
-                     vol_format="Voistat", ROI_def=NULL, SUVR_def=NULL, 
-                     PVC=F, reference="cerebellum", merge=F,
+                     vol_file_suffix="_TAC.voistat", vol_format="Voistat", 
+                     ROI_def=NULL, SUVR_def=NULL, ref="cerebellum", merge=F, 
                      k2prime=NULL, t_star=0, master=NULL, outfile=NULL) {
   
   file_info <- list(dir=dir, tac_format=tac_format, 
                     tac_file_suffix=tac_file_suffix, vol_format=vol_format,
                     vol_file_suffix=vol_file_suffix)
 
-  all_models <- c("SUVR", "Logan", "eslope", "max")
+  all_models <- names(model_definitions())
   if (!(all(models %in% all_models))) stop("Invalid model name(s) supplied.")
   
-  if ("SUVR" %in% models) {
-    # TODO check to ensure all required parameters are available
-    SUVR <- model_batch(participants=participants, model="SUVR", PVC=PVC,
-                        SUVR_def=SUVR_def, reference=reference, merge=merge, 
-                        file_info=file_info, ROI_def=ROI_def)
-    names(SUVR) <- lapply(names(SUVR), paste, "_SUVR", sep="")
-    if (is.null(master)) master <- SUVR else master <- data.frame(master, SUVR)
-  }
-  
-  if ("Logan" %in% models) {
-    # TODO check to ensure all required parameters are available
-    DVR <- model_batch(participants=participants, model="Logan", PVC=PVC,
-                       file_info=file_info, ROI_def=ROI_def, k2prime=k2prime,
-                       t_star=t_star, reference=reference, merge=merge)
+  for (this_model in models) {
+    if (this_model == "Logan") {
+      DVR <- model_batch(participants=participants, model="Logan", PVC=PVC,
+                         file_info=file_info, ROI_def=ROI_def, k2prime=k2prime,
+                         t_star=t_star, ref=ref, merge=merge)
                        
-    names(DVR) <- lapply(names(DVR), paste, "_DVR", sep="")
-    if (is.null(master)) master <- DVR else master <- data.frame(master, DVR)
-  }
-
-  if ("eslope" %in% models) {
-    # TODO check to ensure all required parameters are available
-    eslope <- model_batch(participants, mode="eslope", file_info=file_info,
-                          ROI_def=ROI_def, PVC=PVC, merge=merge)
-    names(eslope) <- lapply(names(eslope), paste, "_eslope", sep="")
-    if (is.null(master)) master <- eslope else master <- data.frame(master,
-                                                                      eslope)
-  }
-
-  if ("max" %in% models) {
-    # TODO check to ensure all required parameters are available
-    maxv <- model_batch(participants, mode="max", file_info=file_info,
-                        ROI_def=ROI_def, PVC=PVC, merge=merge)
-    names(maxv) <- lapply(names(maxv), paste, "_max", sep="")
-    if (is.null(master)) master <- maxv else master <- data.frame(master, maxv)
+      names(DVR) <- lapply(names(DVR), paste, "_DVR", sep="")
+      if (is.null(master)) master <- DVR else master <- data.frame(master, DVR)
+    } else {
+        MOD <- model_batch(participants=participants, model=this_model, 
+                           PVC=PVC, SUVR_def=SUVR_def, ref=ref, merge=merge, 
+                           file_info=file_info, ROI_def=ROI_def)
+        names(MOD) <- lapply(names(MOD), paste, "_", this_model, sep="")
+        if (is.null(master)) master <- MOD else master <- data.frame(master, 
+                                                                     MOD)
+    }
   }
 
   if (!(is.null(outfile))) write.csv(master, file = outfile)

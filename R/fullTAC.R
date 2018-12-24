@@ -8,6 +8,7 @@
 
 #' Calculate weighted time-activity curves for specified regions of interest
 #'
+#'@export
 #'@param tac The time-activity curve data from loading function.
 #'@param volumes The ROI volume data from loading function
 #'@param ROI_def The definition of ROIs by combining smaller ROIs from TAC file.
@@ -29,7 +30,7 @@ calcTAC <- function(tac, volumes, ROI_def, merge, PVC) {
     names(calculated_TACs) <- names(ROI_def)
     # Calculate the weighted mean TACs for each ROI in the definition list.
     for (i in 1:length(ROI_def)) {
-        calculated_TACs[i] <- apply(tac[,ROI_PVC[[i]]], 1,  weighted.mean,
+        calculated_TACs[i] <- apply(tac[,ROI_PVC[[i]]], 1, weighted.mean,
                                     volumes[ROI_def[[i]],])
     }
     
@@ -45,6 +46,7 @@ calcTAC <- function(tac, volumes, ROI_def, merge, PVC) {
 
 #' Calculate group mean TAC for a list of participants in weighted average ROIs
 #'
+#'@export
 #'@param participantlist A vector of participant IDs
 #'@param tac The time-activity curve data from loading function
 #'@param raw_volumes The ROI volume data from loading function
@@ -77,6 +79,7 @@ groupTAC <- function(participantlist, directory="", ROI_def=standardROIs(),
 
 #' Plots time activity curves from 1 or 2 participants or groups.
 #'
+#'@export
 #'@param TACtable1 (e.g. from calcTAC() or groupTAC(), or simply loadTACfile())
 #'@param TACtable2 An optional, second TAC, to plot for comparison.
 #'@param ROIs A vector of ROIs to plot, names matching the TAC headers.

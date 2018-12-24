@@ -15,6 +15,7 @@
 #' those weighted means. It also takes into account potentially different
 #' frame durations.
 #'
+#'@export 
 #'@param tac The time-activity curve data from calcTAC()
 #'@param SUVR_def is a vector of the start times for window to be used in SUVR
 #'@param reference is a string, e.g. "cerbellum", to specify reference region
