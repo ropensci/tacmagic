@@ -44,13 +44,17 @@ model_batch <- function(participants, model, file_info, merge, ROI_def, PVC,
   model_fn <- fn_list[[model]]
 
   # Generate the file names ----------------------------------------------------
-  tac_f <- paste(file_info$dir, participants, file_info$tac_file_suffix, sep="")
-  vol_f <- paste(file_info$dir, participants, file_info$vol_file_suffix, sep="")
+  tac_f <- paste0(file_info$dir, participants, file_info$tac_file_suffix)
+  vol_f <- paste0(file_info$dir, participants, file_info$vol_file_suffix)
    
   # Empty data.frame to store the calculated values-----------------------------   
+  
+  tac1 <- loadTACfile(tac_f[1], file_info$tac_format)
+  vol1 <- loadVolumes(vol_f[1], format=file_info$vol_format)
+  tac_data1 <- calcTAC(tac1, vol1, ROI_def=ROI_def, PVC=PVC, merge=merge)
   master <- as.data.frame(matrix(nrow = length(participants), 
-  								 ncol=length(names(ROI_def)) ) )
-  names(master) <- names(ROI_def)
+  								 ncol=(length(names(tac_data1))-2) ))
+  names(master) <- names(tac_data1)[3:length(names(tac_data1))]
   row.names(master) <- participants
 
   # Runs through each participant to calculate the model and store the values---
@@ -64,7 +68,6 @@ model_batch <- function(participants, model, file_info, merge, ROI_def, PVC,
     if (model == "Logan") {
       VALUE <- model_fn(tac_data, ref=ref, k2prime=k2prime, t_star=t_star)
       } else VALUE <- model_fn(tac_data, SUVR_def=SUVR_def, ref=ref) 
-
     master[participants[i], ] <- t(VALUE)
   }
 
