@@ -10,4 +10,10 @@
 #'
 #' @docType package
 #' @name tacmagic
+#' @importFrom stats IQR approxfun integrate lm quantile sd weighted.mean
+#' @importFrom graphics abline legend lines par plot
+#' @importFrom utils read.csv write.csv write.table
+#' @importFrom grDevices rainbow
 NULL
+
+

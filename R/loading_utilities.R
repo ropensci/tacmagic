@@ -82,7 +82,7 @@ loadTACvoistat <- function(voistat_file, acqtimes) {
   startend <- loadACQtimes(acqtimes)
   if (checkACQtimes(startend$start, startend$end, tac$time)) {
 	tac <- data.frame(startend, tac) 
-  } else error("Supplied acqtimes do not match midframe time data.")
+  } else stop("Supplied acqtimes do not match midframe time data.")
 
   return(tac)
 }
