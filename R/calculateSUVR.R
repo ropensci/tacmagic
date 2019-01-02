@@ -20,8 +20,6 @@
 #'@param SUVR_def is a vector of the start times for window to be used in SUVR
 #'@param reference is a string, e.g. "cerbellum", to specify reference region
 #'@return A data.frame of SUVR values for the specified ROIs
-#'@examples
-#' calcSUVR(p1tac, c(3000, 3300, 3600, 3900))
 calcSUVR <- function(tac, SUVR_def, reference) {
 
     SUVRtable <- new_table(tac, "SUVR")

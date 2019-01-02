@@ -141,6 +141,6 @@ voistat_to_TAC <- function(voistat_file, acqtimes_file, output_file,
                            header_names=c("start[seconds]", "end[kBq/cc]")) {
   tac <- loadTACvoistat(voistat_file, acqtimes_file)
   tac <- tac[-3]
-  names(tac)[1:2] <- headernames
+  names(tac)[1:2] <- header_names
   write.table(x=tac, file=output_file, quote=F, sep="\t", row.names=F)
 }

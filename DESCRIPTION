@@ -10,7 +10,7 @@ Description: This is a beta package of functions to analyze of PET time activity
     curve (tac) data, including merging ROIs, calculating SUVR, and plotting. 
     In its current form, these scripts may be useful in analyzing the output 
     files from PMOD or other sources.
-Depends: R (>= 3.4.4)
+Depends: R (>= 3.4)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
@@ -20,3 +20,5 @@ Imports:
     grDevices, 
     pracma, 
     utils
+Suggests:
+    testthat

@@ -18,7 +18,6 @@
 #'@param filename (e.g. participant.TAC)
 #'@param format (default, and only option currently, is .tac as from PMOD.
 #'@return data.frame with loaded TAC data
-#'@examples loadTACfile("/dir/participant1.tac")
 loadTACfile <- function(filename, format="PMOD", acqtimes=NULL) {
   if (format == "PMOD") {
       tac <- loadTACPMOD(filename)
@@ -38,7 +37,6 @@ loadTACfile <- function(filename, format="PMOD", acqtimes=NULL) {
 #'@param filename (e.g. participant.voistat)
 #'@param format (default is the TAC .voistat format from PMOD).
 #'@return data.frame with loaded TAC data
-#'@examples loadVolumes("/dir/participant1_TAC.voistat")
 loadVolumes <- function(filename, format="Voistat") {
   if (format == "Voistat") {
       volumes <- volumesFromVoistatTAC(filename)
@@ -57,7 +55,6 @@ loadVolumes <- function(filename, format="Voistat") {
 #'@param filename (e.g. participant_logan.voistat)
 #'@param format (default is the TAC .voistat format from PMOD).
 #'@return data.frame with loaded model data in specified combined weighted ROIs.
-#'@examples loadVolumes("/dir/participant1_TAC.voistat")
 voistatScraper <- function(voistat_file, ROI_def, model="VALUE") {
     
     voistat <- read.csv(voistat_file, sep="\t", skip=6, header=T, stringsAsFactors=F)

@@ -14,7 +14,7 @@
 #'@param ROI_def The definition of ROIs by combining smaller ROIs from TAC file.
 #'@param merge If true, includes the original ROIs in the output data.
 #'@return Time-activity curves for the specified ROIs
-#'@examples calcTAC(p1tac, p1vol, standardROIs(), merge=T)
+#examples calcTAC(p1tac, p1vol, standardROIs(), merge=T)
 calcTAC <- function(tac, volumes, ROI_def, merge, PVC) {
     
     ROI_PVC <- ROI_def
@@ -46,14 +46,13 @@ calcTAC <- function(tac, volumes, ROI_def, merge, PVC) {
 
 #' Calculate group mean TAC for a list of participants in weighted average ROIs
 #'
-#'@export
+#@export
 #'@param participantlist A vector of participant IDs
 #'@param tac The time-activity curve data from loading function
 #'@param raw_volumes The ROI volume data from loading function
 #'@param ROI_def The definition of ROIs by combining smaller ROIs from TAC file
 #'@param merge If true, includes the original ROIs in the output data
 #'@return Time-activity curves for the specified ROIs
-#'@examples calcTAC(p1tac, p1vol, standardROIs(), merge=T)
 # groupTAC <- function(participantlist, directory="", ROI_def=standardROIs(), 
 #                      merge=F) {
 #   groupTACtable <- emptyTACtable(paste(directory, participantlist[1], ".tac", 
@@ -86,7 +85,6 @@ calcTAC <- function(tac, volumes, ROI_def, merge, PVC) {
 #'@param ymax The maximum value on the y-axis.
 #'@param seconds_to_mins If true, converts time from TAC from sec to min.
 #'@return Creates a plot.
-#'@examples plotTAC2(controls_tac, treatment_tac)
 plotTAC2 <- function(TACtable1, TACtable2=NULL, ROIs=c("totalcortical", 
   "cerebellum"), ymax=25, seconds_to_mins=FALSE) {
   
