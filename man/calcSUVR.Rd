@@ -24,6 +24,3 @@ volumes of each needs to be taken into account. This function calculates
 those weighted means. It also takes into account potentially different
 frame durations.
 }
-\examples{
-calcSUVR(p1tac, c(3000, 3300, 3600, 3900))
-}

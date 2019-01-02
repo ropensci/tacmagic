@@ -15,5 +15,5 @@ This includes the cortical regions of standardROIs() but also other regions.
 It can be modified to suit the user's needs.
 }
 \examples{
-standardROIs()
+fullROIs()
 }

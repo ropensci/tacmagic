@@ -17,6 +17,3 @@ data.frame with loaded TAC data
 \description{
 Loads ROI volumes from file for use by other functions
 }
-\examples{
-loadVolumes("/dir/participant1_TAC.voistat")
-}

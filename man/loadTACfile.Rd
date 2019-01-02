@@ -17,6 +17,3 @@ data.frame with loaded TAC data
 \description{
 Loads TAC from file for use by other functions (default is PMOD .tac format)
 }
-\examples{
-loadTACfile("/dir/participant1.tac")
-}

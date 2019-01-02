@@ -17,6 +17,3 @@ data.frame with loaded model data in specified combined weighted ROIs.
 \description{
 Loads model data from file for use by other functions.
 }
-\examples{
-loadVolumes("/dir/participant1_TAC.voistat")
-}
