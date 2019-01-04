@@ -10,7 +10,7 @@
 # and model_batch
 #'@noRd
 model_definitions <- function() {
-  return(c(SUVR=calcSUVR, 
+  return(c(SUVR=suvr, 
   	       eslope=peakSlope, 
   	       max=maxTAC, 
   	       Logan=DVR_all_reference_Logan
@@ -23,7 +23,7 @@ model_definitions <- function() {
 #' named tac and volume files, this calculates a model, e.g. SUVR, and stores in 
 #' a single table.
 #'
-#' See calcSUVR() for how SUVR is calculated.
+#' See suvr() for how SUVR is calculated.
 #'
 #'@param participants A vector of participant IDs
 #'@param model The chosen model e.g. "SUVR"

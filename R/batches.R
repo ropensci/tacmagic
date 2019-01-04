@@ -13,7 +13,7 @@
 #' model options are "SUVR", "Logan" and "eslope".
 #'
 #' For further details about how the models are calculated, see the indiviudal
-#' functions that they rely on. "SUVR" uses calcSUVR(), "Logan" uses
+#' functions that they rely on. "SUVR" uses suvr(), "Logan" uses
 #' DVR_all_reference_Logan(), and "eslope" uses peaksSlope().
 #'
 #'@export
