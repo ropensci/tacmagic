@@ -33,9 +33,13 @@ tm_batch(participants, models = c("SUVR", "Logan", "eslope"), PVC = F,
 
 \item{ref}{The name of the reference region for DVR/SUVR calculation}
 
+\item{merge}{Passes value to calcTAC; T to keep original atomic ROIs}
+
 \item{k2prime}{Fixed k2' for DVR calculation}
 
 \item{t_star}{Change from 0 to manually specify a t* for DVR calculation}
+
+\item{master}{Optionally, a data.frame of same format as return, to add to}
 
 \item{outfile}{Specify a filename to save the data}
 }
@@ -51,7 +55,4 @@ model options are "SUVR", "Logan" and "eslope".
 For further details about how the models are calculated, see the indiviudal
 functions that they rely on. "SUVR" uses calcSUVR(), "Logan" uses
 DVR_all_reference_Logan(), and "eslope" uses peaksSlope().
-}
-\examples{
-
 }

@@ -10,6 +10,8 @@ loadTACfile(filename, format = "PMOD", acqtimes = NULL)
 \item{filename}{(e.g. participant.TAC)}
 
 \item{format}{(default, and only option currently, is .tac as from PMOD.}
+
+\item{acqtimes}{File name for a .acqtimes file (as in PMOD)}
 }
 \value{
 data.frame with loaded TAC data

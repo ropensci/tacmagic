@@ -7,12 +7,14 @@
 voistatScraper(voistat_file, ROI_def, model = "VALUE")
 }
 \arguments{
-\item{filename}{(e.g. participant_logan.voistat)}
+\item{voistat_file}{Filename (e.g. participant_logan.voistat)}
 
-\item{format}{(default is the TAC .voistat format from PMOD).}
+\item{ROI_def}{The definition of ROIs by combining smaller ROIs from TAC file}
+
+\item{model}{A string to name the variable being extracted, e.g. "Logan_DVR"}
 }
 \value{
-data.frame with loaded model data in specified combined weighted ROIs.
+data.frame with loaded model data in specified combined weighted ROIs
 }
 \description{
 Loads model data from file for use by other functions.

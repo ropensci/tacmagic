@@ -2,7 +2,7 @@
 % Please edit documentation in R/tac.R
 \name{plotTAC2}
 \alias{plotTAC2}
-\title{Calculate group mean TAC for a list of participants in weighted average ROIs}
+\title{Plots time activity curves from 1 or 2 participants or groups.}
 \usage{
 plotTAC2(TACtable1, TACtable2 = NULL, ROIs = c("totalcortical",
   "cerebellum"), ymax = 25, seconds_to_mins = FALSE)
@@ -17,23 +17,10 @@ plotTAC2(TACtable1, TACtable2 = NULL, ROIs = c("totalcortical",
 \item{ymax}{The maximum value on the y-axis.}
 
 \item{seconds_to_mins}{If true, converts time from TAC from sec to min.}
-
-\item{participantlist}{A vector of participant IDs}
-
-\item{tac}{The time-activity curve data from loading function}
-
-\item{raw_volumes}{The ROI volume data from loading function}
-
-\item{ROI_def}{The definition of ROIs by combining smaller ROIs from TAC file}
-
-\item{merge}{If true, includes the original ROIs in the output data}
 }
 \value{
-Time-activity curves for the specified ROIs
-Plots time activity curves from 1 or 2 participants or groups.
-
 Creates a plot.
 }
 \description{
-Calculate group mean TAC for a list of participants in weighted average ROIs
+Plots time activity curves from 1 or 2 participants or groups.
 }

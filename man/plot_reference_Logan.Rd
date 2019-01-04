@@ -10,6 +10,8 @@ plot_reference_Logan(tac_data, target, ref, k2prime, t_star = 0,
 \arguments{
 \item{tac_data}{The time-activity curve data from calcTAC()}
 
+\item{target}{The name of the receptor-rich region, e.g. "frontal"}
+
 \item{ref}{The reference region, e.g. "cerebellum"}
 
 \item{k2prime}{A fixed value for k2' must be specified (e.g. 0.2)}

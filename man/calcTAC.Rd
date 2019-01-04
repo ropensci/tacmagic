@@ -7,13 +7,15 @@
 calcTAC(tac, volumes, ROI_def, merge, PVC)
 }
 \arguments{
-\item{tac}{The time-activity curve data from loading function.}
+\item{tac}{The time-activity curve data from loading function}
 
 \item{volumes}{The ROI volume data from loading function}
 
-\item{ROI_def}{The definition of ROIs by combining smaller ROIs from TAC file.}
+\item{ROI_def}{The definition of ROIs by combining smaller ROIs from TAC file}
 
-\item{merge}{If true, includes the original ROIs in the output data.}
+\item{merge}{If TRUE, includes the original ROIs in the output data}
+
+\item{PVC}{If TRUE, appends "_C" to ROI name header (as in PMOD TAC files)}
 }
 \value{
 Time-activity curves for the specified ROIs

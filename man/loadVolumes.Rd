@@ -9,7 +9,7 @@ loadVolumes(filename, format = "Voistat")
 \arguments{
 \item{filename}{(e.g. participant.voistat)}
 
-\item{format}{(default is the TAC .voistat format from PMOD).}
+\item{format}{(default is the TAC .voistat format from PMOD)}
 }
 \value{
 data.frame with loaded TAC data

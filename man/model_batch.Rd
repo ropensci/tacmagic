@@ -14,6 +14,8 @@ model_batch(participants, model, file_info, merge, ROI_def, PVC,
 
 \item{file_info}{A list containing tac and volume file info.}
 
+\item{merge}{Passes value to calcTAC; T to keep original atomic ROIs}
+
 \item{ROI_def}{Object that defines combined ROIs, see ROI_definitions.R}
 
 \item{PVC}{For PVC, set to T where the data is stored as _C in same tac file}
@@ -22,7 +24,9 @@ model_batch(participants, model, file_info, merge, ROI_def, PVC,
 
 \item{SUVR_def}{is a vector of the start times for window to be used in SUVR}
 
-\item{dir}{A directory and/or file name prefix for the tac/volume files}
+\item{k2prime}{A fixed value for k2' must be specified (e.g. 0.2)}
+
+\item{t_star}{If 0, t* will be calculated using find_t_star()}
 }
 \value{
 A table of SUVR values for the specified ROIs for all participants.
@@ -34,7 +38,4 @@ a single table.
 }
 \details{
 See calcSUVR() for how SUVR is calculated.
-}
-\examples{
-
 }
