@@ -9,10 +9,11 @@
 #' Calculate weighted time-activity curves for specified regions of interest
 #'
 #'@export
-#'@param tac The time-activity curve data from loading function.
+#'@param tac The time-activity curve data from loading function
 #'@param volumes The ROI volume data from loading function
-#'@param ROI_def The definition of ROIs by combining smaller ROIs from TAC file.
-#'@param merge If true, includes the original ROIs in the output data.
+#'@param ROI_def The definition of ROIs by combining smaller ROIs from TAC file
+#'@param merge If TRUE, includes the original ROIs in the output data
+#'@param PVC If TRUE, appends "_C" to ROI name header (as in PMOD TAC files)
 #'@return Time-activity curves for the specified ROIs
 #examples calcTAC(p1tac, p1vol, standardROIs(), merge=T)
 calcTAC <- function(tac, volumes, ROI_def, merge, PVC) {
@@ -43,38 +44,6 @@ calcTAC <- function(tac, volumes, ROI_def, merge, PVC) {
     
     return(calculated_TACs)
 }
-
-#' Calculate group mean TAC for a list of participants in weighted average ROIs
-#'
-#@export
-#'@param participantlist A vector of participant IDs
-#'@param tac The time-activity curve data from loading function
-#'@param raw_volumes The ROI volume data from loading function
-#'@param ROI_def The definition of ROIs by combining smaller ROIs from TAC file
-#'@param merge If true, includes the original ROIs in the output data
-#'@return Time-activity curves for the specified ROIs
-# groupTAC <- function(participantlist, directory="", ROI_def=standardROIs(), 
-#                      merge=F) {
-#   groupTACtable <- emptyTACtable(paste(directory, participantlist[1], ".tac", 
-#                                  sep=""), sep="", ROI_def, merge=merge)
-#   print("Working on files:")
-#   for (participant in participantlist) {
-#     tac_file <- paste(directory, participant, ".tac", sep="")
-#     voistat_file <- paste(directory, participant, ".voistat", sep="")
-#     print(tac_file)
-#     print(voistat_file)
-#     TACtable <- calcTAC(tac_file, voistat_file, ROI_def, merge)
-#     print(all(names(TACtable)==names(groupTACtable)))
-#     if (all(names(TACtable)==names(groupTACtable))==F) {
-#         stop("Columns don't match. Please check your files.")
-#     }
-#     groupTACtable <- groupTACtable + TACtable
-#   }
-#   groupTACtable <- groupTACtable / length(participantlist)
-#   print(paste("Divided group table by", length(participantlist), 
-#         "to arrive at mean."))
-#   return(groupTACtable)
-# }
 
 #' Plots time activity curves from 1 or 2 participants or groups.
 #'

@@ -21,7 +21,6 @@
 #'@param t_star If 0, t* will be calculated using find_t_star()
 #'@param method Method of inntegration, "trapz" or "integrate"
 #'@return Data frame with calculate DVRs for all ROIs
-#'@examples
 DVR_reference_Logan <- function(tac_data, target, ref, k2prime, t_star,
 method="trapz") {
     model <- reference_Logan_lm(tac_data, target, ref, k2prime, t_star, method)
@@ -42,7 +41,6 @@ method="trapz") {
 #'@param t_star If 0, t* will be calculated using find_t_star()
 #'@param method Method of inntegration, "trapz" or "integrate"
 #'@return Data frame with calculate DVRs for all ROIs
-#'@examples
 DVR_all_reference_Logan <- function(tac_data, reference, k2prime, t_star=0,
                                     method="trapz") {
     
@@ -69,12 +67,12 @@ DVR_all_reference_Logan <- function(tac_data, reference, k2prime, t_star=0,
 #'
 #'@export
 #'@param tac_data The time-activity curve data from calcTAC()
+#'@param target The name of the receptor-rich region, e.g. "frontal"
 #'@param ref The reference region, e.g. "cerebellum"
 #'@param k2prime A fixed value for k2' must be specified (e.g. 0.2)
 #'@param t_star If 0, t* will be calculated using find_t_star()
 #'@param method Method of inntegration, "trapz" or "integrate"
 #'@return No return
-#'@examples
 plot_reference_Logan <- function(tac_data, target, ref, k2prime, t_star=0,
                                  method="trapz") {
     model <- reference_Logan_lm(tac_data, target, ref, k2prime, t_star, method)

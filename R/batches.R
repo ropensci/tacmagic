@@ -28,11 +28,12 @@
 #'@param SUVR_def is a vector of the start times for window to be used in SUVR
 #'@param PVC For PVC, true where the data is stored as _C in same tac file
 #'@param ref The name of the reference region for DVR/SUVR calculation
+#'@param merge Passes value to calcTAC; T to keep original atomic ROIs
 #'@param k2prime Fixed k2' for DVR calculation
 #'@param t_star Change from 0 to manually specify a t* for DVR calculation
+#'@param master Optionally, a data.frame of same format as return, to add to
 #'@param outfile Specify a filename to save the data
 #'@return A table of SUVR values for the specified ROIs for all participants
-#'@examples
 #'
 tm_batch <- function(participants, models=c("SUVR", "Logan", "eslope"), PVC=F,
                      dir="", tac_format="PMOD", tac_file_suffix=".tac", 
@@ -84,7 +85,6 @@ tm_batch <- function(participants, models=c("SUVR", "Logan", "eslope"), PVC=F,
 #'@param otherdata A data.frame of the same participants to add the new data to
 #'@param outfile Specify a filename to save the data
 #'@return A table of values for the specified ROIs for all participants.
-#'@examples
 #'
 batchVoistat <- function(participants, ROI_def, dir="", filesuffix, varname,
                          otherdata=NULL, outfile) {

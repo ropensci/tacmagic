@@ -8,7 +8,7 @@
 
 # Contains the names and function names of all the models for use in tm_batch
 # and model_batch
-#'@noRD
+#'@noRd
 model_definitions <- function() {
   return(c(SUVR=calcSUVR, 
   	       eslope=peakSlope, 
@@ -27,14 +27,15 @@ model_definitions <- function() {
 #'
 #'@param participants A vector of participant IDs
 #'@param model The chosen model e.g. "SUVR"
-#'@param dir A directory and/or file name prefix for the tac/volume files
 #'@param file_info A list containing tac and volume file info.
+#'@param merge Passes value to calcTAC; T to keep original atomic ROIs
 #'@param ROI_def Object that defines combined ROIs, see ROI_definitions.R
 #'@param SUVR_def is a vector of the start times for window to be used in SUVR
 #'@param ref The name of the reference region for SUVR calculation
 #'@param PVC For PVC, set to T where the data is stored as _C in same tac file
+#'@param k2prime A fixed value for k2' must be specified (e.g. 0.2)
+#'@param t_star If 0, t* will be calculated using find_t_star()
 #'@return A table of SUVR values for the specified ROIs for all participants.
-#'@examples
 #'
 model_batch <- function(participants, model, file_info, merge, ROI_def, PVC,
 	                    ref=NULL, SUVR_def=NULL, k2prime=NULL, t_star=NULL) {
