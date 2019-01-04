@@ -37,5 +37,5 @@ named tac and volume files, this calculates a model, e.g. SUVR, and stores in
 a single table.
 }
 \details{
-See calcSUVR() for how SUVR is calculated.
+See suvr() for how SUVR is calculated.
 }
