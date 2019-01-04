@@ -32,6 +32,3 @@ this extracts the value from the files for the specified ROIs.
 \details{
 See voistatScraper() for specifics.
 }
-\examples{
-
-}
