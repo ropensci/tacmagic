@@ -19,13 +19,13 @@ tm_batch(participants, models = c("SUVR", "Logan", "eslope"), PVC = F,
 
 \item{dir}{A directory and/or file name prefix for the tac/volume files}
 
-\item{tac_format}{Format of tac files provided: See loadTACfile()}
+\item{tac_format}{Format of tac files provided: See load_tac()}
 
 \item{tac_file_suffix}{How participant IDs corresponds to the TAC files}
 
 \item{vol_file_suffix}{How participant IDs correspond to volume files}
 
-\item{vol_format}{The file format that includes volumes: See loadVolumes()}
+\item{vol_format}{The file format that includes volumes: See load_vol()}
 
 \item{ROI_def}{Object that defines combined ROIs, see ROI_definitions.R}
 
@@ -33,7 +33,7 @@ tm_batch(participants, models = c("SUVR", "Logan", "eslope"), PVC = F,
 
 \item{ref}{The name of the reference region for DVR/SUVR calculation}
 
-\item{merge}{Passes value to calcTAC; T to keep original atomic ROIs}
+\item{merge}{Passes value to tac_roi(); T to keep original atomic ROIs}
 
 \item{k2prime}{Fixed k2' for DVR calculation}
 
@@ -54,5 +54,5 @@ model options are "SUVR", "Logan" and "eslope".
 \details{
 For further details about how the models are calculated, see the indiviudal
 functions that they rely on. "SUVR" uses suvr(), "Logan" uses
-DVR_all_reference_Logan(), and "eslope" uses peaksSlope().
+DVR_all_ref_Logan(), and "eslope" uses peaksSlope().
 }

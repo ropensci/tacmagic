@@ -14,7 +14,7 @@ model_batch(participants, model, file_info, merge, ROI_def, PVC,
 
 \item{file_info}{A list containing tac and volume file info.}
 
-\item{merge}{Passes value to calcTAC; T to keep original atomic ROIs}
+\item{merge}{Passes value to tac_roi(); T to keep original atomic ROIs}
 
 \item{ROI_def}{Object that defines combined ROIs, see ROI_definitions.R}
 
