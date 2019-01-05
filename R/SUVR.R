@@ -1,8 +1,7 @@
 ##################################
-## PET Analysis in R            ##
-## calculateSUVR.R              ##
+## tacmagic - PET Analysis in R ##
+## SUVR.R                       ##
 ## (C) Eric E. Brown  2018      ##
-## PEAR v devel                 ##
 ## Beta version--check all work ##
 ##################################
 
@@ -16,8 +15,8 @@
 #' frame durations.
 #'
 #'@export 
-#'@param tac The time-activity curve data from calcTAC()
-#'@param SUVR_def is a vector of the start times for window to be used in SUVR
+#'@param tac The time-activity curve data from tac_roi()
+#'@param SUVR_def a vector of start times for window to be used in SUVR
 #'@param reference is a string, e.g. "cerbellum", to specify reference region
 #'@return A data.frame of SUVR values for the specified ROIs
 suvr <- function(tac, SUVR_def, reference) {

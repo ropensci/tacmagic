@@ -13,7 +13,7 @@ model_definitions <- function() {
   return(c(SUVR=suvr, 
   	       eslope=peakSlope, 
   	       max=maxTAC, 
-  	       Logan=DVR_all_reference_Logan
+  	       Logan=DVR_all_ref_Logan
   	     ))
 }
 
@@ -28,7 +28,7 @@ model_definitions <- function() {
 #'@param participants A vector of participant IDs
 #'@param model The chosen model e.g. "SUVR"
 #'@param file_info A list containing tac and volume file info.
-#'@param merge Passes value to calcTAC; T to keep original atomic ROIs
+#'@param merge Passes value to tac_roi(); T to keep original atomic ROIs
 #'@param ROI_def Object that defines combined ROIs, see ROI_definitions.R
 #'@param SUVR_def is a vector of the start times for window to be used in SUVR
 #'@param ref The name of the reference region for SUVR calculation
@@ -50,9 +50,9 @@ model_batch <- function(participants, model, file_info, merge, ROI_def, PVC,
    
   # Empty data.frame to store the calculated values-----------------------------   
   
-  tac1 <- loadTACfile(tac_f[1], file_info$tac_format)
-  vol1 <- loadVolumes(vol_f[1], format=file_info$vol_format)
-  tac_data1 <- calcTAC(tac1, vol1, ROI_def=ROI_def, PVC=PVC, merge=merge)
+  tac1 <- load_tac(tac_f[1], file_info$tac_format)
+  vol1 <- load_vol(vol_f[1], format=file_info$vol_format)
+  tac_data1 <- tac_roi(tac1, vol1, ROI_def=ROI_def, PVC=PVC, merge=merge)
   master <- as.data.frame(matrix(nrow = length(participants), 
   								 ncol=(length(names(tac_data1))-2) ))
   names(master) <- names(tac_data1)[3:length(names(tac_data1))]
@@ -62,9 +62,9 @@ model_batch <- function(participants, model, file_info, merge, ROI_def, PVC,
   for (i in 1:length(participants)) {
     message(paste("Working on...", participants[i]))
         
-    taci <- loadTACfile(tac_f[i], file_info$tac_format)
-    voli <- loadVolumes(vol_f[i], format=file_info$vol_format)
-    tac_data <- calcTAC(taci, voli, ROI_def=ROI_def, PVC=PVC, merge=merge)
+    taci <- load_tac(tac_f[i], file_info$tac_format)
+    voli <- load_vol(vol_f[i], format=file_info$vol_format)
+    tac_data <- tac_roi(taci, voli, ROI_def=ROI_def, PVC=PVC, merge=merge)
         
     if (model == "Logan") {
       VALUE <- model_fn(tac_data, ref=ref, k2prime=k2prime, t_star=t_star)

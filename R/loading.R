@@ -19,7 +19,7 @@
 #'@param format (default, and only option currently, is .tac as from PMOD.
 #'@param acqtimes File name for a .acqtimes file (as in PMOD)
 #'@return data.frame with loaded TAC data
-loadTACfile <- function(filename, format="PMOD", acqtimes=NULL) {
+load_tac <- function(filename, format="PMOD", acqtimes=NULL) {
   if (format == "PMOD") {
       tac <- loadTACPMOD(filename)
   } else if (format == "voistat") {
@@ -38,7 +38,7 @@ loadTACfile <- function(filename, format="PMOD", acqtimes=NULL) {
 #'@param filename (e.g. participant.voistat)
 #'@param format (default is the TAC .voistat format from PMOD)
 #'@return data.frame with loaded TAC data
-loadVolumes <- function(filename, format="Voistat") {
+load_vol <- function(filename, format="Voistat") {
   if (format == "Voistat") {
       volumes <- volumesFromVoistatTAC(filename)
   } else if (format == "BPndPaste") {
@@ -57,7 +57,7 @@ loadVolumes <- function(filename, format="Voistat") {
 #'@param ROI_def The definition of ROIs by combining smaller ROIs from TAC file
 #'@param model A string to name the variable being extracted, e.g. "Logan_DVR"
 #'@return data.frame with loaded model data in specified combined weighted ROIs
-voistatScraper <- function(voistat_file, ROI_def, model="VALUE") {
+load_voistat <- function(voistat_file, ROI_def, model="VALUE") {
     
     voistat <- read.csv(voistat_file, sep="\t", skip=6, header=T, 
                         stringsAsFactors=F)

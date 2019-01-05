@@ -1,8 +1,7 @@
 ##################################
-## PET Analysis in R            ##
-## reference_Logan.R            ##
+## tacmagic - PET Analysis in R ##
+## logan.R                      ##
 ## (C) Eric E. Brown  2018      ##
-## PEAR v devel                 ##
 ## Beta version--check all work ##
 ##################################
 
@@ -14,16 +13,16 @@
 #' is equal to DVR. Works for a single tac (target).
 #'
 #'@export
-#'@param tac_data The time-activity curve data from calcTAC()
+#'@param tac_data The time-activity curve data from tac_roi()
 #'@param target The name of the target ROI, e.g. "frontal"
 #'@param ref The reference region, e.g. "cerebellum"
 #'@param k2prime A fixed value for k2' must be specified (e.g. 0.2)
 #'@param t_star If 0, t* will be calculated using find_t_star()
 #'@param method Method of inntegration, "trapz" or "integrate"
 #'@return Data frame with calculate DVRs for all ROIs
-DVR_reference_Logan <- function(tac_data, target, ref, k2prime, t_star,
-method="trapz") {
-    model <- reference_Logan_lm(tac_data, target, ref, k2prime, t_star, method)
+DVR_ref_Logan <- function(tac_data, target, ref, k2prime, t_star, 
+                          method="trapz") {
+    model <- ref_Logan_lm(tac_data, target, ref, k2prime, t_star, method)
     DVR <- model$coefficients[[2]]
     return(DVR)
 }
@@ -32,26 +31,26 @@ method="trapz") {
 #' Non-invasive reference Logan method for all ROIs in tac data
 #'
 #' This calculates the DVR using the non-invasive reference Logan method for
-#' all TACs in a supplied tac file. It uses DVR_reference_Logan.
+#' all TACs in a supplied tac file. It uses DVR_ref_Logan.
 #'
 #'@export
-#'@param tac_data The time-activity curve data from calcTAC()
+#'@param tac_data The time-activity curve data from tac_roi()
 #'@param reference The reference region, e.g. "cerebellum"
 #'@param k2prime A fixed value for k2' must be specified (e.g. 0.2)
 #'@param t_star If 0, t* will be calculated using find_t_star()
 #'@param method Method of inntegration, "trapz" or "integrate"
 #'@return Data frame with calculate DVRs for all ROIs
-DVR_all_reference_Logan <- function(tac_data, reference, k2prime, t_star=0,
-                                    method="trapz") {
+DVR_all_ref_Logan <- function(tac_data, reference, k2prime, t_star=0,
+                              method="trapz") {
     
     DVRtable <- new_table(tac_data, "DVR")
     
     ROIs <- names(tac_data)[3:length(names(tac_data))]
     for (ROI in ROIs) {
         message(paste("Trying", ROI))
-        attempt <- try(DVR_reference_Logan(tac_data, target=ROI, ref=reference,
-                                           k2prime=k2prime, t_star=t_star,
-                                           method=method))
+        attempt <- try(DVR_ref_Logan(tac_data, target=ROI, ref=reference,
+                                     k2prime=k2prime, t_star=t_star, 
+                                     method=method))
         if (class(attempt) == "try-error") {
             attempt <- NA
         }
@@ -66,17 +65,17 @@ DVR_all_reference_Logan <- function(tac_data, reference, k2prime, t_star=0,
 #' This plots the non-invasive Logan plot.
 #'
 #'@export
-#'@param tac_data The time-activity curve data from calcTAC()
+#'@param tac_data The time-activity curve data from tac_roi()
 #'@param target The name of the receptor-rich region, e.g. "frontal"
 #'@param ref The reference region, e.g. "cerebellum"
 #'@param k2prime A fixed value for k2' must be specified (e.g. 0.2)
 #'@param t_star If 0, t* will be calculated using find_t_star()
 #'@param method Method of inntegration, "trapz" or "integrate"
 #'@return No return
-plot_reference_Logan <- function(tac_data, target, ref, k2prime, t_star=0,
-                                 method="trapz") {
-    model <- reference_Logan_lm(tac_data, target, ref, k2prime, t_star, method)
-    xy <- reference_Logan_xy(tac_data, target, ref, k2prime, method)
+plot_ref_Logan <- function(tac_data, target, ref, k2prime, t_star=0,
+                           method="trapz") {
+    model <- ref_Logan_lm(tac_data, target, ref, k2prime, t_star, method)
+    xy <- ref_Logan_xy(tac_data, target, ref, k2prime, method)
     x <- xy$x
     y <- xy$y
     if (t_star == 0) t_star <- find_t_star(x, y)
@@ -96,7 +95,7 @@ plot_reference_Logan <- function(tac_data, target, ref, k2prime, t_star=0,
 
 # The non-invasive reference Logan method
 #' @noRd
-reference_Logan_xy <- function(tac, target, ref, k2prime, method) {
+ref_Logan_xy <- function(tac, target, ref, k2prime, method) {
     
   mid_time <- (tac$start + tac$end) / 2
   
@@ -104,7 +103,6 @@ reference_Logan_xy <- function(tac, target, ref, k2prime, method) {
   target_tac <- approxfun(x=mid_time, y=tac[,target], method = "constant",
                           rule=2)
   ref_tac <- approxfun(x=mid_time, y=tac[,ref], method = "constant", rule=2)
-  
   
   if (method == "trapz") {
     frames <- 1:length(mid_time)
@@ -130,10 +128,10 @@ reference_Logan_xy <- function(tac, target, ref, k2prime, method) {
 
 # The non-invasive reference Logan method -- linear model starting from t*
 #' @noRd
-reference_Logan_lm <- function(tac_data, target, ref, k2prime, t_star, method) {
+ref_Logan_lm <- function(tac_data, target, ref, k2prime, t_star, method) {
     
-  xy <- reference_Logan_xy(tac_data, target=target, ref=ref, k2prime=k2prime, 
-                           method=method)
+  xy <- ref_Logan_xy(tac_data, target=target, ref=ref, k2prime=k2prime, 
+                     method=method)
   
   x <- xy$x
   y <- xy$y

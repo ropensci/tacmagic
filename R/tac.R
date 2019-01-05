@@ -15,8 +15,8 @@
 #'@param merge If TRUE, includes the original ROIs in the output data
 #'@param PVC If TRUE, appends "_C" to ROI name header (as in PMOD TAC files)
 #'@return Time-activity curves for the specified ROIs
-#examples calcTAC(p1tac, p1vol, standardROIs(), merge=T)
-calcTAC <- function(tac, volumes, ROI_def, merge, PVC) {
+#examples tac_roi(p1tac, p1vol, standardROIs(), merge=T)
+tac_roi <- function(tac, volumes, ROI_def, merge, PVC) {
     
     ROI_PVC <- ROI_def
     
@@ -48,13 +48,13 @@ calcTAC <- function(tac, volumes, ROI_def, merge, PVC) {
 #' Plots time activity curves from 1 or 2 participants or groups.
 #'
 #'@export
-#'@param TACtable1 (e.g. from calcTAC() or groupTAC(), or simply loadTACfile())
+#'@param TACtable1 (e.g. from tac_roi() or groupTAC(), or simply load_tac())
 #'@param TACtable2 An optional, second TAC, to plot for comparison.
 #'@param ROIs A vector of ROIs to plot, names matching the TAC headers.
 #'@param ymax The maximum value on the y-axis.
 #'@param seconds_to_mins If true, converts time from TAC from sec to min.
 #'@return Creates a plot.
-plotTAC2 <- function(TACtable1, TACtable2=NULL, ROIs=c("totalcortical", 
+plot_tac <- function(TACtable1, TACtable2=NULL, ROIs=c("totalcortical", 
   "cerebellum"), ymax=25, seconds_to_mins=FALSE) {
   
   # If the seconds_to_mins argument is TRUE, this converts the time from 

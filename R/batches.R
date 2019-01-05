@@ -1,8 +1,7 @@
 ##################################
-## PET Analysis in R            ##
-## batches.R                    ##
+## tacmagic - PET Analysis in R ##
+## bathces.R                    ##
 ## (C) Eric E. Brown  2018      ##
-## PEAR v devel                 ##
 ## Beta version--check all work ##
 ##################################
 
@@ -14,21 +13,21 @@
 #'
 #' For further details about how the models are calculated, see the indiviudal
 #' functions that they rely on. "SUVR" uses suvr(), "Logan" uses
-#' DVR_all_reference_Logan(), and "eslope" uses peaksSlope().
+#' DVR_all_ref_Logan(), and "eslope" uses peaksSlope().
 #'
 #'@export
 #'@param participants A vector of participant IDs
 #'@param models A vector of names of the models to calculate
 #'@param dir A directory and/or file name prefix for the tac/volume files
-#'@param tac_format Format of tac files provided: See loadTACfile()
+#'@param tac_format Format of tac files provided: See load_tac()
 #'@param tac_file_suffix How participant IDs corresponds to the TAC files
-#'@param vol_format The file format that includes volumes: See loadVolumes()
+#'@param vol_format The file format that includes volumes: See load_vol()
 #'@param vol_file_suffix How participant IDs correspond to volume files
 #'@param ROI_def Object that defines combined ROIs, see ROI_definitions.R
 #'@param SUVR_def is a vector of the start times for window to be used in SUVR
 #'@param PVC For PVC, true where the data is stored as _C in same tac file
 #'@param ref The name of the reference region for DVR/SUVR calculation
-#'@param merge Passes value to calcTAC; T to keep original atomic ROIs
+#'@param merge Passes value to tac_roi(); T to keep original atomic ROIs
 #'@param k2prime Fixed k2' for DVR calculation
 #'@param t_star Change from 0 to manually specify a t* for DVR calculation
 #'@param master Optionally, a data.frame of same format as return, to add to
@@ -70,12 +69,12 @@ tm_batch <- function(participants, models=c("SUVR", "Logan", "eslope"), PVC=F,
   return(master)
 }
 
-#' Obtain values from voistat files (using voistatScraper() for a batch.
+#' Obtain values from voistat files (using load_voistat() for a batch.
 #'
 #' For a vector of participant IDs and correspondingly named .voistat files,
 #' this extracts the value from the files for the specified ROIs.
 #'
-#' See voistatScraper() for specifics.
+#' See load_voistat() for specifics.
 #'
 #'@param participants A vector of participant IDs
 #'@param ROI_def Object that defines combined ROIs, see ROI_definitions.R
@@ -86,19 +85,19 @@ tm_batch <- function(participants, models=c("SUVR", "Logan", "eslope"), PVC=F,
 #'@param outfile Specify a filename to save the data
 #'@return A table of values for the specified ROIs for all participants.
 #'
-batchVoistat <- function(participants, ROI_def, dir="", filesuffix, varname,
+voistat_batch <- function(participants, ROI_def, dir="", filesuffix, varname,
                          otherdata=NULL, outfile) {
 
   voistat_file = paste(dir, participants[1], filesuffix, ".voistat", sep="")
 
-  first <- voistatScraper(voistat_file, ROI_def)
+  first <- load_voistat(voistat_file, ROI_def)
   master <- t(first)
   master <- master[-1,]
 
   for (each in participants) {
     message(paste("Working on...", each))
     voistat_file = paste(dir, each, filesuffix, ".voistat", sep="")
-    VALUE <- voistatScraper(voistat_file, ROI_def)
+    VALUE <- load_voistat(voistat_file, ROI_def)
     trans <- t(VALUE)
     row.names(trans) <- each
     master <- rbind(master,trans)
@@ -118,7 +117,7 @@ QC_count_ROIs <- function(participants, tac_format="PMOD", dir="",
                        ROIs=rep(NA, length(participants)))
   for (each in participants) {
     message(paste("Working on...", each))
-    tac_raw <- loadTACfile(paste(dir, each, tac_file_suffix, sep=""), 
+    tac_raw <- load_tac(paste(dir, each, tac_file_suffix, sep=""), 
                            tac_format)
     if (trip == 0) {
       headers <- names(tac_raw)
