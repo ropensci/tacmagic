@@ -1,12 +1,10 @@
-# PET Analysis in R
+# tacmagic: PET Analysis in R
 
 This is a beta version (not fully tested; use at own risk) of an R package to process and analyze time-activity curve (TAC) data from positron emission tomography (PET) studies.
 
 The package provides loading functions to work with processed PET data, such as TAC, ROI volumes and ROI statistics (e.g. Logan, R1, etc.) in a common format regardless of the software that created them (e.g. PMOD). This then enables subsequent statistical calculations.
 
-These scripts are in NO WAY affiliated with or endorsed by PMOD Technologies. 
-
-If you are interested in these scripts, or have any questions, suggestions, and especially if you see any problems, please contact me at eric.brown@utoronto.ca. I am interested in improving these scripts and making them more useful. If you 
+If you are interested in these scripts, or have any questions, suggestions, and especially if you see any problems, please contact me at eb@ericebrown.com. I am interested in improving these scripts and making them more useful. If you 
 do use them, please acknowledge/cite this in your work.
 
 ## Features
@@ -45,3 +43,5 @@ Calculates time-activity curves for individual ROIs, individual participants, gr
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
+
+These scripts are in NO WAY affiliated with or endorsed by PMOD Technologies. 
