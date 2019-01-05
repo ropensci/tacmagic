@@ -40,13 +40,12 @@ DVR_ref_Logan <- function(tac_data, target, ref, k2prime, t_star,
 #'
 #'@export
 #'@param tac_data The time-activity curve data from tac_roi()
-#'@param reference The reference region, e.g. "cerebellum"
+#'@param ref The reference region, e.g. "cerebellum"
 #'@param k2prime A fixed value for k2' must be specified (e.g. 0.2)
 #'@param t_star If 0, t* will be calculated using find_t_star()
 #'@param method Method of inntegration, "trapz" or "integrate"
 #'@return Data frame with calculate DVRs for all ROIs
-DVR_all_ref_Logan <- function(tac_data, ref, k2prime, t_star=0,
-                              method="trapz") {
+DVR_all_ref_Logan <- function(tac_data, ref, k2prime, t_star, method="trapz") {
     
     DVRtable <- new_table(tac_data, "DVR")
     
@@ -87,7 +86,7 @@ plot_ref_Logan <- function(tac_data, target, ref, k2prime, t_star=0,
     
     par(mfrow=c(1,2))
     
-    plotTAC2(tac_data, ROIs=c(target,ref))
+    plot_tac(tac_data, ROIs=c(target,ref))
     
     plot(y~x)
     abline(model)
