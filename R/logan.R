@@ -5,7 +5,12 @@
 ## Beta version--check all work ##
 ##################################
 
+
 # See Logan 1996 in references().
+
+# On testing, produces results equivalent to using Turku PET Centre's
+# logan 0.6.17 with the settings -C -mid=y (traditional regression model and 
+# mid-frame times)
 
 #' Non-invasive reference Logan method
 #'
@@ -40,7 +45,7 @@ DVR_ref_Logan <- function(tac_data, target, ref, k2prime, t_star,
 #'@param t_star If 0, t* will be calculated using find_t_star()
 #'@param method Method of inntegration, "trapz" or "integrate"
 #'@return Data frame with calculate DVRs for all ROIs
-DVR_all_ref_Logan <- function(tac_data, reference, k2prime, t_star=0,
+DVR_all_ref_Logan <- function(tac_data, ref, k2prime, t_star=0,
                               method="trapz") {
     
     DVRtable <- new_table(tac_data, "DVR")
@@ -48,7 +53,7 @@ DVR_all_ref_Logan <- function(tac_data, reference, k2prime, t_star=0,
     ROIs <- names(tac_data)[3:length(names(tac_data))]
     for (ROI in ROIs) {
         message(paste("Trying", ROI))
-        attempt <- try(DVR_ref_Logan(tac_data, target=ROI, ref=reference,
+        attempt <- try(DVR_ref_Logan(tac_data, target=ROI, ref=ref,
                                      k2prime=k2prime, t_star=t_star, 
                                      method=method))
         if (class(attempt) == "try-error") {
@@ -90,7 +95,6 @@ plot_ref_Logan <- function(tac_data, target, ref, k2prime, t_star=0,
 }
 
 
-
 ## Helper functions
 
 # The non-invasive reference Logan method
@@ -98,27 +102,25 @@ plot_ref_Logan <- function(tac_data, target, ref, k2prime, t_star=0,
 ref_Logan_xy <- function(tac, target, ref, k2prime, method) {
     
   mid_time <- (tac$start + tac$end) / 2
+  mid_time <- mid_time / 60 # needed because k2' is units 1/min (not seconds)
   
   # Derive functions for TACs by interpolation.
-  target_tac <- approxfun(x=mid_time, y=tac[,target], method = "constant",
-                          rule=2)
-  ref_tac <- approxfun(x=mid_time, y=tac[,ref], method = "constant", rule=2)
-  
+  target_tac <- approxfun(x=mid_time, y=tac[,target], method = "linear", rule=2)
+  ref_tac <- approxfun(x=mid_time, y=tac[,ref], method = "linear", rule=2)
+
+  if (!is.null(k2prime)) k2r <- (tac[,ref] / k2prime) else k2r <- 0
+
   if (method == "trapz") {
     frames <- 1:length(mid_time)
     yA <- sapply(frames, FUN=vAUC, x=mid_time, y=tac[,target])
-    xA <- sapply(frames, FUN=vAUC, x=mid_time, y=tac[,ref]) + (tac[,ref] /
-                                                                    k2prime)
+    xA <- sapply(frames, FUN=vAUC, x=mid_time, y=tac[,ref]) + k2r
   } else if (method == "integrate") {
     yA <- sapply(mid_time, FUN=vintegrate, lower=mid_time[1], f=target_tac)
-    xA <- sapply(mid_time, FUN=vintegrate, lower=mid_time[1], f=ref_tac) + (
-                                                            tac[,ref] / k2prime)
+    xA <- sapply(mid_time, FUN=vintegrate, lower=mid_time[1], f=ref_tac) + k2r
   }
 
-  yB <- tac[,target]
-  y <- yA / yB
-  xB <- yB
-  x <- xA / xB
+  y <- yA / tac[,target]
+  x <- xA / tac[,target]
 
   output <- data.frame(x,y)
 
@@ -171,7 +173,8 @@ find_t_star <- function(x, y, error=0.10) {
 # just the integrate() value.
 #' @noRd
 vintegrate <- function(upper, lower, fn) {
-    v <- integrate(fn, lower=lower, upper=upper, stop.on.error=F)
+    v <- integrate(fn, lower=lower, upper=upper, stop.on.error=F, 
+                   subdivisions=10000L)
     return(v$value)
 }
 
