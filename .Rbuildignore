@@ -1,0 +1,7 @@
+.git
+scratch
+.gitignore
+.Rhistory
+.Rproj.user
+PET.Rcheck
+readme.md
