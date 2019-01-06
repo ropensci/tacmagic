@@ -6,7 +6,7 @@
 ##################################
 
 
-# See Logan 1996 in references().
+# See references()$Logan_1996
 
 # On testing, produces results equivalent to using Turku PET Centre's
 # logan 0.6.17 with the settings -C -mid=y (traditional regression model and 
