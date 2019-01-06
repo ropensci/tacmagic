@@ -78,19 +78,39 @@ standardROIs <- function() {
 #'@examples fullROIs()
 fullROIs <- function() {
 
-    deep_def <- c("CaudateNucl", "NuclAccumb",  "Putamen", "Thalamus", 
-                  "Pallidum")
+  deep_def <- c("CaudateNucl", "NuclAccumb",  "Putamen", "Thalamus", "Pallidum")
     
-    leftdeep <- paste(deep_def, "_l", sep="")
-    rightdeep <- paste(deep_def, "_r", sep="")
-    deep <- c(leftdeep, rightdeep)
+  leftdeep <- paste(deep_def, "_l", sep="")
+  rightdeep <- paste(deep_def, "_r", sep="")
+  deep <- c(leftdeep, rightdeep)
     
-    ventricles <- c("FrontalHorn_l", "FrontalHorn_r", "TemporaHorn_r",
-    "TemporaHorn_l", "ThirdVentricl")
-    whitematter <- c("White_matter_l", "White_matter_r")
+  ventricles <- c("FrontalHorn_l", "FrontalHorn_r", "TemporaHorn_r",
+                  "TemporaHorn_l", "ThirdVentricl")
+  whitematter <- c("White_matter_l", "White_matter_r")
     
-    ROIs <- c(standardROIs(), list(leftdeep=leftdeep, rightdeep=rightdeep,
-              deep=deep, ventricles=ventricles, whitematter=whitematter))
+  ROIs <- c(standardROIs(), list(leftdeep=leftdeep, rightdeep=rightdeep,
+            deep=deep, ventricles=ventricles, whitematter=whitematter))
     
-    return(ROIs)
+  return(ROIs)
+}
+
+roi_Hammers_PIB <- function() {
+  # See PMOD Neuro Tool (PNEURO) (Version 4.0) documentation
+  amyloidcompdef <- c("FL_mid_fr_G", "FL_strai_G", "FL_sup_fr_G", "FL_OFC_MOG", 
+                    "FL_OFC_LOG", "FL_OFC_POG", "Subgen_antCing", 
+                    "Subcall_area", 
+
+                    "G_sup_temp_post", "G_tem_midin", "G_sup_temp_ant",
+                    
+                    "PL_sup_pa_G", "PL_rest",
+                    
+                    "G_cing_ant", "G_cing_post")
+
+  leftamyloidcomp <- paste0(amyloidcompdef, "_l")
+  rightamyloidcomp <- paste0(amyloidcompdef, "_r")
+  amyloidcomp <- c(leftamyloidcomp, rightamyloidcomp)
+
+  ROIs <- c(fullROIs(), list(amyloidcomp=amyloidcomp))
+
+  return(ROIs)
 }

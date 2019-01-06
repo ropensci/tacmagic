@@ -48,7 +48,7 @@ suvr_auc <- function(tac, SUVR_def, reference) {
     
     tac$mid <- (tac$start + tac$end) / 2
 
-    for (ROI in names(tac)[-(1:2)]) {    
+    for (ROI in names(tac)[-c(1:2, length(tac))]) {    
         rich <- pracma::trapz(tac[(tac$start %in% SUVR_def),][,"mid"], 
                               tac[(tac$start %in% SUVR_def),][,ROI])
         poor <- pracma::trapz(tac[(tac$start %in% SUVR_def),][,"mid"], 
