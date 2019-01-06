@@ -36,7 +36,7 @@ volumesFromBPndPaste <- function(BPnd_file) {
 ## TAC INFORMATION
 
 #' @noRd
-loadTACPMOD <- function(tac_file) {
+load_tac_PMOD <- function(tac_file) {
 
   tac <- read.csv(tac_file, sep="")
 
@@ -51,7 +51,7 @@ loadTACPMOD <- function(tac_file) {
 }
 
 #' @noRd
-loadTACvoistat <- function(voistat_file, acqtimes) {
+load_tac_voistat <- function(voistat_file, acqtimes) {
   voistat <- read.csv(voistat_file, sep="\t", skip=6, header=T,
   stringsAsFactors=F)
 
@@ -79,7 +79,7 @@ loadTACvoistat <- function(voistat_file, acqtimes) {
     }
   }
 
-  startend <- loadACQtimes(acqtimes)
+  startend <- load_acq(acqtimes)
   if (checkACQtimes(startend$start, startend$end, tac$time)) {
 	tac <- data.frame(startend, tac) 
   } else stop("Supplied acqtimes do not match midframe time data.")
@@ -87,9 +87,21 @@ loadTACvoistat <- function(voistat_file, acqtimes) {
   return(tac)
 }
 
+# Loads tac data from a .mat file, the output of the magia pipelines
+# magia information is found at references()$magia
+#' @noRd
+load_tac_magia <- function(filename) {
+  matlab <- R.matlab::readMat(filename)
+  tacs <- as.data.frame(t(matlab$tacs))
+  names(tacs) <- as.vector(unlist(matlab$roi.info[[1]]))
+  frames <- as.data.frame(matlab$frames) * 60
+  names(frames) <- c("start", "end")
+  return(data.frame(frames, tacs))
+}
+
 # Checks to ensure there are start and end times in the first 2 columns.
 #' @noRd
-validateTACtable <- function(tac) {
+validate_tac <- function(tac) {
   if (FALSE == (startsWith(names(tac)[1], "start") && 
                 startsWith(names(tac)[2], "end"))) {
     stop("The first two columns of the TAC file should be start and end times, 
@@ -122,7 +134,7 @@ validateTACvoistat <- function(voistat) {
 # end times of each frame. Returns a data frame with 2 columns with start, end
 # in seconds.
 #' @noRd
-loadACQtimes <- function(acqtimes_file) {
+load_acq <- function(acqtimes_file) {
   aq <- read.csv(acqtimes_file, sep="\t", skip=2, header=F)
   names(aq) <- c("start", "end")
   return(aq)

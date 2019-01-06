@@ -47,3 +47,14 @@ test_that("tac_roi() accurately calculates weighted averages from PMOD .voistat
   expect_equal(AD06_tac_pvc_vs, ans_pvc)
 
 })
+
+test_that("tac_roi() can load magia matlab files to the proper format", {
+
+  f_magia <- system.file("extdata", "AD06_tac_magia.mat", package="tacmagic")
+  m <- load_tac_magia(f_magia)
+  n <- load_tac(f_magia, format="magia")
+  expect_is(m, "data.frame")
+  expect_equal(names(m)[1:2], c("start", "end"))
+  expect_identical(m, n)
+
+})	

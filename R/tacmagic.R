@@ -14,6 +14,7 @@
 #' @importFrom graphics abline legend lines par plot
 #' @importFrom utils read.csv write.csv write.table
 #' @importFrom grDevices rainbow
+#' @importFrom R.matlab readMat
 NULL
 
 

@@ -16,17 +16,20 @@
 #' Loads TAC from file for use by other functions (default is PMOD .tac format)
 #'
 #'@param filename (e.g. participant.TAC)
-#'@param format (default, and only option currently, is .tac as from PMOD.
-#'@param acqtimes File name for a .acqtimes file (as in PMOD)
+#'@param format Options include "PMOD", "voistat" (also from PMOD), and "magia"
+#'@param acqtimes File name for a .acqtimes file (as in PMOD), required for 
+#' format="voistat"
 #'@return data.frame with loaded TAC data
 load_tac <- function(filename, format="PMOD", acqtimes=NULL) {
   if (format == "PMOD") {
-      tac <- loadTACPMOD(filename)
+      tac <- load_tac_PMOD(filename)
   } else if (format == "voistat") {
-      tac <- loadTACvoistat(filename, acqtimes)
-  } else stop("Speficied format for tac not supported.")
+      tac <- load_tac_voistat(filename, acqtimes)
+    } else if (format == "magia") {
+      tac <- load_tac_magia(filename)
+      } else stop("Speficied format for tac not supported.")
 
-  validateTACtable(tac)
+  validate_tac(tac)
   return(tac)
 }
 
