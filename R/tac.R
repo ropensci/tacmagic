@@ -1,8 +1,7 @@
 ##################################
-## PET Analysis in R            ##
-## fullTAC.R                    ##
+## tacmagic - PET Analysis in R ##
+## tac.R                        ##
 ## (C) Eric E. Brown  2018      ##
-## PEAR v devel                 ##
 ## Beta version--check all work ##
 ##################################
 

@@ -1,8 +1,7 @@
 ##################################
-## PET Analysis in R            ##
+## tacmagic - PET Analysis in R ##
 ## ROI_definitions.R            ##
 ## (C) Eric E. Brown  2018      ##
-## PEAR v devel                 ##
 ## Beta version--check all work ##
 ##################################
 

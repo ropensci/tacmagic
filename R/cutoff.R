@@ -1,8 +1,7 @@
 ##################################
-## PET Analysis in R            ##
-## PIB_pos.R                    ##
-## Eric E. Brown                ##
-## PEAR v devel                 ##
+## tacmagic - PET Analysis in R ##
+## cutoff.R                     ##
+## (C) Eric E. Brown  2018      ##
 ## Beta version--check all work ##
 ##################################
 
@@ -78,3 +77,8 @@ sdCutoff <- function(data) {
 PIB_Positive <- function(corticalSUVR, cutoff) {
   return(as.numeric(corticalSUVR > cutoff))
 }
+
+
+##
+#using package mixtools
+
