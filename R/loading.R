@@ -15,6 +15,7 @@
 
 #' Loads TAC from file for use by other functions (default is PMOD .tac format)
 #'
+#'@export
 #'@param filename (e.g. participant.TAC)
 #'@param format Options include "PMOD", "voistat" (also from PMOD), and "magia"
 #'@param acqtimes File name for a .acqtimes file (as in PMOD), required for 
@@ -38,11 +39,12 @@ load_tac <- function(filename, format="PMOD", acqtimes=NULL) {
 
 #' Loads ROI volumes from file for use by other functions
 #'
+#'@export
 #'@param filename (e.g. participant.voistat)
 #'@param format (default is the TAC .voistat format from PMOD)
 #'@return data.frame with loaded TAC data
-load_vol <- function(filename, format="Voistat") {
-  if (format == "Voistat") {
+load_vol <- function(filename, format="voistat") {
+  if (format == "voistat") {
       volumes <- volumesFromVoistatTAC(filename)
   } else if (format == "BPndPaste") {
       volumes <- volumesFromBPndPaste(filename)

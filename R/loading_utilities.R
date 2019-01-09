@@ -84,6 +84,8 @@ load_tac_voistat <- function(voistat_file, acqtimes) {
 	tac <- data.frame(startend, tac) 
   } else stop("Supplied acqtimes do not match midframe time data.")
 
+  tac$time <- NULL
+
   return(tac)
 }
 

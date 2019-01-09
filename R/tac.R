@@ -55,7 +55,7 @@ tac_roi <- function(tac, volumes, ROI_def, merge, PVC) {
 #'@param seconds_to_mins If true, converts time from TAC from sec to min.
 #'@return Creates a plot.
 plot_tac <- function(TACtable1, TACtable2=NULL, ROIs=c("totalcortical", 
-  "cerebellum"), ymax=25, seconds_to_mins=FALSE) {
+  "cerebellum"), ymax=25, seconds_to_mins=FALSE, title="") {
   
   # If the seconds_to_mins argument is TRUE, this converts the time from 
   # seconds to minutes (by dividing the $start column by 60)
@@ -69,9 +69,11 @@ plot_tac <- function(TACtable1, TACtable2=NULL, ROIs=c("totalcortical",
 
   # Sets up the plot using the frame start from the TAC file for the x axis
   # and converting to minutes if chosen. 
+   
   plot(1,type='n',xlim=c(TACtable1$start[1],
                       TACtable1$start[length(TACtable1$start)]/time_conversion),
-                        ylim=c(0,ymax),xlab=time_units, ylab='Activity')
+                        ylim=c(0,ymax),xlab=time_units, ylab='Activity',
+                        main=title)
   
   # Separate colour ranges for each group of TACs.
   colour1 <- rainbow(length(ROIs), start=0, end=0.25)
@@ -95,6 +97,7 @@ plot_tac <- function(TACtable1, TACtable2=NULL, ROIs=c("totalcortical",
             type='o', 
             col=colour2[ROI], 
             lwd=2)
+  
     }
     
   }

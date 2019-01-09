@@ -19,7 +19,8 @@ Imports:
     graphics, 
     grDevices, 
     pracma, 
-    utils
+    utils,
+    R.matlab
 Suggests:
     testthat,
     knitr,

@@ -13,9 +13,9 @@
 #'@export 
 #'@param tac The time-activity curve data from tac_roi()
 #'@param SUVR_def a vector of start times for window to be used in SUVR
-#'@param reference is a string, e.g. "cerbellum", to specify reference region
+#'@param ref is a string, e.g. "cerbellum", to specify reference region
 #'@return A data.frame of SUVR values for the specified ROIs
-suvr <- function(tac, SUVR_def, reference) {
+suvr <- function(tac, SUVR_def, ref) {
 
     SUVRtable <- new_table(tac, "SUVR")
     
@@ -25,7 +25,7 @@ suvr <- function(tac, SUVR_def, reference) {
     
     for (ROI in names(tac)[-(1:2)]) {
         rich <- weighted.mean(tac[frames,][,ROI], frame_weights)
-        poor <- weighted.mean(tac[frames,][,reference], frame_weights)
+        poor <- weighted.mean(tac[frames,][,ref], frame_weights)
         SUVRtable[ROI, "SUVR"] <-  rich/poor
     }
     return(SUVRtable)
@@ -40,9 +40,9 @@ suvr <- function(tac, SUVR_def, reference) {
 #'@export 
 #'@param tac The time-activity curve data from tac_roi()
 #'@param SUVR_def a vector of start times for window to be used in SUVR
-#'@param reference is a string, e.g. "cerbellum", to specify reference region
+#'@param ref is a string, e.g. "cerbellum", to specify reference region
 #'@return A data.frame of SUVR values for the specified ROIs
-suvr_auc <- function(tac, SUVR_def, reference) {
+suvr_auc <- function(tac, SUVR_def, ref) {
 
     SUVRtable <- new_table(tac, "SUVR")
     
@@ -52,7 +52,7 @@ suvr_auc <- function(tac, SUVR_def, reference) {
         rich <- pracma::trapz(tac[(tac$start %in% SUVR_def),][,"mid"], 
                               tac[(tac$start %in% SUVR_def),][,ROI])
         poor <- pracma::trapz(tac[(tac$start %in% SUVR_def),][,"mid"], 
-                              tac[(tac$start %in% SUVR_def),][,reference])
+                              tac[(tac$start %in% SUVR_def),][,ref])
         SUVRtable[ROI, "SUVR"] <-  rich/poor
     }    
 
