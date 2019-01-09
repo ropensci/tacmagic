@@ -17,8 +17,8 @@ test_that("tac_roi() accurately calculates weighted averages from PMOD .tac and
   tac <- load_tac(f_raw_tac)
   vol <- load_vol(f_raw_vol)
 
-  AD06_tac_nc <- tac_roi(tac, vol, fullROIs(), merge=F, PVC=F)
-  AD06_tac_pvc <- tac_roi(tac, vol, fullROIs(), merge=F, PVC=T)
+  AD06_tac_nc <- tac_roi(tac, vol, roi_ham_full(), merge=F, PVC=F)
+  AD06_tac_pvc <- tac_roi(tac, vol, roi_ham_full(), merge=F, PVC=T)
   
   expect_equal(AD06_tac_nc, ans_nc)
   expect_equal(AD06_tac_pvc, ans_pvc)
@@ -37,8 +37,8 @@ test_that("tac_roi() accurately calculates weighted averages from PMOD .voistat
   tac <- load_tac(f_voistat, format="voistat", acqtimes=f_acq)
   vol <- load_vol(f_voistat)
 
-  AD06_tac_nc_vs <- tac_roi(tac, vol, fullROIs(), merge=F, PVC=F)
-  AD06_tac_pvc_vs <- tac_roi(tac, vol, fullROIs(), merge=F, PVC=T)
+  AD06_tac_nc_vs <- tac_roi(tac, vol, roi_ham_full(), merge=F, PVC=F)
+  AD06_tac_pvc_vs <- tac_roi(tac, vol, roi_ham_full(), merge=F, PVC=T)
 
   ans_nc <- read.csv(f_ans_nc)
   ans_pvc <- read.csv(f_ans_pvc)

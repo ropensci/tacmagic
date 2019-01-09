@@ -15,7 +15,7 @@
 #'@export
 #'@return A list of lists, where each list is an ROI (e.g.) frontal lobe that 
 #' specifies the atomic ROIs from the atlas that make it up.
-#'@examples standardROIs()
+#'@examples roi_ham_stand()
 roi_ham_stand <- function() {
     
   frontal_def <- c("FL_mid_fr_G", "FL_precen_G", "FL_strai_G", "FL_OFC_AOG",
@@ -75,7 +75,7 @@ roi_ham_stand <- function() {
 #'@export
 #'@return A list of lists, where each list is an ROI (e.g.) frontal lobe that 
 #' specifies the atomic ROIs from the atlas that make it up.
-#'@examples fullROIs()
+#'@examples roi_ham_full()
 roi_ham_full <- function() {
 
   deep_def <- c("CaudateNucl", "NuclAccumb",  "Putamen", "Thalamus", "Pallidum")
@@ -103,7 +103,7 @@ roi_ham_full <- function() {
 #'@export
 #'@return A list of lists, where each list is an ROI (e.g.) frontal lobe that 
 #' specifies the atomic ROIs from the atlas that make it up.
-#'@examples fullROIs()
+#'@examples roi_ham_pib()
 roi_ham_pib <- function() {
 
   amyloidcompdef <- c("FL_mid_fr_G", "FL_strai_G", "FL_sup_fr_G", "FL_OFC_MOG", 

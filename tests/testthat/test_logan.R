@@ -11,7 +11,7 @@ test_that("DVR_all_ref_Logan() produces the same results as existing tools", {
   tac <- load_tac(f_raw_tac)
   vol <- load_vol(f_raw_vol)
 
-  AD06_tac_nc <- tac_roi(tac, vol, fullROIs(), merge=F, PVC=F)
+  AD06_tac_nc <- tac_roi(tac, vol, roi_ham_full(), merge=F, PVC=F)
 
   # Calculate Logan DVRs with different settings -------------------------------
   nok2_integrate <- DVR_all_ref_Logan(AD06_tac_nc, 

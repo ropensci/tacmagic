@@ -13,7 +13,7 @@ test_that("suvr() calculates SUVR as expected, from a sample file", {
   tac <- load_tac(f_raw_tac)
   vol <- load_vol(f_raw_vol)
 
-  calculated_tac <- tac_roi(tac, vol, fullROIs(), merge=F, PVC=F)
+  calculated_tac <- tac_roi(tac, vol, roi_ham_full(), merge=F, PVC=F)
 
   # this SUVR_def includes varying frame lengths so is a good test
   calculated_result <- suvr(calculated_tac, c(3000, 3300, 3600), "cerebellum")
