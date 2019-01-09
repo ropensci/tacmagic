@@ -49,10 +49,11 @@ tac_roi <- function(tac, volumes, ROI_def, merge, PVC) {
 #'
 #'@export
 #'@param TACtable1 (e.g. from tac_roi() or groupTAC(), or simply load_tac())
-#'@param TACtable2 An optional, second TAC, to plot for comparison.
-#'@param ROIs A vector of ROIs to plot, names matching the TAC headers.
-#'@param ymax The maximum value on the y-axis.
-#'@param seconds_to_mins If true, converts time from TAC from sec to min.
+#'@param TACtable2 An optional, second TAC, to plot for comparison
+#'@param ROIs A vector of ROIs to plot, names matching the TAC headers
+#'@param ymax The maximum value on the y-axis
+#'@param seconds_to_mins If true, converts time from TAC from sec to min
+#'@param title A title for the plot
 #'@return Creates a plot.
 plot_tac <- function(TACtable1, TACtable2=NULL, ROIs=c("totalcortical", 
   "cerebellum"), ymax=25, seconds_to_mins=FALSE, title="") {

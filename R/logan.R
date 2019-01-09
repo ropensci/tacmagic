@@ -23,6 +23,7 @@
 #'@param ref The reference region, e.g. "cerebellum"
 #'@param k2prime A fixed value for k2' must be specified (e.g. 0.2)
 #'@param t_star If 0, t* will be calculated using find_t_star()
+#'@param error For find_t_star()
 #'@param method Method of inntegration, "trapz" or "integrate"
 #'@return Data frame with calculate DVRs for all ROIs
 DVR_ref_Logan <- function(tac_data, target, ref, k2prime, t_star, error=0.10, 
@@ -45,6 +46,7 @@ DVR_ref_Logan <- function(tac_data, target, ref, k2prime, t_star, error=0.10,
 #'@param ref The reference region, e.g. "cerebellum"
 #'@param k2prime A fixed value for k2' must be specified (e.g. 0.2)
 #'@param t_star If 0, t* will be calculated using find_t_star()
+#'@param error For find_t_star()
 #'@param method Method of inntegration, "trapz" or "integrate"
 #'@return Data frame with calculate DVRs for all ROIs
 DVR_all_ref_Logan <- function(tac_data, ref, k2prime, t_star, error=0.10, 
@@ -77,6 +79,7 @@ DVR_all_ref_Logan <- function(tac_data, ref, k2prime, t_star, error=0.10,
 #'@param ref The reference region, e.g. "cerebellum"
 #'@param k2prime A fixed value for k2' must be specified (e.g. 0.2)
 #'@param t_star If 0, t* will be calculated using find_t_star()
+#'@param error For find_t_star()
 #'@param method Method of inntegration, "trapz" or "integrate"
 #'@return No return
 plot_ref_Logan <- function(tac_data, target, ref, k2prime, t_star=0, error=0.1,
@@ -94,7 +97,7 @@ plot_ref_Logan <- function(tac_data, target, ref, k2prime, t_star=0, error=0.1,
     
     plot_tac(tac_data, ROIs=c(target,ref))
     
-    plot(y~x, main=paste("Reference Logan model, reference =", ref))
+    plot(y~x, main="Logan plot")
     abline(model)
     abline(v=x[t_star])
 }
