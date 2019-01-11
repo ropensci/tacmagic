@@ -1,7 +1,7 @@
 Package: tacmagic
 Type: Package
 Title: PET Time Activity Curve Analysis in R
-Version: 0.1.9
+Version: 0.1.8.9000
 Authors@R: c(person("Eric", "Brown", 
                     role = c("aut", "cre"),
                     email = "eb@ericebrown.com",
