@@ -4,21 +4,13 @@
 \alias{model_batch}
 \title{Calculate a model, e.g. SUVR or Logan DVR, for ROIs in a participant batch}
 \usage{
-model_batch(participants, model, file_info, merge, ROI_def, PVC,
-  ref = NULL, SUVR_def = NULL, k2prime = NULL, t_star = NULL)
+model_batch(all_tacs, model, ref = NULL, SUVR_def = NULL,
+  k2prime = NULL, t_star = NULL)
 }
 \arguments{
-\item{participants}{A vector of participant IDs}
+\item{all_tacs}{A list of tac data.frames (e.g. from load_batch())}
 
 \item{model}{The chosen model e.g. "SUVR"}
-
-\item{file_info}{A list containing tac and volume file info.}
-
-\item{merge}{Passes value to tac_roi(); T to keep original atomic ROIs}
-
-\item{ROI_def}{Object that defines combined ROIs, see ROI_definitions.R}
-
-\item{PVC}{For PVC, set to T where the data is stored as _C in same tac file}
 
 \item{ref}{The name of the reference region for SUVR calculation}
 
@@ -29,7 +21,7 @@ model_batch(participants, model, file_info, merge, ROI_def, PVC,
 \item{t_star}{If 0, t* will be calculated using find_t_star()}
 }
 \value{
-A table of SUVR values for the specified ROIs for all participants.
+A data.frame of SUVR values for the ROIs for all participants
 }
 \description{
 Use tm_batch instead. For a vector of participant IDs and correspondingly 

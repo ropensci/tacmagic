@@ -7,58 +7,41 @@
 
 #' Calculate one or more models for a batch of participants
 #'
-#' For a vector of participant IDs and correspondingly named tac and volume
-#' files, this produces SUVR, DVR, and upslope in a tidy data.frame. Current
-#' model options are "SUVR", "Logan" and "eslope".
+#' For a list of tac data (from load_batch) this calculates specified models
+#' and saves in a tidy data.frame. Current model options are "SUVR", "Logan" 
+#' and "eslope".
 #'
 #' For further details about how the models are calculated, see the indiviudal
 #' functions that they rely on. "SUVR" uses suvr(), "Logan" uses
 #' DVR_all_ref_Logan(), and "eslope" uses peaksSlope().
 #'
 #'@export
-#'@param participants A vector of participant IDs
+#'@param all_tacs A list by participant, of tac data (load_batch())
 #'@param models A vector of names of the models to calculate
-#'@param dir A directory and/or file name prefix for the tac/volume files
-#'@param tac_format Format of tac files provided: See load_tac()
-#'@param tac_file_suffix How participant IDs corresponds to the TAC files
-#'@param vol_format The file format that includes volumes: See load_vol()
-#'@param vol_file_suffix How participant IDs correspond to volume files
-#'@param ROI_def Object that defines combined ROIs, see ROI_definitions.R
 #'@param SUVR_def is a vector of the start times for window to be used in SUVR
-#'@param PVC For PVC, true where the data is stored as _C in same tac file
 #'@param ref The name of the reference region for DVR/SUVR calculation
-#'@param merge Passes value to tac_roi(); T to keep original atomic ROIs
 #'@param k2prime Fixed k2' for DVR calculation
 #'@param t_star Change from 0 to manually specify a t* for DVR calculation
 #'@param master Optionally, a data.frame of same format as return, to add to
 #'@param outfile Specify a filename to save the data
 #'@return A table of SUVR values for the specified ROIs for all participants
 #'
-tm_batch <- function(participants, models=c("SUVR", "Logan", "eslope"), PVC=F,
-                     dir="", tac_format="PMOD", tac_file_suffix=".tac", 
-                     vol_file_suffix="_TAC.voistat", vol_format="Voistat", 
-                     ROI_def=NULL, SUVR_def=NULL, ref="cerebellum", merge=F, 
-                     k2prime=NULL, t_star=0, master=NULL, outfile=NULL) {
-  
-  file_info <- list(dir=dir, tac_format=tac_format, 
-                    tac_file_suffix=tac_file_suffix, vol_format=vol_format,
-                    vol_file_suffix=vol_file_suffix)
+tm_batch <- function(all_tacs, models=c("SUVR", "Logan"), ref, SUVR_def=NULL, 
+                     k2prime=NULL, t_star=NULL, master=NULL, outfile=NULL) {
 
   all_models <- names(model_definitions())
   if (!(all(models %in% all_models))) stop("Invalid model name(s) supplied.")
   
   for (this_model in models) {
     if (this_model == "Logan") {
-      DVR <- model_batch(participants=participants, model="Logan", PVC=PVC,
-                         file_info=file_info, ROI_def=ROI_def, k2prime=k2prime,
-                         t_star=t_star, ref=ref, merge=merge)
+      DVR <- model_batch(all_tacs, model="Logan", k2prime=k2prime, 
+                         t_star=t_star, ref=ref)
                        
       names(DVR) <- lapply(names(DVR), paste, "_DVR", sep="")
       if (is.null(master)) master <- DVR else master <- data.frame(master, DVR)
     } else {
-        MOD <- model_batch(participants=participants, model=this_model, 
-                           PVC=PVC, SUVR_def=SUVR_def, ref=ref, merge=merge, 
-                           file_info=file_info, ROI_def=ROI_def)
+        MOD <- model_batch(all_tacs, model=this_model, SUVR_def=SUVR_def, 
+                           ref=ref)
         names(MOD) <- lapply(names(MOD), paste, "_", this_model, sep="")
         if (is.null(master)) master <- MOD else master <- data.frame(master, 
                                                                      MOD)
@@ -67,6 +50,42 @@ tm_batch <- function(participants, models=c("SUVR", "Logan", "eslope"), PVC=F,
 
   if (!(is.null(outfile))) write.csv(master, file = outfile)
   return(master)
+}
+
+#' Load (+/- merge) ROIs for batch of participants
+#'
+#' For a vector of participant IDs and correspondingly named tac files,
+#' this loads the tac files. If roi_m = T, then can also merge ROIs into 
+#' larger ROIs based on the optional parameters that follow.
+#'
+#' See load_voistat() for specifics.
+#'
+#'@export
+#'@param participants A vector of participant IDs
+#'@param dir A directory and/or file name prefix for the tac/volume files
+#'@param tac_format Format of tac files provided: See load_tac()
+#'@param tac_file_suffix How participant IDs corresponds to the TAC files
+#'@param roi_m T if you want to merge atomic ROIs into larger ROIs
+#'@param vol_format The file format that includes volumes: See load_vol()
+#'@param vol_file_suffix How participant IDs correspond to volume files
+#'@param ROI_def Object that defines combined ROIs, see ROI_definitions.R
+#'@param PVC For PVC, true where the data is stored as _C in same tac file
+#'@param merge Passes value to tac_roi(); T to also incl. original atomic ROIs
+#'@return A list of data.frames, each is a participant's TACs
+#' 
+load_batch <- function(participants, PVC=F, dir="", tac_format="PMOD", 
+                       tac_file_suffix=".tac", roi_m=F,
+                       vol_file_suffix=NULL, vol_format=NULL, 
+                       merge=NULL, ROI_def=NULL) {
+  
+  r <- lapply(participants, load_tacs, dir=dir, tac_format=tac_format, 
+              roi_m=roi_m, tac_file_suffix=tac_file_suffix, 
+              vol_file_suffix=vol_file_suffix, 
+              vol_format=vol_format, ROI_def=ROI_def, PVC=PVC, merge=merge)
+  
+  names(r) <- participants
+
+  return(r)
 }
 
 #' Obtain values from voistat files (using load_voistat() for a batch.

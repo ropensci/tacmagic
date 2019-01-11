@@ -24,36 +24,26 @@ model_definitions <- function() {
 #'
 #' See suvr() for how SUVR is calculated.
 #'
-#'@param participants A vector of participant IDs
+#'@param all_tacs A list of tac data.frames (e.g. from load_batch())
 #'@param model The chosen model e.g. "SUVR"
-#'@param file_info A list containing tac and volume file info.
-#'@param merge Passes value to tac_roi(); T to keep original atomic ROIs
-#'@param ROI_def Object that defines combined ROIs, see ROI_definitions.R
 #'@param SUVR_def is a vector of the start times for window to be used in SUVR
 #'@param ref The name of the reference region for SUVR calculation
-#'@param PVC For PVC, set to T where the data is stored as _C in same tac file
 #'@param k2prime A fixed value for k2' must be specified (e.g. 0.2)
 #'@param t_star If 0, t* will be calculated using find_t_star()
-#'@return A table of SUVR values for the specified ROIs for all participants.
+#'@return A data.frame of SUVR values for the ROIs for all participants
 #'
-model_batch <- function(participants, model, file_info, merge, ROI_def, PVC,
-	                    ref=NULL, SUVR_def=NULL, k2prime=NULL, t_star=NULL) {
+model_batch <- function(all_tacs, model, 
+                         ref=NULL, SUVR_def=NULL, k2prime=NULL, t_star=NULL) {
 
   # Specify function to use (except Logan, which needs different params) -------
   fn_list <- model_definitions()
   model_fn <- fn_list[[model]]
+  participants <- names(all_tacs)
 
-  # Generate the file names ----------------------------------------------------
-  tac_f <- paste0(file_info$dir, participants, file_info$tac_file_suffix)
-  vol_f <- paste0(file_info$dir, participants, file_info$vol_file_suffix)
-   
   # Empty data.frame to store the calculated values-----------------------------   
-  
-  tac1 <- load_tac(tac_f[1], file_info$tac_format)
-  vol1 <- load_vol(vol_f[1], format=file_info$vol_format)
-  tac_data1 <- tac_roi(tac1, vol1, ROI_def=ROI_def, PVC=PVC, merge=merge)
+  tac_data1 <- all_tacs[[1]]
   master <- as.data.frame(matrix(nrow = length(participants), 
-  								 ncol=(length(names(tac_data1))-2) ))
+                   ncol=(length(names(tac_data1))-2) ))
   names(master) <- names(tac_data1)[3:length(names(tac_data1))]
   row.names(master) <- participants
 
@@ -61,9 +51,7 @@ model_batch <- function(participants, model, file_info, merge, ROI_def, PVC,
   for (i in 1:length(participants)) {
     message(paste("Working on...", participants[i]))
         
-    taci <- load_tac(tac_f[i], file_info$tac_format)
-    voli <- load_vol(vol_f[i], format=file_info$vol_format)
-    tac_data <- tac_roi(taci, voli, ROI_def=ROI_def, PVC=PVC, merge=merge)
+    tac_data <- all_tacs[[i]]
         
     if (model == "Logan") {
       VALUE <- model_fn(tac_data, ref=ref, k2prime=k2prime, t_star=t_star)
@@ -71,5 +59,25 @@ model_batch <- function(participants, model, file_info, merge, ROI_def, PVC,
     master[participants[i], ] <- t(VALUE)
   }
 
-    return(master)
+  return(master)
 }
+
+# Takes a participant ID, and what is needed to make the file names, and loads 
+# the tac/vol files, then does ROI merging as specified; returns a list of tac
+# information, each element is a participant.
+#'@noRd
+load_tacs <- function(participant, roi_m, dir, tac_format, tac_file_suffix, 
+                    vol_file_suffix=NULL, vol_format=NULL, ROI_def=NULL, PVC=NULL, merge=NULL) {
+  
+  tac_f <- paste0(dir, participant, tac_file_suffix) 
+  tac <- load_tac(tac_f, format=tac_format)
+
+  if (roi_m) {
+    vol_f <- paste0(dir, participant, vol_file_suffix)
+    vol <- load_vol(vol_f, format=vol_format)
+    out <- tac_roi(tac, vol, ROI_def=ROI_def, PVC=PVC, merge=merge)
+  } else out <- tac
+
+  return(out)
+}
+

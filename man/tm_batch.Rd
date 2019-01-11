@@ -4,36 +4,17 @@
 \alias{tm_batch}
 \title{Calculate one or more models for a batch of participants}
 \usage{
-tm_batch(participants, models = c("SUVR", "Logan", "eslope"), PVC = F,
-  dir = "", tac_format = "PMOD", tac_file_suffix = ".tac",
-  vol_file_suffix = "_TAC.voistat", vol_format = "Voistat",
-  ROI_def = NULL, SUVR_def = NULL, ref = "cerebellum", merge = F,
-  k2prime = NULL, t_star = 0, master = NULL, outfile = NULL)
+tm_batch(all_tacs, models = c("SUVR", "Logan"), ref, SUVR_def = NULL,
+  k2prime = NULL, t_star = NULL, master = NULL, outfile = NULL)
 }
 \arguments{
-\item{participants}{A vector of participant IDs}
+\item{all_tacs}{A list by participant, of tac data (load_batch())}
 
 \item{models}{A vector of names of the models to calculate}
 
-\item{PVC}{For PVC, true where the data is stored as _C in same tac file}
-
-\item{dir}{A directory and/or file name prefix for the tac/volume files}
-
-\item{tac_format}{Format of tac files provided: See load_tac()}
-
-\item{tac_file_suffix}{How participant IDs corresponds to the TAC files}
-
-\item{vol_file_suffix}{How participant IDs correspond to volume files}
-
-\item{vol_format}{The file format that includes volumes: See load_vol()}
-
-\item{ROI_def}{Object that defines combined ROIs, see ROI_definitions.R}
-
-\item{SUVR_def}{is a vector of the start times for window to be used in SUVR}
-
 \item{ref}{The name of the reference region for DVR/SUVR calculation}
 
-\item{merge}{Passes value to tac_roi(); T to keep original atomic ROIs}
+\item{SUVR_def}{is a vector of the start times for window to be used in SUVR}
 
 \item{k2prime}{Fixed k2' for DVR calculation}
 
@@ -47,9 +28,9 @@ tm_batch(participants, models = c("SUVR", "Logan", "eslope"), PVC = F,
 A table of SUVR values for the specified ROIs for all participants
 }
 \description{
-For a vector of participant IDs and correspondingly named tac and volume
-files, this produces SUVR, DVR, and upslope in a tidy data.frame. Current
-model options are "SUVR", "Logan" and "eslope".
+For a list of tac data (from load_batch) this calculates specified models
+and saves in a tidy data.frame. Current model options are "SUVR", "Logan" 
+and "eslope".
 }
 \details{
 For further details about how the models are calculated, see the indiviudal

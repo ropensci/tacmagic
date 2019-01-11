@@ -2,6 +2,7 @@
 
 export(DVR_all_ref_Logan)
 export(DVR_ref_Logan)
+export(load_batch)
 export(load_tac)
 export(load_vol)
 export(plot_ref_Logan)
