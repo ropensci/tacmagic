@@ -20,21 +20,22 @@ tac_roi <- function(tac, volumes, ROI_def, merge, PVC) {
     ROI_PVC <- ROI_def
     
     if (PVC) {
-        for (i in 1:length(ROI_PVC)) ROI_PVC[i] <- lapply(ROI_PVC[i], paste,
-                                                          "_C", sep="")
+        for (i in 1:length(ROI_PVC)) {
+          ROI_PVC[i] <- lapply(ROI_PVC[i], paste, "_C", sep="")
+        }
     }
     
     # Setup the output data.frame
     m <- matrix(nrow=length(tac[,1]), ncol=length(ROI_def))
     calculated_TACs <- as.data.frame(m)
     names(calculated_TACs) <- names(ROI_def)
-    # Calculate the weighted mean TACs for each ROI in the definition list.
+    
+    # Calculate the weighted mean TACs for each ROI in the definition list
     for (i in 1:length(ROI_def)) {
         calculated_TACs[i] <- apply(tac[,ROI_PVC[[i]]], 1, weighted.mean,
                                     volumes[ROI_def[[i]],])
     }
     
-    # Prepare the output data frame.
     if (merge) {
       calculated_TACs <- data.frame(tac, calculated_TACs)
     } else {
@@ -47,25 +48,25 @@ tac_roi <- function(tac, volumes, ROI_def, merge, PVC) {
 #' Plots time activity curves from 1 or 2 participants or groups.
 #'
 #'@export
-#'@param TACtable1 (e.g. from tac_roi() or groupTAC(), or simply load_tac())
+#'@param TACtable1 (e.g. from tac_roi() or load_tac())
 #'@param TACtable2 An optional, second TAC, to plot for comparison
 #'@param ROIs A vector of ROIs to plot, names matching the TAC headers
 #'@param ymax The maximum value on the y-axis
 #'@param seconds_to_mins If true, converts time from TAC from sec to min
 #'@param title A title for the plot
 #'@return Creates a plot.
-plot_tac <- function(TACtable1, TACtable2=NULL, ROIs=c("totalcortical", 
-  "cerebellum"), ymax=25, seconds_to_mins=FALSE, title="") {
+plot_tac <- function(TACtable1, TACtable2=NULL, ROIs, ymax=25, 
+                     seconds_to_mins=F, title="") {
   
-  # If the seconds_to_mins argument is TRUE, this converts the time from 
+  # If the seconds_to_mins argument is TRUE, convert the time from 
   # seconds to minutes (by dividing the $start column by 60)
+  time_conversion <- 1
+  time_units <- "Time (seconds)"
+
   if (seconds_to_mins) {
     time_conversion <- 60
     time_units <- "Time (minutes)"
-  } else { 
-      time_conversion <- 1
-      time_units <- "Time (seconds)"
-    }
+  } 
 
   # Sets up the plot using the frame start from the TAC file for the x axis
   # and converting to minutes if chosen. 
@@ -75,11 +76,11 @@ plot_tac <- function(TACtable1, TACtable2=NULL, ROIs=c("totalcortical",
                         ylim=c(0,ymax),xlab=time_units, ylab='Activity',
                         main=title)
   
-  # Separate colour ranges for each group of TACs.
+  # Separate colour ranges for each group of TACs
   colour1 <- rainbow(length(ROIs), start=0, end=0.25)
   colour2 <- rainbow(length(ROIs), start=0.5, end=0.8)
   
-  # Plots the ROIs as specified in the ROIs argument.
+  # Plots the ROIs as specified in the ROIs argument
   index <- c(1:length(ROIs))
   for (ROI in index) {
 
@@ -89,21 +90,18 @@ plot_tac <- function(TACtable1, TACtable2=NULL, ROIs=c("totalcortical",
           col=colour1[ROI], 
           lwd=2)
     
-    # Only if a 2nd TAC table is provided, plots a second participant/group on 
-    # the same plot.
+    # Only if 2nd TAC table is provided, plots second on same plot
     if (is.data.frame(TACtable2)) {
       lines(x=TACtable2$start/time_conversion, 
             y=TACtable2[,ROIs[ROI]], 
             type='o', 
             col=colour2[ROI], 
             lwd=2)
-  
     }
-    
   }
   
-  legend("topright", legend = ROIs , col=colour1, pch=1)
+  legend("topright", legend=ROIs, col=colour1, pch=1)
   if (is.data.frame(TACtable2)) {
-    legend("bottomright", legend = ROIs, col=colour2, pch=1)
+    legend("bottomright", legend=ROIs, col=colour2, pch=1)
   }
 } 
