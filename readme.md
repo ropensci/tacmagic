@@ -11,24 +11,13 @@ do use them, please acknowledge/cite this in your work.
 
 ### Data loading and weighted-averages
 
-Supports formats exported from the PMOD suite of software. Combines atlas-based ROIs into larger ROIs as defined in standardROIs() or fullROIs() (or by the user), weighted for volume.
+### Time-activity curve plotting
 
 ### SUVR calculation
 
-Calculate standardized uptake value ratios (SUVR) for regions of interest (ROIs). For large ROIs made up of several smaller ROIs, calculates the mean SUVR weighted the subROIs by volume. It also weights the SUVR by frame length.
-
-### Logan 
-
-In progress/testing.
+### Non-invasive Logan reference method
 
 ### Batch and group-wise analysis
-
-Calculates SUVR and other statistics for groups of participants.
-
-### Time-activity curve calculation and plotting
-
-Calculates time-activity curves for individual ROIs, individual participants, groups, and has basic plotting functions for 1 or more TACs.
-
 
 ## Licence
 
