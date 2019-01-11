@@ -1,22 +1,13 @@
 ##################################
-## PET Analysis in R            ##
+## tacmagic - PET Analysis in R ##
 ## loading_utilities.R          ##
 ## (C) Eric E. Brown  2018      ##
-## PEAR v devel                 ##
 ## Beta version--check all work ##
 ##################################
-
-# Loading utility functions
 
 
 ## VOLUME INFORMATION
 
-# BPnd data can be copied from PNEURO and saved as a CSV. It contains ROI volume
-# information. This extracts that.
-volumesFromBPndPaste <- function(BPnd_file) {
-    BPnd <- read.csv(BPnd_file, header=TRUE, row.names=1)
-    return(BPnd["Volume..ccm."])
-}
 
 # TAC .voistat files contain volume information for each ROI. This extracts it. 
 volumesFromVoistatTAC <- function(voistat_file) {
@@ -32,11 +23,19 @@ volumesFromVoistatTAC <- function(voistat_file) {
     return(data.frame(ROIs, Volume..ccm., row.names=1))
 }
 
+# BPnd data can be copied from PNEURO and saved as a CSV. It contains ROI volume
+# information. This extracts that. Not needed unless volume information is
+# otherwise unavailable.
+volumesFromBPndPaste <- function(BPnd_file) {
+    BPnd <- read.csv(BPnd_file, header=TRUE, row.names=1)
+    return(BPnd["Volume..ccm."])
+}
+
 
 ## TAC INFORMATION
 
 #' @noRd
-loadTACPMOD <- function(tac_file) {
+load_tac_PMOD <- function(tac_file) {
 
   tac <- read.csv(tac_file, sep="")
 
@@ -51,7 +50,7 @@ loadTACPMOD <- function(tac_file) {
 }
 
 #' @noRd
-loadTACvoistat <- function(voistat_file, acqtimes) {
+load_tac_voistat <- function(voistat_file, acqtimes) {
   voistat <- read.csv(voistat_file, sep="\t", skip=6, header=T,
   stringsAsFactors=F)
 
@@ -79,17 +78,31 @@ loadTACvoistat <- function(voistat_file, acqtimes) {
     }
   }
 
-  startend <- loadACQtimes(acqtimes)
+  startend <- load_acq(acqtimes)
   if (checkACQtimes(startend$start, startend$end, tac$time)) {
 	tac <- data.frame(startend, tac) 
-  } else error("Supplied acqtimes do not match midframe time data.")
+  } else stop("Supplied acqtimes do not match midframe time data.")
+
+  tac$time <- NULL
 
   return(tac)
 }
 
+# Loads tac data from a .mat file, the output of the magia pipelines
+# magia information is found at references()$magia
+#' @noRd
+load_tac_magia <- function(filename) {
+  matlab <- R.matlab::readMat(filename)
+  tacs <- as.data.frame(t(matlab$tacs))
+  names(tacs) <- as.vector(unlist(matlab$roi.info[[1]]))
+  frames <- as.data.frame(matlab$frames) * 60
+  names(frames) <- c("start", "end")
+  return(data.frame(frames, tacs))
+}
+
 # Checks to ensure there are start and end times in the first 2 columns.
 #' @noRd
-validateTACtable <- function(tac) {
+validate_tac <- function(tac) {
   if (FALSE == (startsWith(names(tac)[1], "start") && 
                 startsWith(names(tac)[2], "end"))) {
     stop("The first two columns of the TAC file should be start and end times, 
@@ -122,7 +135,7 @@ validateTACvoistat <- function(voistat) {
 # end times of each frame. Returns a data frame with 2 columns with start, end
 # in seconds.
 #' @noRd
-loadACQtimes <- function(acqtimes_file) {
+load_acq <- function(acqtimes_file) {
   aq <- read.csv(acqtimes_file, sep="\t", skip=2, header=F)
   names(aq) <- c("start", "end")
   return(aq)
@@ -139,8 +152,8 @@ checkACQtimes <- function(start, end, mid) {
 #' @noRd
 voistat_to_TAC <- function(voistat_file, acqtimes_file, output_file,
                            header_names=c("start[seconds]", "end[kBq/cc]")) {
-  tac <- loadTACvoistat(voistat_file, acqtimes_file)
+  tac <- load_tac_voistat(voistat_file, acqtimes_file)
   tac <- tac[-3]
-  names(tac)[1:2] <- headernames
+  names(tac)[1:2] <- header_names
   write.table(x=tac, file=output_file, quote=F, sep="\t", row.names=F)
 }

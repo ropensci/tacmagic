@@ -1,8 +1,7 @@
 ##################################
-## PET Analysis in R            ##
+## tacmagic - PET Analysis in R ##
 ## loading.R                    ##
 ## (C) Eric E. Brown  2018      ##
-## PEAR v devel                 ##
 ## Beta version--check all work ##
 ##################################
 
@@ -15,18 +14,22 @@
 
 #' Loads TAC from file for use by other functions (default is PMOD .tac format)
 #'
+#'@export
 #'@param filename (e.g. participant.TAC)
-#'@param format (default, and only option currently, is .tac as from PMOD.
+#'@param format Options include "PMOD", "voistat" (also from PMOD), and "magia"
+#'@param acqtimes File name for a .acqtimes file (as in PMOD), required for 
+#' format="voistat"
 #'@return data.frame with loaded TAC data
-#'@examples loadTACfile("/dir/participant1.tac")
-loadTACfile <- function(filename, format="PMOD", acqtimes=NULL) {
+load_tac <- function(filename, format="PMOD", acqtimes=NULL) {
   if (format == "PMOD") {
-      tac <- loadTACPMOD(filename)
+      tac <- load_tac_PMOD(filename)
   } else if (format == "voistat") {
-      tac <- loadTACvoistat(filename, acqtimes)
-  } else stop("Speficied format for tac not supported.")
+      tac <- load_tac_voistat(filename, acqtimes)
+    } else if (format == "magia") {
+      tac <- load_tac_magia(filename)
+      } else stop("Speficied format for tac not supported.")
 
-  validateTACtable(tac)
+  validate_tac(tac)
   return(tac)
 }
 
@@ -35,12 +38,12 @@ loadTACfile <- function(filename, format="PMOD", acqtimes=NULL) {
 
 #' Loads ROI volumes from file for use by other functions
 #'
+#'@export
 #'@param filename (e.g. participant.voistat)
-#'@param format (default is the TAC .voistat format from PMOD).
+#'@param format (default is the TAC .voistat format from PMOD)
 #'@return data.frame with loaded TAC data
-#'@examples loadVolumes("/dir/participant1_TAC.voistat")
-loadVolumes <- function(filename, format="Voistat") {
-  if (format == "Voistat") {
+load_vol <- function(filename, format="voistat") {
+  if (format == "voistat") {
       volumes <- volumesFromVoistatTAC(filename)
   } else if (format == "BPndPaste") {
       volumes <- volumesFromBPndPaste(filename)
@@ -54,20 +57,23 @@ loadVolumes <- function(filename, format="Voistat") {
 
 #' Loads model data from file for use by other functions.
 #'
-#'@param filename (e.g. participant_logan.voistat)
-#'@param format (default is the TAC .voistat format from PMOD).
-#'@return data.frame with loaded model data in specified combined weighted ROIs.
-#'@examples loadVolumes("/dir/participant1_TAC.voistat")
-voistatScraper <- function(voistat_file, ROI_def, model="VALUE") {
+#'@param voistat_file Filename (e.g. participant_logan.voistat)
+#'@param ROI_def The definition of ROIs by combining smaller ROIs from TAC file
+#'@param model A string to name the variable being extracted, e.g. "Logan_DVR"
+#'@return data.frame with loaded model data in specified combined weighted ROIs
+load_voistat <- function(voistat_file, ROI_def, model="VALUE") {
     
-    voistat <- read.csv(voistat_file, sep="\t", skip=6, header=T, stringsAsFactors=F)
+    voistat <- read.csv(voistat_file, sep="\t", skip=6, header=T, 
+                        stringsAsFactors=F)
     
     VALUE <- rep(NA, length(ROI_def))
     VALUEtable <- data.frame(row.names=names(ROI_def), VALUE)
     
     for (i in 1:length(ROI_def)) {
         m <- match(ROI_def[[i]], voistat$VoiName.Region...string.)
-        VALUEtable[names(ROI_def)[i], "VALUE"] <- weighted.mean(voistat$Averaged..1.1.[m], voistat$Volume..ccm.[m])
+        VALUEtable[names(ROI_def)[i], "VALUE"] <- weighted.mean(
+                                                      voistat$Averaged..1.1.[m], 
+                                                      voistat$Volume..ccm.[m])
     }
     
     names(VALUEtable) <- model

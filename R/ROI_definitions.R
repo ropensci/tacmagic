@@ -1,18 +1,21 @@
 ##################################
-## PET Analysis in R            ##
+## tacmagic - PET Analysis in R ##
 ## ROI_definitions.R            ##
 ## (C) Eric E. Brown  2018      ##
-## PEAR v devel                 ##
 ## Beta version--check all work ##
 ##################################
 
 # ROI definitions file.
 
-#' Return a list of larger ROIs made up of the ROIs in the Hammer's atlas (see references()).
+
+#' Return a list of merged ROIs made up of the atomic ROIs in the Hammer's 
+#' atlas (see references()$Hammers_2003).
 #'
-#'@return A list of lists, where each list is an ROI (e.g.) frontal lobe that specifies the atomic ROIs from the atlas that make it up.
-#'@examples standardROIs()
-standardROIs <- function() {
+#'@export
+#'@return A list of lists, where each list is an ROI (e.g.) frontal lobe that 
+#' specifies the atomic ROIs from the atlas that make it up.
+#'@examples roi_ham_stand()
+roi_ham_stand <- function() {
     
   frontal_def <- c("FL_mid_fr_G", "FL_precen_G", "FL_strai_G", "FL_OFC_AOG",
   "FL_inf_fr_G", "FL_sup_fr_G", "FL_OFC_MOG", "FL_OFC_LOG", "FL_OFC_POG",
@@ -65,25 +68,58 @@ standardROIs <- function() {
 
 #' Return a list of larger ROIs made up of the ROIs in the Hammer's atlas.
 #'
-#' This includes the cortical regions of standardROIs() but also other regions.
+#' This includes the cortical regions of roi_ham_stand() but also other regions.
 #' It can be modified to suit the user's needs.
 #'
-#'@return A list of lists, where each list is an ROI (e.g.) frontal lobe that specifies the atomic ROIs from the atlas that make it up.
-#'@examples standardROIs()
-fullROIs <- function() {
+#'@export
+#'@return A list of lists, where each list is an ROI (e.g.) frontal lobe that 
+#' specifies the atomic ROIs from the atlas that make it up.
+#'@examples roi_ham_full()
+roi_ham_full <- function() {
 
-    deep_def <- c("CaudateNucl", "NuclAccumb",  "Putamen", "Thalamus", "Pallidum")
+  deep_def <- c("CaudateNucl", "NuclAccumb",  "Putamen", "Thalamus", "Pallidum")
     
-    leftdeep <- paste(deep_def, "_l", sep="")
-    rightdeep <- paste(deep_def, "_r", sep="")
-    deep <- c(leftdeep, rightdeep)
+  leftdeep <- paste(deep_def, "_l", sep="")
+  rightdeep <- paste(deep_def, "_r", sep="")
+  deep <- c(leftdeep, rightdeep)
     
-    ventricles <- c("FrontalHorn_l", "FrontalHorn_r", "TemporaHorn_r",
-    "TemporaHorn_l", "ThirdVentricl")
-    whitematter <- c("White_matter_l", "White_matter_r")
+  ventricles <- c("FrontalHorn_l", "FrontalHorn_r", "TemporaHorn_r",
+                  "TemporaHorn_l", "ThirdVentricl")
+  whitematter <- c("White_matter_l", "White_matter_r")
     
-    ROIs <- c(standardROIs(), list(leftdeep=leftdeep, rightdeep=rightdeep,
-              deep=deep, ventricles=ventricles, whitematter=whitematter))
+  ROIs <- c(roi_ham_stand(), list(leftdeep=leftdeep, rightdeep=rightdeep,
+            deep=deep, ventricles=ventricles, whitematter=whitematter))
     
-    return(ROIs)
+  return(ROIs)
+}
+
+#' Return a list of merged ROIs made up of atomic ROIs in the Hammer's atlas.
+#'
+#' This includes the ROIs from roi_ham_full and also the PIB cortical composite
+#' ROI as defined in the PMOD documentation and as widely used in PIB studies.
+#' See PMOD Neuro Tool (PNEURO) (Version 4.0) documentation.
+#' 
+#'@export
+#'@return A list of lists, where each list is an ROI (e.g.) frontal lobe that 
+#' specifies the atomic ROIs from the atlas that make it up.
+#'@examples roi_ham_pib()
+roi_ham_pib <- function() {
+
+  amyloidcompdef <- c("FL_mid_fr_G", "FL_strai_G", "FL_sup_fr_G", "FL_OFC_MOG", 
+                    "FL_OFC_LOG", "FL_OFC_POG", "Subgen_antCing", 
+                    "Subcall_area", 
+
+                    "G_sup_temp_post", "G_tem_midin", "G_sup_temp_ant",
+                    
+                    "PL_sup_pa_G", "PL_rest",
+                    
+                    "G_cing_ant", "G_cing_post")
+
+  leftamyloidcomp <- paste0(amyloidcompdef, "_l")
+  rightamyloidcomp <- paste0(amyloidcompdef, "_r")
+  amyloidcomp <- c(leftamyloidcomp, rightamyloidcomp)
+
+  ROIs <- c(roi_ham_full(), list(amyloidcomp=amyloidcomp))
+
+  return(ROIs)
 }

@@ -1,112 +1,122 @@
 ##################################
-## PET Analysis in R            ##
-## batches.R                    ##
+## tacmagic - PET Analysis in R ##
+## bathces.R                    ##
 ## (C) Eric E. Brown  2018      ##
-## PEAR v devel                 ##
 ## Beta version--check all work ##
 ##################################
 
-#' Calculate multiple models for a batch of participants
+#' Calculate one or more models for a batch of participants
 #'
-#' For a vector of participant IDs and correspondingly named tac and volume
-#' files, this produces SUVR, DVR, and upslope in a tidy data.frame. Current
-#' model options are "SUVR", "Logan" and "eslope".
+#' For a list of tac data (from load_batch) this calculates specified models
+#' and saves in a tidy data.frame. Current model options are "SUVR", "Logan" 
+#' and "eslope".
 #'
 #' For further details about how the models are calculated, see the indiviudal
-#' functions that they rely on. "SUVR" uses calcSUVR(), "Logan" uses
-#' DVR_all_reference_Logan(), and "eslope" uses peaksSlope().
+#' functions that they rely on. "SUVR" uses suvr(), "Logan" uses
+#' DVR_all_ref_Logan(), and "eslope" uses peaksSlope().
 #'
-#'@param participants A vector of participant IDs
+#'@export
+#'@param all_tacs A list by participant, of tac data (load_batch())
 #'@param models A vector of names of the models to calculate
-#'@param tac_format Format of tac files provided: See loadTACfile()
-#'@param dir A directory and/or file name prefix for the tac/volume files
-#'@param tac_file_suffix How participant IDs corresponds to the TAC files
-#'@param vol_format The file format that includes volumes: See loadVolumes()
-#'@param vol_file_suffix How participant IDs correspond to volume files
-#'@param ROI_def Object that defines combined ROIs, see ROI_definitions.R
 #'@param SUVR_def is a vector of the start times for window to be used in SUVR
-#'@param PVC For PVC, true where the data is stored as _C in same tac file
-#'@param reference The name of the reference region for DVR/SUVR calculation
+#'@param ref The name of the reference region for DVR/SUVR calculation
 #'@param k2prime Fixed k2' for DVR calculation
 #'@param t_star Change from 0 to manually specify a t* for DVR calculation
+#'@param master Optionally, a data.frame of same format as return, to add to
 #'@param outfile Specify a filename to save the data
 #'@return A table of SUVR values for the specified ROIs for all participants
-#'@examples
 #'
-participant_batch <- function(participants, models=c("SUVR", "Logan", "eslope"),
-                        dir="", tac_format="PMOD", tac_file_suffix=".tac",
-                        vol_file_suffix="_TAC.voistat", vol_format="Voistat",
-                        ROI_def, SUVR_def=NULL, PVC=F, reference="cerebellum",
-                        k2prime=NULL, t_star=0, master=NULL, outfile=NULL) {
-  
-  all_models <- c("SUVR", "Logan", "eslope")
+tm_batch <- function(all_tacs, models=c("SUVR", "Logan"), ref, SUVR_def=NULL, 
+                     k2prime=NULL, t_star=NULL, master=NULL, outfile=NULL) {
+
+  all_models <- names(model_definitions())
   if (!(all(models %in% all_models))) stop("Invalid model name(s) supplied.")
   
-  if ("SUVR" %in% models) {
-      # TODO check to ensure all required parameters are available
-      SUVR <- batchSUVR(participants=participants, dir=dir,
-                          tac_format=tac_format,
-                          tac_file_suffix=tac_file_suffix,
-                          vol_format=vol_format,
-                          vol_file_suffix=vol_file_suffix,
-                          ROI_def=ROI_def, SUVR_def=SUVR_def, PVC=PVC,
-                          reference=reference, outfile=NULL)
-     names(SUVR) <- lapply(names(SUVR), paste, "_SUVR", sep="")
-     if (is.null(master)) master <- SUVR else master <- data.frame(master, SUVR)
-  }
-  
-  if ("Logan" %in% models) {
-      # TODO check to ensure all required parameters are available
-      DVR <- batchDVR(participants, dir, tac_format, tac_file_suffix,
-                      vol_format, vol_file_suffix, ROI_def, k2prime, t_star,
-                      reference, PVC, outfile=NULL)
+  for (this_model in models) {
+    if (this_model == "Logan") {
+      DVR <- model_batch(all_tacs, model="Logan", k2prime=k2prime, 
+                         t_star=t_star, ref=ref)
+                       
       names(DVR) <- lapply(names(DVR), paste, "_DVR", sep="")
       if (is.null(master)) master <- DVR else master <- data.frame(master, DVR)
+    } else {
+        MOD <- model_batch(all_tacs, model=this_model, SUVR_def=SUVR_def, 
+                           ref=ref)
+        names(MOD) <- lapply(names(MOD), paste, "_", this_model, sep="")
+        if (is.null(master)) master <- MOD else master <- data.frame(master, 
+                                                                     MOD)
+    }
   }
 
-  if ("eslope" %in% models) {
-      # TODO check to ensure all required parameters are available
-      eslope <- batchSlope(participants, tac_format, dir, tac_file_suffix,
-                           vol_format, vol_file_suffix, ROI_def,
-                           outfile=NULL)
-      names(eslope) <- lapply(names(eslope), paste, "_eslope", sep="")
-      if (is.null(master)) master <- eslope else master <- data.frame(master,
-                                                                      eslope)
-  }
   if (!(is.null(outfile))) write.csv(master, file = outfile)
   return(master)
 }
 
-#' Obtain values from voistat files (using voistatScraper() for a batch.
+#' Load (+/- merge) ROIs for batch of participants
+#'
+#' For a vector of participant IDs and correspondingly named tac files,
+#' this loads the tac files. If roi_m = T, then can also merge ROIs into 
+#' larger ROIs based on the optional parameters that follow.
+#'
+#' See load_voistat() for specifics.
+#'
+#'@export
+#'@param participants A vector of participant IDs
+#'@param dir A directory and/or file name prefix for the tac/volume files
+#'@param tac_format Format of tac files provided: See load_tac()
+#'@param tac_file_suffix How participant IDs corresponds to the TAC files
+#'@param roi_m T if you want to merge atomic ROIs into larger ROIs
+#'@param vol_format The file format that includes volumes: See load_vol()
+#'@param vol_file_suffix How participant IDs correspond to volume files
+#'@param ROI_def Object that defines combined ROIs, see ROI_definitions.R
+#'@param PVC For PVC, true where the data is stored as _C in same tac file
+#'@param merge Passes value to tac_roi(); T to also incl. original atomic ROIs
+#'@return A list of data.frames, each is a participant's TACs
+#' 
+load_batch <- function(participants, PVC=F, dir="", tac_format="PMOD", 
+                       tac_file_suffix=".tac", roi_m=F,
+                       vol_file_suffix=NULL, vol_format=NULL, 
+                       merge=NULL, ROI_def=NULL) {
+  
+  r <- lapply(participants, load_tacs, dir=dir, tac_format=tac_format, 
+              roi_m=roi_m, tac_file_suffix=tac_file_suffix, 
+              vol_file_suffix=vol_file_suffix, 
+              vol_format=vol_format, ROI_def=ROI_def, PVC=PVC, merge=merge)
+  
+  names(r) <- participants
+
+  return(r)
+}
+
+#' Obtain values from voistat files (using load_voistat() for a batch.
 #'
 #' For a vector of participant IDs and correspondingly named .voistat files,
 #' this extracts the value from the files for the specified ROIs.
 #'
-#' See voistatScraper() for specifics.
+#' See load_voistat() for specifics.
 #'
 #'@param participants A vector of participant IDs
 #'@param ROI_def Object that defines combined ROIs, see ROI_definitions.R
 #'@param dir Directory and/or filename prefix of the files
 #'@param filesuffix Optional filename characters between ID and ".voistat"
-#'@param master A data.frame of the same format to add the new data to
-#'@param outfile Specify a filename to save the data.
-#'@param varname The name of the variable being exctracted, e.g. "SRTM".
+#'@param varname The name of the variable being exctracted, e.g. "SRTM"
+#'@param otherdata A data.frame of the same participants to add the new data to
+#'@param outfile Specify a filename to save the data
 #'@return A table of values for the specified ROIs for all participants.
-#'@examples
-#' batchVoistat(participants, ROI_def=standardROIs(), outfile="batch1.csv")
-batchVoistat <- function(participants, ROI_def, dir="", filesuffix, varname,
+#'
+voistat_batch <- function(participants, ROI_def, dir="", filesuffix, varname,
                          otherdata=NULL, outfile) {
 
   voistat_file = paste(dir, participants[1], filesuffix, ".voistat", sep="")
 
-  first <- voistatScraper(voistat_file, ROI_def)
+  first <- load_voistat(voistat_file, ROI_def)
   master <- t(first)
   master <- master[-1,]
 
   for (each in participants) {
-    print(paste("Working on...", each))
+    message(paste("Working on...", each))
     voistat_file = paste(dir, each, filesuffix, ".voistat", sep="")
-    VALUE <- voistatScraper(voistat_file, ROI_def)
+    VALUE <- load_voistat(voistat_file, ROI_def)
     trans <- t(VALUE)
     row.names(trans) <- each
     master <- rbind(master,trans)
@@ -121,26 +131,29 @@ batchVoistat <- function(participants, ROI_def, dir="", filesuffix, varname,
 # Counts ROIs in tac file of each listed participant; returns as dataframe.
 QC_count_ROIs <- function(participants, tac_format="PMOD", dir="",
                           tac_file_suffix=".tac") {
-    trip <- 0
-    output <- data.frame(row.names=participants,
-                         ROIs=rep(NA, length(participants)))
-    for (each in participants) {
-        message(paste("Working on...", each))
-        tac_raw <- loadTACfile(paste(dir, each, tac_file_suffix, sep=""),
-                               tac_format)
-        if (trip == 0) {
-            headers <- names(tac_raw)
-            trip <- 1
-        } else {
-            if (!all(names(tac_raw) == headers)) {
-                warning(paste(each, ": ROIs do not match first participant."))
-            }
+  trip <- 0
+  output <- data.frame(row.names=participants,
+                       ROIs=rep(NA, length(participants)))
+  for (each in participants) {
+    message(paste("Working on...", each))
+    tac_raw <- load_tac(paste(dir, each, tac_file_suffix, sep=""), 
+                           tac_format)
+    if (trip == 0) {
+      headers <- names(tac_raw)
+      trip <- 1
+    } else {
+        if (!all(names(tac_raw) == headers)) {
+          warning(paste(each, ": ROIs do not match first participant."))
         }
-        output[each, ] <- length(tac_raw)
-    }
-    if ( (length(unique(output$ROIs))) > 1 ) {
-        warning(paste("Unique ROI sets:", as.character(unique(output$ROIs))))
-    }
+      }
     
-    return(output)
+    output[each, ] <- length(tac_raw)
+    
+  }
+    
+  if ( (length(unique(output$ROIs))) > 1 ) {
+    warning(paste("Unique ROI sets:", as.character(unique(output$ROIs))))
+  }
+    
+  return(output)
 }
