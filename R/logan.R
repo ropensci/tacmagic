@@ -103,7 +103,7 @@ plot_ref_Logan <- function(tac_data, target, ref, k2prime, t_star=0, error=0.1,
 }
 
 
-## Helper functions
+## Helper functions-------------------------------------------------------------
 
 # The non-invasive reference Logan method
 #' @noRd
