@@ -32,8 +32,8 @@
 #' 
 #' See references()$Aizenstein. The authors proposed a standardized method of 
 #' calculating PIB+ cutoff values to classify participants as PIB+ or PIB-. They
-#' used the DVR from 7 ROIs associated with amyloid deposition. The steps are
-#' summarized below. This function implements 1-3, returning the cutoff values
+#' used the DVR from several ROIs associated with amyloid deposition. The steps 
+#' are summarized below. cutoff_aiz() implements 1-3, returning cutoff values
 #' for each ROI. It can be used to dichotomize participants, with pos_anyroi().
 #' 
 #' 1. Remove outliers from a group of cognitively normal individuals. An outlier
@@ -51,6 +51,8 @@
 #' @return Cutoff values for each ROI based on the above method
 cutoff_aiz <- function(modelstats, ROIs) {
 
+  if (length(ROIs) < 2) stop("You must specify at least 2 ROIs.")
+
   modelstats <- modelstats[,ROIs]
   outliers <- modelstats
   outliers[,] <- FALSE
@@ -66,7 +68,6 @@ cutoff_aiz <- function(modelstats, ROIs) {
     outliers <- modelstats > threshold
 
     num_removed <- sum(apply(outliers, 1, any))
-    
     message(paste("Iteration:", i, "Removed:", num_removed))
 
     modelstats <- modelstats[!apply(outliers, 1, any),]
@@ -96,7 +97,7 @@ pos_anyroi <- function(modelstats, cutoff) {
   pos_tab <- modelstats
   pos_tab[,] <- NA 
   for (j in 1:length(cutoff)) {
-    pos_tab[,names(cutoff)] <- modelstats[,names(cutoff[j])] > cutoff[j]
+    pos_tab[,names(cutoff)[j]] <- modelstats[,names(cutoff[j])] > cutoff[j]
   } 
   pos <- apply(pos_tab, 1, any, na.rm=T)
   return(pos)
@@ -106,6 +107,6 @@ pos_anyroi <- function(modelstats, cutoff) {
 
 #' @noRd
 upper_inner_fence <- function(vector) {
-  uif <- quantile(vector, 0.75, type=1) + (1.5*IQR(vector, type=1))
+  uif <- quantile(vector, 0.75, type=7) + (1.5*IQR(vector, type=7))
   return(as.numeric(uif)) 
 }
