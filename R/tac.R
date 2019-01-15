@@ -48,7 +48,8 @@ tac_roi <- function(tac, volumes, ROI_def, merge, PVC) {
   attributes(calculated_TACs)$activity_unit <- attributes(tac)$activity_unit
   attributes(calculated_TACs)$tm_type <- "tac"
 
-  if(!validate_tac(calculated_TACs)) stop("Merged ROI tac file did not validate.")
+  if(!validate_tac(calculated_TACs)) stop("Merged ROI tac file did not 
+                                           validate.")
 
   return(calculated_TACs)
 }

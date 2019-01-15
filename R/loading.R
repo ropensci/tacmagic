@@ -24,7 +24,8 @@
 #'@param activity_unit NULL if in file (e.g. PMOD .tac), or set to "kBq/cc", 
 #'                     "Bq/cc", "nCi/cc"
 #'@return data.frame with loaded TAC data
-load_tac <- function(filename, format="PMOD", acqtimes=NULL, time_unit=NULL, activity_unit=NULL) {
+load_tac <- function(filename, format="PMOD", acqtimes=NULL, time_unit=NULL, 
+                     activity_unit=NULL) {
   
   if (format == "PMOD") {
       

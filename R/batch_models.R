@@ -10,8 +10,6 @@
 #'@noRd
 model_definitions <- function() {
   return(c(SUVR=suvr, 
-  	       eslope=peakSlope, 
-  	       max=maxTAC, 
   	       Logan=DVR_all_ref_Logan
   	     ))
 }
@@ -67,7 +65,8 @@ model_batch <- function(all_tacs, model,
 # information, each element is a participant.
 #'@noRd
 load_tacs <- function(participant, roi_m, dir, tac_format, tac_file_suffix, 
-                    vol_file_suffix=NULL, vol_format=NULL, ROI_def=NULL, PVC=NULL, merge=NULL) {
+                      vol_file_suffix=NULL, vol_format=NULL, ROI_def=NULL, 
+                      PVC=NULL, merge=NULL) {
   
   tac_f <- paste0(dir, participant, tac_file_suffix) 
   tac <- load_tac(tac_f, format=tac_format)

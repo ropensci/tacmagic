@@ -74,10 +74,12 @@ load_tac_voistat <- function(voistat_file, acqtimes) {
 
 
   for (i in 1:length(ROIs)) {
-    tac[,ROIs[i]] <- voistat[voistat$VoiName.Region...string. == ROIs[i], ][, "Averaged..kBq.cc."]
+    tac[,ROIs[i]] <- voistat[voistat$VoiName.Region...string. == 
+                             ROIs[i], ][, "Averaged..kBq.cc."]
 
     if (voistat_type == "C") {
-      tac[,paste(ROIs[i], "_C", sep="")] <- voistat[voistat$VoiName.Region...string. == ROIs[i], ][, "PVC..kBq.cc."]
+      tac[,paste0(ROIs[i], "_C")] <- voistat[voistat$VoiName.Region...string. == 
+                                             ROIs[i], ][, "PVC..kBq.cc."]
     }
   }
 
