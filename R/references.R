@@ -5,8 +5,14 @@
 ## Beta version--check all work ##
 ##################################
 
+#' Print and return a list of references for this package.
+#'
+#'@export
+#'@return List of references.
+#'@examples references()
+references <- function() {
 
-ref_list <- list(
+  ref_list <- list(
 
 	Aizenstein_2008=
 	"# Aizenstein HJ, Nebes RD, Saxton JA, et al. 2008. Frequent amyloid 
@@ -35,14 +41,7 @@ ref_list <- list(
     magia="http://aivo.utu.fi/magia/"
      )
 
-
-#' Print and return a list of references for this package.
-#'
-#'@export
-#'@return List of references.
-#'@examples references()
-references <- function() {
-    print(ref_list)
-    return(ref_list)
+  print(ref_list)
+  return(ref_list)
 }
 

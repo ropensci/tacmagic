@@ -10,6 +10,7 @@
 
 
 # TAC .voistat files contain volume information for each ROI. This extracts it. 
+#' @noRd
 volumesFromVoistatTAC <- function(voistat_file) {
     voistat <- read.csv(voistat_file, sep="\t", skip=6, header=T,
     stringsAsFactors=F)

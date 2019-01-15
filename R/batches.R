@@ -5,6 +5,8 @@
 ## Beta version--check all work ##
 ##################################
 
+# The exported batch functions.
+
 #' Calculate one or more models for a batch of participants
 #'
 #' For a list of tac data (from load_batch) this calculates specified models
@@ -125,34 +127,4 @@ batch_voistat <- function(participants, ROI_def, dir="", filesuffix, varname,
   if (!(is.null(otherdata))) master <- data.frame(otherdata, master)
   if (!(is.null(outfile))) write.csv(master, file = outfile)
   return(master)
-}
-
-# Counts ROIs in tac file of each listed participant; returns as dataframe.
-QC_count_ROIs <- function(participants, tac_format="PMOD", dir="",
-                          tac_file_suffix=".tac") {
-  trip <- 0
-  output <- data.frame(row.names=participants,
-                       ROIs=rep(NA, length(participants)))
-  for (each in participants) {
-    message(paste("Working on...", each))
-    tac_raw <- load_tac(paste(dir, each, tac_file_suffix, sep=""), 
-                           tac_format)
-    if (trip == 0) {
-      headers <- names(tac_raw)
-      trip <- 1
-    } else {
-        if (!all(names(tac_raw) == headers)) {
-          warning(paste(each, ": ROIs do not match first participant."))
-        }
-      }
-    
-    output[each, ] <- length(tac_raw)
-    
-  }
-    
-  if ( (length(unique(output$ROIs))) > 1 ) {
-    warning(paste("Unique ROI sets:", as.character(unique(output$ROIs))))
-  }
-    
-  return(output)
 }

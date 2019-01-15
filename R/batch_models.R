@@ -5,13 +5,16 @@
 ## Beta version--check all work ##
 ##################################
 
-# Contains the names and function names of all the models for use in tm_batch
-# and model_batch
-#'@noRd
+#' List of models and their names available to tm_batch()
+#'
+#' Contains the names and function names of all the models for use in tm_batch
+#'
+#' @return list of functions available to tm_batch.
+#' @noRd
 model_definitions <- function() {
   return(c(SUVR=suvr, 
-  	       Logan=DVR_all_ref_Logan
-  	     ))
+           Logan=DVR_all_ref_Logan
+         ))
 }
 
 #' Calculate a model, e.g. SUVR or Logan DVR, for ROIs in a participant batch
@@ -29,7 +32,7 @@ model_definitions <- function() {
 #'@param k2prime A fixed value for k2' must be specified (e.g. 0.2)
 #'@param t_star If 0, t* will be calculated using find_t_star()
 #'@return A data.frame of SUVR values for the ROIs for all participants
-#'
+#'@noRd
 model_batch <- function(all_tacs, model, 
                         ref=NULL, SUVR_def=NULL, k2prime=NULL, t_star=NULL) {
 
@@ -60,9 +63,11 @@ model_batch <- function(all_tacs, model,
   return(master)
 }
 
-# Takes a participant ID, and what is needed to make the file names, and loads 
-# the tac/vol files, then does ROI merging as specified; returns a list of tac
-# information, each element is a participant.
+#' Used by the user-facing function batch_load()
+#'
+#' Takes a participant ID, and what is needed to make the file names, and loads 
+#' the tac/vol files, then does ROI merging as specified; returns a list of tac
+#' information, each element is a participant.
 #'@noRd
 load_tacs <- function(participant, roi_m, dir, tac_format, tac_file_suffix, 
                       vol_file_suffix=NULL, vol_format=NULL, ROI_def=NULL, 
