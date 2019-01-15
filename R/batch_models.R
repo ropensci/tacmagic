@@ -10,8 +10,6 @@
 #'@noRd
 model_definitions <- function() {
   return(c(SUVR=suvr, 
-  	       eslope=peakSlope, 
-  	       max=maxTAC, 
   	       Logan=DVR_all_ref_Logan
   	     ))
 }
@@ -33,7 +31,7 @@ model_definitions <- function() {
 #'@return A data.frame of SUVR values for the ROIs for all participants
 #'
 model_batch <- function(all_tacs, model, 
-                         ref=NULL, SUVR_def=NULL, k2prime=NULL, t_star=NULL) {
+                        ref=NULL, SUVR_def=NULL, k2prime=NULL, t_star=NULL) {
 
   # Specify function to use (except Logan, which needs different params) -------
   fn_list <- model_definitions()
@@ -67,7 +65,8 @@ model_batch <- function(all_tacs, model,
 # information, each element is a participant.
 #'@noRd
 load_tacs <- function(participant, roi_m, dir, tac_format, tac_file_suffix, 
-                    vol_file_suffix=NULL, vol_format=NULL, ROI_def=NULL, PVC=NULL, merge=NULL) {
+                      vol_file_suffix=NULL, vol_format=NULL, ROI_def=NULL, 
+                      PVC=NULL, merge=NULL) {
   
   tac_f <- paste0(dir, participant, tac_file_suffix) 
   tac <- load_tac(tac_f, format=tac_format)
@@ -80,4 +79,3 @@ load_tacs <- function(participant, roi_m, dir, tac_format, tac_file_suffix,
 
   return(out)
 }
-

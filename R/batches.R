@@ -8,12 +8,11 @@
 #' Calculate one or more models for a batch of participants
 #'
 #' For a list of tac data (from load_batch) this calculates specified models
-#' and saves in a tidy data.frame. Current model options are "SUVR", "Logan" 
-#' and "eslope".
+#' and saves in a tidy data.frame. Current model options are "SUVR", "Logan". 
 #'
 #' For further details about how the models are calculated, see the indiviudal
 #' functions that they rely on. "SUVR" uses suvr(), "Logan" uses
-#' DVR_all_ref_Logan(), and "eslope" uses peaksSlope().
+#' DVR_all_ref_Logan().
 #'
 #'@export
 #'@param all_tacs A list by participant, of tac data (load_batch())
@@ -26,7 +25,7 @@
 #'@param outfile Specify a filename to save the data
 #'@return A table of SUVR values for the specified ROIs for all participants
 #'
-tm_batch <- function(all_tacs, models=c("SUVR", "Logan"), ref, SUVR_def=NULL, 
+batch_tm <- function(all_tacs, models=c("SUVR", "Logan"), ref, SUVR_def=NULL, 
                      k2prime=NULL, t_star=NULL, master=NULL, outfile=NULL) {
 
   all_models <- names(model_definitions())
@@ -73,7 +72,7 @@ tm_batch <- function(all_tacs, models=c("SUVR", "Logan"), ref, SUVR_def=NULL,
 #'@param merge Passes value to tac_roi(); T to also incl. original atomic ROIs
 #'@return A list of data.frames, each is a participant's TACs
 #' 
-load_batch <- function(participants, PVC=F, dir="", tac_format="PMOD", 
+batch_load <- function(participants, PVC=F, dir="", tac_format="PMOD", 
                        tac_file_suffix=".tac", roi_m=F,
                        vol_file_suffix=NULL, vol_format=NULL, 
                        merge=NULL, ROI_def=NULL) {
@@ -104,7 +103,7 @@ load_batch <- function(participants, PVC=F, dir="", tac_format="PMOD",
 #'@param outfile Specify a filename to save the data
 #'@return A table of values for the specified ROIs for all participants.
 #'
-voistat_batch <- function(participants, ROI_def, dir="", filesuffix, varname,
+batch_voistat <- function(participants, ROI_def, dir="", filesuffix, varname,
                          otherdata=NULL, outfile) {
 
   voistat_file = paste(dir, participants[1], filesuffix, ".voistat", sep="")

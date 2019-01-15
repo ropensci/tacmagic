@@ -39,12 +39,13 @@ load_tac_PMOD <- function(tac_file) {
 
   tac <- read.csv(tac_file, sep="")
 
-  if (all(c(
-            startsWith(names(tac)[1], "start"), 
-            startsWith(names(tac)[2], "end")
-           ))) {
+  if (all(c((names(tac)[1:2] == c("start.seconds.", "end.kBq.cc."))))) {
+    attributes(tac)$time_unit <- "seconds"
+    attributes(tac)$activity_unit <- "kBq/cc"
     names(tac)[1:2] <- c("start", "end")
-  } else stop("The first 2 columns should have start and end times.")
+
+  } else stop("The first 2 columns should have start and end times and units
+               are expected to be seconds and kBq/cc.")
 
   return(tac)
 }
@@ -70,11 +71,15 @@ load_tac_voistat <- function(voistat_file, acqtimes) {
 
   tac$time <- voistat[voistat$VoiName.Region...string. == ROIs[3], ][, "Time..seconds."]
 
+
+
   for (i in 1:length(ROIs)) {
-    tac[,ROIs[i]] <- voistat[voistat$VoiName.Region...string. == ROIs[i], ][, "Averaged..kBq.cc."]
+    tac[,ROIs[i]] <- voistat[voistat$VoiName.Region...string. == 
+                             ROIs[i], ][, "Averaged..kBq.cc."]
 
     if (voistat_type == "C") {
-      tac[,paste(ROIs[i], "_C", sep="")] <- voistat[voistat$VoiName.Region...string. == ROIs[i], ][, "PVC..kBq.cc."]
+      tac[,paste0(ROIs[i], "_C")] <- voistat[voistat$VoiName.Region...string. == 
+                                             ROIs[i], ][, "PVC..kBq.cc."]
     }
   }
 
@@ -84,7 +89,8 @@ load_tac_voistat <- function(voistat_file, acqtimes) {
   } else stop("Supplied acqtimes do not match midframe time data.")
 
   tac$time <- NULL
-
+  attributes(tac)$time_unit <- "seconds"
+  attributes(tac)$activity_unit <- "kBq/cc"
   return(tac)
 }
 
@@ -97,7 +103,8 @@ load_tac_magia <- function(filename) {
   names(tacs) <- as.vector(unlist(matlab$roi.info[[1]]))
   frames <- as.data.frame(matlab$frames) * 60
   names(frames) <- c("start", "end")
-  return(data.frame(frames, tacs))
+  tac <- data.frame(frames, tacs)
+  return(tac)
 }
 
 # Checks to ensure there are start and end times in the first 2 columns.
@@ -108,6 +115,19 @@ validate_tac <- function(tac) {
     stop("The first two columns of the TAC file should be start and end times, 
           with headers starting with 'start' and 'end'.")
   }
+  if (!(attributes(tac)$tm_type == "tac")) {
+    stop("The tac data should have attribute tm_type=tac")
+  }
+
+  if (!(attributes(tac)$time_unit %in% c("seconds", "minutes"))) {
+    stop("The tac data missing attribute time_unit (\"seconds\"/\"minutes\")")
+  }
+
+  if (!(attributes(tac)$activity_unit %in% c("kBq/cc", "nCi/cc", "Bq/cc"))) {
+    stop("The tac data missing attribute activity_unit e.g. kBq/cc, nCi/cc, 
+          Bq/cc")
+  }
+
   return(TRUE)
 }
 
@@ -145,15 +165,4 @@ load_acq <- function(acqtimes_file) {
 #' @noRd
 checkACQtimes <- function(start, end, mid) {
   return(all(mid == ((start + end) / 2)))
-}
-
-# To convert the voistat TAC file to a .tac file, check the header names to
-# ensure it matches.
-#' @noRd
-voistat_to_TAC <- function(voistat_file, acqtimes_file, output_file,
-                           header_names=c("start[seconds]", "end[kBq/cc]")) {
-  tac <- load_tac_voistat(voistat_file, acqtimes_file)
-  tac <- tac[-3]
-  names(tac)[1:2] <- header_names
-  write.table(x=tac, file=output_file, quote=F, sep="\t", row.names=F)
 }

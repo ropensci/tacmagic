@@ -4,11 +4,11 @@
 \alias{plot_tac}
 \title{Plots time activity curves from 1 or 2 participants or groups.}
 \usage{
-plot_tac(TACtable1, TACtable2 = NULL, ROIs = c("totalcortical",
-  "cerebellum"), ymax = 25, seconds_to_mins = FALSE, title = "")
+plot_tac(TACtable1, TACtable2 = NULL, ROIs, ymax = 25,
+  time = "minutes", title = "")
 }
 \arguments{
-\item{TACtable1}{(e.g. from tac_roi() or groupTAC(), or simply load_tac())}
+\item{TACtable1}{(e.g. from tac_roi() or load_tac())}
 
 \item{TACtable2}{An optional, second TAC, to plot for comparison}
 
@@ -16,7 +16,7 @@ plot_tac(TACtable1, TACtable2 = NULL, ROIs = c("totalcortical",
 
 \item{ymax}{The maximum value on the y-axis}
 
-\item{seconds_to_mins}{If true, converts time from TAC from sec to min}
+\item{time}{"seconds" or "minutes" depending on desired x-axis, converts tac}
 
 \item{title}{A title for the plot}
 }

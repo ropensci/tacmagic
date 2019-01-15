@@ -5,80 +5,86 @@
 ## Beta version--check all work ##
 ##################################
 
-# Based on a method described in:
 
-# Aizenstein HJ, Nebes RD, Saxton JA, et al. 2008.
-# Frequent amyloid deposition without significant
-# cognitive impairment among the elderly. Arch
-# Neurol 65: 1509–1517.
+#' Cutoff value caluclation using method described in Aizenstein et al. 2008
+#' 
+#' See references()$Aizenstein. The authors proposed a standardized method of 
+#' calculating PIB+ cutoff values to classify participants as PIB+ or PIB-. They
+#' used the DVR from several ROIs associated with amyloid deposition. The steps 
+#' are summarized below. cutoff_aiz() implements 1-3, returning cutoff values
+#' for each ROI. It can be used to dichotomize participants, with pos_anyroi().
+#' 
+#' 1. Remove outliers from a group of cognitively normal individuals. An outlier
+#' is defined as having any ROI with DVR > upper inner fence of that ROI (= 3rd 
+#' quartile + (1.5 * IQR).
+#' 2. Iterate step 1 as needed until there are no more outlying participants.
+#' 3. From this subset of the group with outliers removed, the cutoff value for 
+#' each ROI is set as the upper inner fence. 
+#' 4. For all participants, if there is any ROI above the cutoff for that 
+#' region, then the participant is deemed to be PIB+.
+#' 
+#' @export
+#' @param modelstats SUVR or DVR data for group of participants from batch_tm()
+#' @param ROIs list of variables (ROIs) to use for cutoff detection
+#' @return Cutoff values for each ROI based on the above method
+cutoff_aiz <- function(modelstats, ROIs) {
 
-# A group of functions to create a PIB-positive cutoff and filter your SUVR data
-# with it.
+  if (length(ROIs) < 2) stop("You must specify at least 2 ROIs.")
 
-# This function removes entries greater than 1.5 standard deviations away from
-# the means.
-removeOutliersStDev <- function(data, stdevs=1.5) {
-  loweroutliers <- (data < (mean(data) - stdevs*sd(data)))
-  upperoutliers <- (data > (mean(data) + stdevs*sd(data)))
-  outliers <- loweroutliers | upperoutliers
-  return (data[!outliers])
-}
+  modelstats <- modelstats[,ROIs]
+  outliers <- modelstats
+  outliers[,] <- FALSE
 
-# Remove outliers with upper inner fence
-removeOutliersUIF <- function(data) {
-  before <- length(data)
-  new <- remove(data)
-  after <- length(new)
-  iterations <- 1
-  while ((before - after) > 0) {
-    before <- length(new)
-    new <- remove(new)
-    after <- length(new)
-    iterations <- iterations + 1
+  i <- 1 
+  num_removed <- 9999
+
+  while (num_removed > 0) {
+
+    cut <- apply(modelstats, 2, upper_inner_fence)
+    threshold <- outliers
+    for (j in 1:length(cut)) threshold[,j] <- cut[j]
+    outliers <- modelstats > threshold
+
+    num_removed <- sum(apply(outliers, 1, any))
+    message(paste("Iteration:", i, "Removed:", num_removed))
+
+    modelstats <- modelstats[!apply(outliers, 1, any),]
+    outliers <- outliers[!apply(outliers, 1, any),]
+
+    i <- i + 1
   }
-  cat("Stopped with", iterations, "iterations.\n")
-  cat("Outliers removed:", length(data)-length(new), "\n")
-  return (new)
+
+  cut <- apply(modelstats, 2, upper_inner_fence)
+  return(cut)
 }
 
-remove <- function(data) {
-  print(data)
-  outliers <- data > (quantile(data, 0.75) + (1.5*IQR(data)))
-  print(outliers)
-  new <- data[!outliers]
-  print(new)
-  print("----")
-  return(new)
+#' Dichotomize participants based on ROI cutoff values
+#' 
+#' See references()$Aizenstein. The authors proposed a standardized method of 
+#' calculating PIB+ cutoff values to classify participants as PIB+ or PIB-. They
+#' used the DVR from 7 ROIs associated with amyloid deposition. This function 
+#' takes the ROI-based cutoff-values, e.g. from cutoff_aiz(), and returns a 
+#' table specifying which participants are positive, i.e. which have at least
+#' one ROI greater than the cutoff.
+#' 
+#' @export
+#' @param modelstats SUVR or DVR data for group of participants from batch_tm()
+#' @param cutoff cutoffs for ROIs as from cutoff_aiz()
+#' @return data.frame of participants and positive/negative status
+pos_anyroi <- function(modelstats, cutoff) {
+  pos_tab <- modelstats
+  pos_tab[,] <- NA 
+  for (j in 1:length(cutoff)) {
+    pos_tab[,names(cutoff)[j]] <- modelstats[,names(cutoff[j])] > cutoff[j]
+  } 
+  pos <- apply(pos_tab, 1, any, na.rm=T)
+  return(pos)
 }
 
-# This function determines a PIB-Positive cutoff similar to the method described
-# by Aizenstein et al. but simplified (check if this is suitable for you)
-# The first step is to remove the outliers from a set of control participants'
-# total neocortical SUVR. This step uses the removeOutliersStDev function with a
-# standard deviation of 1.5. Then, with the cleaned data, it determines and
-# returns the value of the upper inner fence, returning a single number as the
-# PIB+ cutoff score.
-# This could be repeated for multiple ROIs to emulate what was done in 
-# Aizenstein et. al
-uifCutoff <- function(data) {
-  no_outliers <- removeOutliersUIF(data)
-  cutoff <- (quantile(no_outliers, 0.75) + (1.5*IQR(data)))
-  return(as.numeric(cutoff))
+# Helper functions--------------------------------------------------------------
+
+#' @noRd
+upper_inner_fence <- function(vector) {
+  uif <- quantile(vector, 0.75, type=7) + (1.5*IQR(vector, type=7))
+  return(as.numeric(uif)) 
 }
-
-sdCutoff <- function(data) {
-  no_outliers <- removeOutliersStDev(data, 1.5)
-  cutoff <- (quantile(no_outliers, 0.75) + (1.5*IQR(data)))
-  return(as.numeric(cutoff))
-}
-
-# This function returns a vector of values where 1 = greater than cutoff score
-# (PIB+) and 0 is PIB-.
-PIB_Positive <- function(corticalSUVR, cutoff) {
-  return(as.numeric(corticalSUVR > cutoff))
-}
-
-
-##
-#using package mixtools
-

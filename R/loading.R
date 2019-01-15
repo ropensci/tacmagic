@@ -17,18 +17,45 @@
 #'@export
 #'@param filename (e.g. participant.TAC)
 #'@param format Options include "PMOD", "voistat" (also from PMOD), and "magia"
-#'@param acqtimes File name for a .acqtimes file (as in PMOD), required for 
-#' format="voistat"
+#'@param acqtimes Filename for a .acqtimes file (as in PMOD), required for 
+#'                format="voistat"
+#'@param time_unit NULL if in file (e.g. PMOD .tac), or set to "seconds" or 
+#'                 "minutes"
+#'@param activity_unit NULL if in file (e.g. PMOD .tac), or set to "kBq/cc", 
+#'                     "Bq/cc", "nCi/cc"
 #'@return data.frame with loaded TAC data
-load_tac <- function(filename, format="PMOD", acqtimes=NULL) {
+load_tac <- function(filename, format="PMOD", acqtimes=NULL, time_unit=NULL, 
+                     activity_unit=NULL) {
+  
   if (format == "PMOD") {
+      
+      if (!(is.null(time_unit) & is.null(activity_unit))) {
+        warning("Your specified units will override any data in the files.")
+      }
+      
       tac <- load_tac_PMOD(filename)
-  } else if (format == "voistat") {
-      tac <- load_tac_voistat(filename, acqtimes)
-    } else if (format == "magia") {
-      tac <- load_tac_magia(filename)
-      } else stop("Speficied format for tac not supported.")
 
+  } else if (format == "voistat") {  
+      
+      if (!(is.null(time_unit) & is.null(activity_unit))) {
+        warning("Your specified units will override any data in the files.")
+      }
+      
+      tac <- load_tac_voistat(filename, acqtimes)
+    
+    } else if (format == "magia") {
+    
+        if ((is.null(time_unit) | is.null(activity_unit))) {
+          stop("You must specify both time and activity units.")
+        }
+    
+        tac <- load_tac_magia(filename)
+    
+      } else stop("Specified format for tac not supported.")
+
+  attributes(tac)$tm_type <- "tac"
+  if (!is.null(time_unit)) attributes(tac)$time_unit <- time_unit
+  if (!is.null(time_unit)) attributes(tac)$activity_unit <- activity_unit
   validate_tac(tac)
   return(tac)
 }

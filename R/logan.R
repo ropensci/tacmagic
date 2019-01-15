@@ -56,13 +56,18 @@ DVR_all_ref_Logan <- function(tac_data, ref, k2prime, t_star, error=0.10,
     
     ROIs <- names(tac_data)[3:length(names(tac_data))]
     for (ROI in ROIs) {
-        #message(paste("Trying", ROI))
-        attempt <- try(DVR_ref_Logan(tac_data, target=ROI, ref=ref,
-                                     k2prime=k2prime, t_star=t_star, 
-                                     error=error, method=method))
-        if (class(attempt) == "try-error") {
-            attempt <- NA
+        message(paste("Trying", ROI))
+        if (any(is.na(tac_data[,ROI]))) {
+          attempt <- NA
+        } else {
+            attempt <- try(DVR_ref_Logan(tac_data, target=ROI, ref=ref,
+                                         k2prime=k2prime, t_star=t_star, 
+                                         error=error, method=method))
+            if (class(attempt) == "try-error") {
+              attempt <- NA
+            }  
         }
+        
         DVRtable[ROI, "DVR"] <- attempt
     }
     return(DVRtable)
@@ -103,14 +108,18 @@ plot_ref_Logan <- function(tac_data, target, ref, k2prime, t_star=0, error=0.1,
 }
 
 
-## Helper functions
+## Helper functions-------------------------------------------------------------
 
 # The non-invasive reference Logan method
 #' @noRd
 ref_Logan_xy <- function(tac, target, ref, k2prime, method) {
-    
+  
+  if (!(validate_tac(tac))) stop("Invalid tac object provided.")
+
   mid_time <- (tac$start + tac$end) / 2
-  mid_time <- mid_time / 60 # needed because k2' is units 1/min (not seconds)
+  if (attributes(tac)$time_unit == "seconds") {
+    mid_time <- mid_time / 60 # needed because k2' is units 1/min (not seconds)
+  }
   
   # Derive functions for TACs by interpolation.
   target_tac <- approxfun(x=mid_time, y=tac[,target], method = "linear", rule=2)
