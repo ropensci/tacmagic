@@ -6,28 +6,6 @@
 ##################################
 
 
-# "In an effort to standardize the definition of amyloid positivity, we used an iterative, objective 
-# procedure to identify high outliers in the control group. A “mild” or “suspect” outlier was defined in 
-# the standard manner as any observation more than 1.5 the interquartile range higher than the third 
-# quartile,41 that is, any observation higher than the upper-inner fence of the box-and-whisker plot of 
-# the data. 
-#
-# This calculation was performed using 62 clinically unimpaired control subjects (43 from 
-# this study and 19 from other related studies). The brain areas used for this calculation were those 
-# that most commonly show amyloid deposition in AD patients (ACG; frontal, PRC/PCG, parietal, lateral 
-# temporal, and lateral occipital cortices; and occipital pole). After determining which subjects 
-# were outliers for any of these neocortical brain areas, we removed those subjects from the analysis 
-# and repeated the calculation until there were no outliers remaining. The process required 2 iterations: 
-# 12 outliers were removed on the first iteration and 4 on the second. We were left with a core group 
-# of 46 controls (74%) who were considered very unlikely to be amyloid-positive. 
-#
-# The cutoff value for amyloid positivity was defined as the upper-inner fence of the 46 control subjects for each of the 7 
-# key brain areas listed previously. Any subject who had a PiB DVR value that exceeded this cutoff point 
-# in any of these 7 brain areas was defined as amyloid-positive. [...] we eliminated 
-# the effect of doubtful cases near this cutoff point by excluding the 5 subjects (12%) with PiB DVR 
-# values within 2.5% above or below the cutoff value and compared the 9 subjects clearly above the 
-# cutoff point (21%) with the 29 sub- jects clearly below (67%)."
-
 #' Cutoff value caluclation using method described in Aizenstein et al. 2008
 #' 
 #' See references()$Aizenstein. The authors proposed a standardized method of 
