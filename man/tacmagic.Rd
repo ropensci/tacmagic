@@ -6,13 +6,9 @@
 \alias{tacmagic-package}
 \title{tacmagic: PET Time Activity Curve Analysis in R}
 \description{
-This is a beta package of functions to analyze of PET time activity 
-   curve (tac) data, including merging ROIs, calculating SUVR, and plotting. 
-   In its current form, these scripts may be useful in analyzing the output 
-   files from PMOD or other sources.
+This package provides functions to analyze of PET time activity curve (tac) 
+data, including loading from various fomrmats, merging ROIs weighted for 
+volume, calculating models including SUVR and DVR, plotting functions and
+calculation of cutoff values. Please see the vignette for a detailed overview
+of tacmagic functions.
 }
-\section{Foo functions}{
-
-The foo functions ...
-}
-

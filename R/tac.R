@@ -17,32 +17,40 @@
 #examples tac_roi(p1tac, p1vol, standardROIs(), merge=T)
 tac_roi <- function(tac, volumes, ROI_def, merge, PVC) {
     
-    ROI_PVC <- ROI_def
+  if(!validate_tac(tac)) stop("Supplied tac file did not validate.")
+
+  ROI_PVC <- ROI_def
     
-    if (PVC) {
-        for (i in 1:length(ROI_PVC)) {
-          ROI_PVC[i] <- lapply(ROI_PVC[i], paste, "_C", sep="")
-        }
-    }
+  if (PVC) {
+      for (i in 1:length(ROI_PVC)) {
+        ROI_PVC[i] <- lapply(ROI_PVC[i], paste, "_C", sep="")
+      }
+  }
     
-    # Setup the output data.frame
-    m <- matrix(nrow=length(tac[,1]), ncol=length(ROI_def))
-    calculated_TACs <- as.data.frame(m)
-    names(calculated_TACs) <- names(ROI_def)
+  # Setup the output data.frame
+  m <- matrix(nrow=length(tac[,1]), ncol=length(ROI_def))
+  calculated_TACs <- as.data.frame(m)
+  names(calculated_TACs) <- names(ROI_def)
+
+  # Calculate the weighted mean TACs for each ROI in the definition list
+  for (i in 1:length(ROI_def)) {
+      calculated_TACs[i] <- apply(tac[,ROI_PVC[[i]]], 1, weighted.mean,
+                                  volumes[ROI_def[[i]],])
+  }
     
-    # Calculate the weighted mean TACs for each ROI in the definition list
-    for (i in 1:length(ROI_def)) {
-        calculated_TACs[i] <- apply(tac[,ROI_PVC[[i]]], 1, weighted.mean,
-                                    volumes[ROI_def[[i]],])
-    }
-    
-    if (merge) {
-      calculated_TACs <- data.frame(tac, calculated_TACs)
-    } else {
-        calculated_TACs <- data.frame(tac[1:2], calculated_TACs)
-    }
-    
-    return(calculated_TACs)
+  if (merge) {
+    calculated_TACs <- data.frame(tac, calculated_TACs)
+  } else {
+      calculated_TACs <- data.frame(tac[1:2], calculated_TACs)
+  }
+  
+  attributes(calculated_TACs)$time_unit <- attributes(tac)$time_unit
+  attributes(calculated_TACs)$activity_unit <- attributes(tac)$activity_unit
+  attributes(calculated_TACs)$tm_type <- "tac"
+
+  if(!validate_tac(calculated_TACs)) stop("Merged ROI tac file did not validate.")
+
+  return(calculated_TACs)
 }
 
 #' Plots time activity curves from 1 or 2 participants or groups.
@@ -52,29 +60,41 @@ tac_roi <- function(tac, volumes, ROI_def, merge, PVC) {
 #'@param TACtable2 An optional, second TAC, to plot for comparison
 #'@param ROIs A vector of ROIs to plot, names matching the TAC headers
 #'@param ymax The maximum value on the y-axis
-#'@param seconds_to_mins If true, converts time from TAC from sec to min
+#'@param time "seconds" or "minutes" depending on desired x-axis, converts tac
 #'@param title A title for the plot
 #'@return Creates a plot.
 plot_tac <- function(TACtable1, TACtable2=NULL, ROIs, ymax=25, 
-                     seconds_to_mins=F, title="") {
+                     time="minutes", title="") {
   
-  # If the seconds_to_mins argument is TRUE, convert the time from 
-  # seconds to minutes (by dividing the $start column by 60)
-  time_conversion <- 1
-  time_units <- "Time (seconds)"
+  if (!validate_tac(TACtable1)) stop("The 1st tac object did not validate.")
+  if (!is.null(TACtable2)) {
+    if (!validate_tac(TACtable2)) stop("The 2nd tac object did not validate.")
+  }
+  
+  if (!(time %in% c("seconds", "minutes"))) stop("Time must be \"seconds\" or 
+                                                 \"minutes\"")
 
-  if (seconds_to_mins) {
-    time_conversion <- 60
-    time_units <- "Time (minutes)"
-  } 
+  if (time == "minutes") {
+    if (attributes(TACtable1)$time_unit == "minutes") time_conversion <- 1
+    if (attributes(TACtable1)$time_unit == "seconds") time_conversion <- 60
+  }
+
+  if (time == "seconds") {
+    if (attributes(TACtable1)$time_unit == "seconds") time_conversion <- 1
+    if (attributes(TACtable1)$time_unit == "minutes") time_conversion <- 1/60
+  }
 
   # Sets up the plot using the frame start from the TAC file for the x axis
   # and converting to minutes if chosen. 
    
-  plot(1,type='n',xlim=c(TACtable1$start[1],
-                      TACtable1$start[length(TACtable1$start)]/time_conversion),
-                        ylim=c(0,ymax),xlab=time_units, ylab='Activity',
-                        main=title)
+  plot(1,type='n',
+       xlim=c(TACtable1$start[1],
+              TACtable1$start[length(TACtable1$start)]/time_conversion),
+              ylim=c(0,ymax),
+              xlab=paste0("Time (", time, ")"),
+              ylab=paste0("Activity (", 
+                          attributes(TACtable1)$activity_unit, ")"),
+              main=title)
   
   # Separate colour ranges for each group of TACs
   colour1 <- rainbow(length(ROIs), start=0, end=0.25)

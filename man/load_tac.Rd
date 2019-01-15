@@ -4,15 +4,22 @@
 \alias{load_tac}
 \title{Loads TAC from file for use by other functions (default is PMOD .tac format)}
 \usage{
-load_tac(filename, format = "PMOD", acqtimes = NULL)
+load_tac(filename, format = "PMOD", acqtimes = NULL,
+  time_unit = NULL, activity_unit = NULL)
 }
 \arguments{
 \item{filename}{(e.g. participant.TAC)}
 
 \item{format}{Options include "PMOD", "voistat" (also from PMOD), and "magia"}
 
-\item{acqtimes}{File name for a .acqtimes file (as in PMOD), required for 
+\item{acqtimes}{Filename for a .acqtimes file (as in PMOD), required for 
 format="voistat"}
+
+\item{time_unit}{NULL if in file (e.g. PMOD .tac), or set to "seconds" or 
+"minutes"}
+
+\item{activity_unit}{NULL if in file (e.g. PMOD .tac), or set to "kBq/cc", 
+"Bq/cc", "nCi/cc"}
 }
 \value{
 data.frame with loaded TAC data
