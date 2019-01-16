@@ -1,15 +1,16 @@
 Package: tacmagic
 Type: Package
-Title: PET Time Activity Curve Analysis in R
+Title: tacmagic: PET Time Activity Curve Analysis in R
 Version: 0.1.8.9000
 Authors@R: c(person("Eric", "Brown", 
                     role = c("aut", "cre"),
                     email = "eb@ericebrown.com",
                     comment = c(ORCID = "0000-0002-1575-2606")))
-Description: This is a beta package of functions to analyze of PET time activity 
-    curve (tac) data, including merging ROIs, calculating SUVR, and plotting. 
-    In its current form, these scripts may be useful in analyzing the output 
-    files from PMOD or other sources.
+Description: This package provides functions to analyze of PET time activity 
+    curve (tac) data, including loading from various formats, merging ROIs 
+    weighted for volume, calculating models including SUVR and DVR, plotting 
+    functions and calculation of cutoff values. Please see the vignette for a 
+    detailed overview of tacmagic functions.
 Depends: R (>= 3.4)
 License: GPL-3
 Encoding: UTF-8
@@ -24,5 +25,6 @@ Imports:
 Suggests:
     testthat,
     knitr,
-    rmarkdown
+    rmarkdown,
+    covr
 VignetteBuilder: knitr

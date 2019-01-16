@@ -5,9 +5,6 @@
 \alias{fake_DVR}
 \title{Fake DVR data for vignette and package testing}
 \format{A data frame with 50 rows and 4 variables representing ROIs}
-\source{
-\url{http://www.diamondse.info/}
-}
 \usage{
 fake_DVR
 }

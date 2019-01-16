@@ -19,6 +19,4 @@
 #' save(fake_data, "fake_DVR.Rda")
 #'
 #' @format A data frame with 50 rows and 4 variables representing ROIs
-
-#' @source \url{http://www.diamondse.info/}
 "fake_DVR"
