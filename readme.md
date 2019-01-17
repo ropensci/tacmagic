@@ -1,6 +1,8 @@
 # tacmagic: PET Analysis in R
 
-[![Coverage status](https://codecov.io/gh/eebrown/PET/branch/master/graph/badge.svg)](https://codecov.io/github/eebrown/PET?branch=master)
+[![Build Status](https://travis-ci.org/eebrown/PET.svg?branch=master)](https://travis-ci.org/eebrown/PET) [![Coverage status](https://codecov.io/gh/eebrown/PET/branch/master/graph/badge.svg)](https://codecov.io/github/eebrown/PET?branch=master)
+
+Development branch: [![Coverage status](https://codecov.io/gh/eebrown/PET/branch/master/graph/badge.svg)](https://codecov.io/github/eebrown/PET?branch=devel) [![Coverage status](https://codecov.io/gh/eebrown/PET/branch/master/graph/badge.svg)](https://codecov.io/github/eebrown/PET?branch=devel)
 
 This is a beta version (not fully tested; use at own risk) of an R package to process and analyze time-activity curve (TAC) data from positron emission tomography (PET) studies.
 
