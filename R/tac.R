@@ -13,8 +13,16 @@
 #'@param ROI_def The definition of ROIs by combining smaller ROIs from TAC file
 #'@param merge If TRUE, includes the original ROIs in the output data
 #'@param PVC If TRUE, appends "_C" to ROI name header (as in PMOD TAC files)
+#'@family tac functions 
 #'@return Time-activity curves for the specified ROIs
-#examples tac_roi(p1tac, p1vol, standardROIs(), merge=T)
+#'@examples 
+#' # f_raw_tac and f_raw_vol are the filenames of PMOD-generated files
+#' f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic") 
+#' f_raw_vol <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
+#' 
+#' tac <- load_tac(f_raw_tac)
+#' vol <- load_vol(f_raw_vol)
+#' AD06_tac_nc <- tac_roi(tac, vol, roi_ham_full(), merge=FALSE, PVC=FALSE)
 tac_roi <- function(tac, volumes, ROI_def, merge, PVC) {
     
   if(!validate_tac(tac)) stop("Supplied tac file did not validate.")
@@ -64,6 +72,15 @@ tac_roi <- function(tac, volumes, ROI_def, merge, PVC) {
 #'@param time "seconds" or "minutes" depending on desired x-axis, converts tac
 #'@param title A title for the plot
 #'@return Creates a plot.
+#'@examples
+#' # f_raw_tac and f_raw_vol are the filenames of PMOD-generated files
+#' f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic") 
+#' f_raw_vol <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
+#' 
+#' tac <- load_tac(f_raw_tac)
+#' vol <- load_vol(f_raw_vol)
+#' AD06_tac_nc <- tac_roi(tac, vol, roi_ham_full(), merge=FALSE, PVC=FALSE)
+#' plot_tac(AD06_tac_nc, ROIs=c("frontal", "cerebellum"), title="Example Plot")
 plot_tac <- function(TACtable1, TACtable2=NULL, ROIs, ymax=25, 
                      time="minutes", title="") {
   

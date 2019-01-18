@@ -104,3 +104,25 @@ test_that("validate_tac() successfully rejects bad files", {
   expect_error(validate_tac(ans_nc))
 
 })
+
+test_that("plot_tac runs without error and contains correct axis label", {
+
+
+  f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic") 
+  f_raw_vol <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
+ 
+  tac <- load_tac(f_raw_tac)
+  vol <- load_vol(f_raw_vol)
+  AD06_tac_nc <- tac_roi(tac, vol, roi_ham_full(), merge=FALSE, PVC=FALSE)
+
+  pdf(NULL)
+  on.exit(dev.off())
+  dev.control(displaylist="enable")
+
+  plot_tac(AD06_tac_nc, ROIs=c("frontal", "cerebellum"), title="Example Plot")
+
+  p <- recordPlot()
+  
+  expect_equal(unlist(p)[[123]], "Time (minutes)")
+
+})
