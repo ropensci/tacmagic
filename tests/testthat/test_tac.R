@@ -33,7 +33,6 @@ test_that("tac_roi() accurately calculates weighted averages from PMOD .tac and
   expect_equal(validate_tac(AD06_tac_pvc), TRUE)
   expect_equal(length(names(AD06_merge)), 196)
 
-
 })
 
 test_that("tac_roi() accurately calculates weighted averages from PMOD .voistat 

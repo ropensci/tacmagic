@@ -84,24 +84,32 @@ load_vol <- function(filename, format="voistat") {
 
 #' Loads model data from file for use by other functions.
 #'
-#'@param voistat_file Filename (e.g. participant_logan.voistat)
-#'@param ROI_def The definition of ROIs by combining smaller ROIs from TAC file
+#'@param filename (e.g. participant_logan.voistat)
+#'@param ROI_def Optional ROI definitions to combine ROIs (e.g. roi_ham_pib())
 #'@param model A string to name the variable being extracted, e.g. "Logan_DVR"
 #'@return data.frame with loaded model data in specified combined weighted ROIs
-load_voistat <- function(voistat_file, ROI_def, model="VALUE") {
+#' @examples
+#' f <- system.file("extdata", "AD06_BPnd_BPnd_Logan.voistat", package="tacmagic")
+#' vs <- load_voistat(f, ROI_def=roi_ham_pib(), model="Logan")
+load_voistat <- function(filename, ROI_def=NULL, model="VALUE") {
     
-    voistat <- read.csv(voistat_file, sep="\t", skip=6, header=T, 
-                        stringsAsFactors=F)
-    
-    VALUE <- rep(NA, length(ROI_def))
-    VALUEtable <- data.frame(row.names=names(ROI_def), VALUE)
-    
+  voistat <- read.csv(filename, sep="\t", skip=6, header=T, stringsAsFactors=F)
+
+  # This still works if ROI_def is NULL
+  ROIs <- c(voistat$VoiName.Region...string., names(ROI_def))
+  values <- c(voistat$Averaged..1.1., rep(NA, length(ROI_def)))
+
+  VALUEtable <- data.frame(row.names=ROIs, VALUE=values)
+
+  if (!is.null(ROI_def)) {
+
     for (i in 1:length(ROI_def)) {
-        m <- match(ROI_def[[i]], voistat$VoiName.Region...string.)
-        VALUEtable[names(ROI_def)[i], "VALUE"] <- weighted.mean(
+      m <- match(ROI_def[[i]], voistat$VoiName.Region...string.)
+      VALUEtable[names(ROI_def)[i], "VALUE"] <- weighted.mean(
                                                       voistat$Averaged..1.1.[m], 
                                                       voistat$Volume..ccm.[m])
-    }
+    }  
+  }
     
     names(VALUEtable) <- model
     return(VALUEtable)
