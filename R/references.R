@@ -43,4 +43,3 @@ references <- function() {
 
   return(ref_list)
 }
-

@@ -77,7 +77,8 @@ roi_ham_stand <- function() {
 #'@examples roi_ham_full()
 roi_ham_full <- function() {
 
-  deep_def <- c("CaudateNucl", "NuclAccumb",  "Putamen", "Thalamus", "Pallidum")
+  deep_def <- c("CaudateNucl", "NuclAccumb",  "Putamen", "Thalamus", 
+                "Pallidum")
     
   leftdeep <- paste(deep_def, "_l", sep="")
   rightdeep <- paste(deep_def, "_r", sep="")

@@ -4,8 +4,8 @@
 \alias{batch_load}
 \title{Load (+/- merge) ROIs for batch of participants}
 \usage{
-batch_load(participants, PVC = F, dir = "", tac_format = "PMOD",
-  tac_file_suffix = ".tac", roi_m = F, vol_file_suffix = NULL,
+batch_load(participants, PVC = FALSE, dir = "", tac_format = "PMOD",
+  tac_file_suffix = ".tac", roi_m = FALSE, vol_file_suffix = NULL,
   vol_format = NULL, merge = NULL, ROI_def = NULL)
 }
 \arguments{

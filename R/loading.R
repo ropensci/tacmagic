@@ -101,7 +101,8 @@ load_vol <- function(filename, format="voistat") {
 #' vs <- load_voistat(f, ROI_def=roi_ham_pib(), model="Logan")
 load_voistat <- function(filename, ROI_def=NULL, model="VALUE") {
     
-  voistat <- read.csv(filename, sep="\t", skip=6, header=T, stringsAsFactors=F)
+  voistat <- read.csv(filename, sep="\t", skip=6, header=TRUE, 
+                      stringsAsFactors=FALSE)
 
   # This still works if ROI_def is NULL
   ROIs <- c(voistat$VoiName.Region...string., names(ROI_def))
@@ -111,11 +112,11 @@ load_voistat <- function(filename, ROI_def=NULL, model="VALUE") {
 
   if (!is.null(ROI_def)) {
 
-    for (i in 1:length(ROI_def)) {
+    for (i in seq_along(ROI_def)) {
       m <- match(ROI_def[[i]], voistat$VoiName.Region...string.)
       VALUEtable[names(ROI_def)[i], "VALUE"] <- weighted.mean(
-                                                      voistat$Averaged..1.1.[m], 
-                                                      voistat$Volume..ccm.[m])
+                                                    voistat$Averaged..1.1.[m], 
+                                                    voistat$Volume..ccm.[m])
     }  
   }
     

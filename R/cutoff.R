@@ -42,7 +42,7 @@ cutoff_aiz <- function(modelstats, ROIs) {
 
     cut <- apply(modelstats, 2, upper_inner_fence)
     threshold <- outliers
-    for (j in 1:length(cut)) threshold[,j] <- cut[j]
+    for (j in seq_along(cut)) threshold[,j] <- cut[j]
     outliers <- modelstats > threshold
 
     num_removed <- sum(apply(outliers, 1, any))
@@ -60,12 +60,12 @@ cutoff_aiz <- function(modelstats, ROIs) {
 
 #' Dichotomize participants based on ROI cutoff values
 #' 
-#' See references()$Aizenstein. The authors proposed a standardized method of 
-#' calculating PIB+ cutoff values to classify participants as PIB+ or PIB-. They
-#' used the DVR from 7 ROIs associated with amyloid deposition. This function 
-#' takes the ROI-based cutoff-values, e.g. from cutoff_aiz(), and returns a 
-#' table specifying which participants are positive, i.e. which have at least
-#' one ROI greater than the cutoff.
+#' See references()$Aizenstein. The authors proposed a standardized method of
+#' calculating PIB+ cutoff values to classify participants as PIB+ or PIB-.
+#' They used the DVR from 7 ROIs associated with amyloid deposition. This
+#' function takes the ROI-based cutoff-values, e.g. from cutoff_aiz(), and
+#' returns a table specifying which participants are positive, i.e. which have
+#' at least one ROI greater than the cutoff.
 #' 
 #' @export
 #' @param modelstats SUVR or DVR data for group of participants from batch_tm()
@@ -74,14 +74,14 @@ cutoff_aiz <- function(modelstats, ROIs) {
 pos_anyroi <- function(modelstats, cutoff) {
   pos_tab <- modelstats
   pos_tab[,] <- NA 
-  for (j in 1:length(cutoff)) {
+  for (j in seq_along(cutoff)) {
     pos_tab[,names(cutoff)[j]] <- modelstats[,names(cutoff[j])] > cutoff[j]
   } 
-  pos <- apply(pos_tab, 1, any, na.rm=T)
+  pos <- apply(pos_tab, 1, any, na.rm=TRUE)
   return(pos)
 }
 
-# Helper functions--------------------------------------------------------------
+# Helper functions-------------------------------------------------------------
 
 #' @noRd
 upper_inner_fence <- function(vector) {

@@ -9,11 +9,11 @@
 ## VOLUME INFORMATION
 
 
-# TAC .voistat files contain volume information for each ROI. This extracts it. 
+# TAC .voistat files contain volume information for each ROI. This extracts it
 #' @noRd
 volumesFromVoistatTAC <- function(voistat_file) {
-    voistat <- read.csv(voistat_file, sep="\t", skip=6, header=T,
-    stringsAsFactors=F)
+    voistat <- read.csv(voistat_file, sep="\t", skip=6, header=TRUE,
+                        stringsAsFactors=FALSE)
     # create a list of each unique ROI name
     ROIs <- unique(voistat[,"VoiName.Region...string."])
     # subset the voistat data to include just a single time frame, since
@@ -24,9 +24,9 @@ volumesFromVoistatTAC <- function(voistat_file) {
     return(data.frame(ROIs, Volume..ccm., row.names=1))
 }
 
-# BPnd data can be copied from PNEURO and saved as a CSV. It contains ROI volume
-# information. This extracts that. Not needed unless volume information is
-# otherwise unavailable.
+# BPnd data can be copied from PNEURO and saved as a CSV. It contains ROI
+# volume information. This extracts that. Not needed unless volume information
+# is otherwise unavailable.
 volumesFromBPndPaste <- function(BPnd_file) {
     BPnd <- read.csv(BPnd_file, header=TRUE, row.names=1)
     return(BPnd["Volume..ccm."])
@@ -53,8 +53,8 @@ load_tac_PMOD <- function(tac_file) {
 
 #' @noRd
 load_tac_voistat <- function(voistat_file, acqtimes) {
-  voistat <- read.csv(voistat_file, sep="\t", skip=6, header=T,
-  stringsAsFactors=F)
+  voistat <- read.csv(voistat_file, sep="\t", skip=6, header=TRUE,
+                      stringsAsFactors=FALSE)
 
   voistat_type <- validateTACvoistat(voistat)
   
@@ -70,17 +70,16 @@ load_tac_voistat <- function(voistat_file, acqtimes) {
   tac <- as.data.frame(matrix(ncol=length(variables), nrow=frames))
   names(tac) <- variables
 
-  tac$time <- voistat[voistat$VoiName.Region...string. == ROIs[3], ][, "Time..seconds."]
+  tac$time <- voistat[voistat$VoiName.Region...string. == ROIs[3], ][, 
+                                                              "Time..seconds."]
 
-
-
-  for (i in 1:length(ROIs)) {
+  for (i in seq_along(ROIs)) {
     tac[,ROIs[i]] <- voistat[voistat$VoiName.Region...string. == 
                              ROIs[i], ][, "Averaged..kBq.cc."]
 
     if (voistat_type == "C") {
-      tac[,paste0(ROIs[i], "_C")] <- voistat[voistat$VoiName.Region...string. == 
-                                             ROIs[i], ][, "PVC..kBq.cc."]
+      tac[,paste0(ROIs[i], "_C")] <- voistat[voistat$VoiName.Region...string. 
+                                             == ROIs[i], ][, "PVC..kBq.cc."]
     }
   }
 
@@ -157,7 +156,7 @@ validateTACvoistat <- function(voistat) {
 # in seconds.
 #' @noRd
 load_acq <- function(acqtimes_file) {
-  aq <- read.csv(acqtimes_file, sep="\t", skip=2, header=F)
+  aq <- read.csv(acqtimes_file, sep="\t", skip=2, header=FALSE)
   names(aq) <- c("start", "end")
   return(aq)
 }

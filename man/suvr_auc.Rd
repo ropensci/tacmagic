@@ -18,6 +18,6 @@ A data.frame of SUVR values for the specified ROIs
 }
 \description{
 Calculate the standardized uptake value ratio (SUVR) for all ROIs in the
-provided tac data, using the specified reference region. This is an alternate
-to suvr() which should provide very similar values.
+provided tac data, using the specified reference region. This is an 
+alternate to suvr() which should provide very similar values.
 }

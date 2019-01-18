@@ -74,8 +74,8 @@ batch_tm <- function(all_tacs, models=c("SUVR", "Logan"), ref, SUVR_def=NULL,
 #'@param merge Passes value to tac_roi(); T to also incl. original atomic ROIs
 #'@return A list of data.frames, each is a participant's TACs
 #' 
-batch_load <- function(participants, PVC=F, dir="", tac_format="PMOD", 
-                       tac_file_suffix=".tac", roi_m=F,
+batch_load <- function(participants, PVC=FALSE, dir="", tac_format="PMOD", 
+                       tac_file_suffix=".tac", roi_m=FALSE,
                        vol_file_suffix=NULL, vol_format=NULL, 
                        merge=NULL, ROI_def=NULL) {
   
@@ -118,25 +118,24 @@ batch_load <- function(participants, PVC=F, dir="", tac_format="PMOD",
 #' batchtest <- batch_voistat(participants=participants, ROI_def=roi_ham_pib(), 
 #'                            dir="", filesuffix="", varname="Logan", 
 #'                            otherdata=NULL, outfile=NULL) 
-
 #'
 batch_voistat <- function(participants, ROI_def, dir="", filesuffix=".voistat", 
                           varname="VALUE", otherdata=NULL, outfile=NULL) {
 
-  voistat_file = paste0(dir, participants[1], filesuffix)
+  voistat_file <- paste0(dir, participants[1], filesuffix)
 
   first <- load_voistat(voistat_file, ROI_def)
   master <- t(first)
   master <- master[-1,]
 
   for (each in participants) {
-    message(paste("Working on...", each))
-    voistat_file = paste0(dir, each, filesuffix)
+    voistat_file <- paste0(dir, each, filesuffix)
     VALUE <- load_voistat(voistat_file, ROI_def)
     trans <- t(VALUE)
     row.names(trans) <- each
     master <- rbind(master,trans)
   }
+
   master <- as.data.frame(master)
   names(master) <- lapply(names(master), paste0, "_", varname)
   if (!(is.null(otherdata))) master <- data.frame(otherdata, master)

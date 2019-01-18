@@ -108,7 +108,7 @@ plot_ref_Logan <- function(tac_data, target, ref, k2prime, t_star=0, error=0.1,
 }
 
 
-## Helper functions-------------------------------------------------------------
+## Helper functions------------------------------------------------------------
 
 # The non-invasive reference Logan method
 #' @noRd
@@ -122,18 +122,20 @@ ref_Logan_xy <- function(tac, target, ref, k2prime, method) {
   }
   
   # Derive functions for TACs by interpolation.
-  target_tac <- approxfun(x=mid_time, y=tac[,target], method = "linear", rule=2)
+  target_tac <- approxfun(x=mid_time, y=tac[,target], method="linear", rule=2)
   ref_tac <- approxfun(x=mid_time, y=tac[,ref], method = "linear", rule=2)
 
   if (!is.null(k2prime)) k2r <- (tac[,ref] / k2prime) else k2r <- 0
 
   if (method == "trapz") {
-    frames <- 1:length(mid_time)
-    yA <- sapply(frames, FUN=vAUC, x=mid_time, y=tac[,target])
-    xA <- sapply(frames, FUN=vAUC, x=mid_time, y=tac[,ref]) + k2r
+    frames <- seq_along(mid_time)
+    yA <- vapply(frames, FUN=vAUC, FUN.VALUE=0, x=mid_time, y=tac[,target])
+    xA <- vapply(frames, FUN=vAUC, FUN.VALUE=0, x=mid_time, y=tac[,ref]) + k2r
   } else if (method == "integrate") {
-    yA <- sapply(mid_time, FUN=vintegrate, lower=mid_time[1], f=target_tac)
-    xA <- sapply(mid_time, FUN=vintegrate, lower=mid_time[1], f=ref_tac) + k2r
+    yA <- vapply(mid_time, FUN=vintegrate, FUN.VALUE=0, lower=mid_time[1], 
+                 f=target_tac)
+    xA <- vapply(mid_time, FUN=vintegrate, FUN.VALUE=0, lower=mid_time[1], 
+                 f=ref_tac) + k2r
   }
 
   y <- yA / tac[,target]
@@ -147,7 +149,8 @@ ref_Logan_xy <- function(tac, target, ref, k2prime, method) {
 
 # The non-invasive reference Logan method -- linear model starting from t*
 #' @noRd
-ref_Logan_lm <- function(tac_data, target, ref, k2prime, t_star, error, method) {
+ref_Logan_lm <- function(tac_data, target, ref, k2prime, t_star, error, 
+                         method) {
     
   xy <- ref_Logan_xy(tac_data, target=target, ref=ref, k2prime=k2prime,
                      method=method)
@@ -187,12 +190,12 @@ find_t_star <- function(x, y, error=0.1) {
 }
 
 
-# Helper function to use integrate() with sapply(), simply re-arranging the
+# Helper function to use integrate() with vapply(), simply re-arranging the
 # arguments of integrate() so that upper is the first argument, and returns
 # just the integrate() value.
 #' @noRd
 vintegrate <- function(upper, lower, fn) {
-    v <- integrate(fn, lower=lower, upper=upper, stop.on.error=F, 
+    v <- integrate(fn, lower=lower, upper=upper, stop.on.error=FALSE, 
                    subdivisions=10000L)
     return(v$value)
 }

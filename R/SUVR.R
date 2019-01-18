@@ -34,8 +34,8 @@ suvr <- function(tac, SUVR_def, ref) {
 #' Calculate SUVRs for regions of interest with AUC from mid-frame times
 #'
 #' Calculate the standardized uptake value ratio (SUVR) for all ROIs in the
-#' provided tac data, using the specified reference region. This is an alternate
-#' to suvr() which should provide very similar values.
+#' provided tac data, using the specified reference region. This is an 
+#' alternate to suvr() which should provide very similar values.
 #'
 #'@export 
 #'@param tac The time-activity curve data from tac_roi()
