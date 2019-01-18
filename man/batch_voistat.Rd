@@ -4,8 +4,8 @@
 \alias{batch_voistat}
 \title{Obtain values from voistat files (using load_voistat() for a batch.}
 \usage{
-batch_voistat(participants, ROI_def, dir = "", filesuffix, varname,
-  otherdata = NULL, outfile)
+batch_voistat(participants, ROI_def, dir = "", filesuffix = ".voistat",
+  varname = "VALUE", otherdata = NULL, outfile = NULL)
 }
 \arguments{
 \item{participants}{A vector of participant IDs}
@@ -28,7 +28,22 @@ A table of values for the specified ROIs for all participants.
 \description{
 For a vector of participant IDs and correspondingly named .voistat files,
 this extracts the value from the files for the specified ROIs.
+participants can also be a vector of filenames, in which case set dir="" and
+filesuffix="", as in the example.
 }
 \details{
 See load_voistat() for specifics.
+}
+\examples{
+participants <- c(system.file("extdata", "AD06_BPnd_BPnd_Logan.voistat", 
+                              package="tacmagic"),
+                   system.file("extdata", "AD07_BPnd_BPnd_Logan.voistat", 
+                               package="tacmagic"),
+                   system.file("extdata", "AD08_BPnd_BPnd_Logan.voistat", 
+                               package="tacmagic"))
+
+batchtest <- batch_voistat(participants=participants, ROI_def=roi_ham_pib(), 
+                           dir="", filesuffix="", varname="Logan", 
+                           otherdata=NULL, outfile=NULL) 
+
 }

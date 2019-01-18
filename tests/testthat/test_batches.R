@@ -35,3 +35,18 @@ test_that("tac_roi() accurately calculates weighted averages from PMOD .tac and
 
 })
 
+test_that("batch_voistat() loads 3 participants and produces same result as individual load_voistat()", {
+  
+
+  participants <- c(system.file("extdata", "AD06_BPnd_BPnd_Logan.voistat", package="tacmagic"),
+                    system.file("extdata", "AD07_BPnd_BPnd_Logan.voistat", package="tacmagic"),
+                    system.file("extdata", "AD08_BPnd_BPnd_Logan.voistat", package="tacmagic"))
+
+  batchtest <- batch_voistat(participants=participants, ROI_def=roi_ham_pib(), dir="", filesuffix="", varname="Logan", otherdata=NULL, outfile=NULL) 
+
+  vs_f <- system.file("extdata", "AD06_BPnd_BPnd_Logan.voistat", package="tacmagic")
+  vs <- load_voistat(vs_f, roi_ham_pib(), model="Logan")
+
+  expect_equal(as.numeric(unlist(vs)), as.numeric(unlist(batchtest[1,])))
+
+})

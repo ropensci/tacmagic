@@ -24,6 +24,7 @@ ROI as rows and the model value as the column. Optionally, the ROIs can be
 combined into larger ROIs if ROI_def is specified, just as with TAC loading.
 }
 \examples{
-f <- system.file("extdata", "AD06_BPnd_BPnd_Logan.voistat", package="tacmagic")
+f <- system.file("extdata", "AD06_BPnd_BPnd_Logan.voistat", 
+                 package="tacmagic")
 vs <- load_voistat(f, ROI_def=roi_ham_pib(), model="Logan")
 }
