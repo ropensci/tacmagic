@@ -2,14 +2,14 @@
 % Please edit documentation in R/loading.R
 \name{load_voistat}
 \alias{load_voistat}
-\title{Loads model data from file for use by other functions.}
+\title{Reads PMOD .voistat files and optionally merges volume-weighted ROIs}
 \usage{
-load_voistat(voistat_file, ROI_def, model = "VALUE")
+load_voistat(filename, ROI_def = NULL, model = "VALUE")
 }
 \arguments{
-\item{voistat_file}{Filename (e.g. participant_logan.voistat)}
+\item{filename}{(e.g. participant_logan.voistat)}
 
-\item{ROI_def}{The definition of ROIs by combining smaller ROIs from TAC file}
+\item{ROI_def}{Optional ROI definitions to combine ROIs (e.g. roi_ham_pib())}
 
 \item{model}{A string to name the variable being extracted, e.g. "Logan_DVR"}
 }
@@ -17,5 +17,13 @@ load_voistat(voistat_file, ROI_def, model = "VALUE")
 data.frame with loaded model data in specified combined weighted ROIs
 }
 \description{
-Loads model data from file for use by other functions.
+PMOD can produce .voistat files with the average model values by ROI for 
+its voxelwise binding potential (BPnd) models, such as Logan, SRTM, etc.
+This function reads the .voistat file and returns a data.frame with the
+ROI as rows and the model value as the column. Optionally, the ROIs can be
+combined into larger ROIs if ROI_def is specified, just as with TAC loading.
+}
+\examples{
+f <- system.file("extdata", "AD06_BPnd_BPnd_Logan.voistat", package="tacmagic")
+vs <- load_voistat(f, ROI_def=roi_ham_pib(), model="Logan")
 }
