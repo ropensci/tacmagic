@@ -25,11 +25,14 @@ test_that("tac_roi() accurately calculates weighted averages from PMOD .tac and
 
   AD06_tac_nc <- tac_roi(tac, vol, roi_ham_full(), merge=F, PVC=F)
   AD06_tac_pvc <- tac_roi(tac, vol, roi_ham_full(), merge=F, PVC=T)
-  
+  AD06_merge <- tac_roi(tac, vol, roi_ham_full(), merge=T, PVC=F)
+
   expect_equal(AD06_tac_nc, ans_nc)
   expect_equal(AD06_tac_pvc, ans_pvc)
   expect_equal(validate_tac(AD06_tac_nc), TRUE)
   expect_equal(validate_tac(AD06_tac_pvc), TRUE)
+  expect_equal(length(names(AD06_merge)), 196)
+
 
 })
 
