@@ -63,3 +63,46 @@ test_that("batch_voistat() loads 3 participants and produces same result as
   expect_equal(as.numeric(unlist(vs)), as.numeric(unlist(batchtest[1,])))
 
 })
+
+test_that("batch_load() loads 3 particpants and produces same result as 
+           individual load_tac()", {
+
+  participants <- c(system.file("extdata", "AD06.tac", package="tacmagic"),
+                    system.file("extdata", "AD07.tac", package="tacmagic"),
+                    system.file("extdata", "AD08.tac", package="tacmagic"))
+
+  batchtest <- batch_load(participants, tac_file_suffix="")
+
+  AD06 <- load_tac(system.file("extdata", "AD06.tac", package="tacmagic"))
+  AD07 <- load_tac(system.file("extdata", "AD07.tac", package="tacmagic"))
+  AD08  <- load_tac(system.file("extdata", "AD08.tac", package="tacmagic"))
+
+  expect_identical(names(batchtest), participants)
+  expect_identical(AD06, batchtest[[1]])
+  expect_identical(AD07, batchtest[[2]])
+  expect_identical(AD08, batchtest[[3]])
+
+})
+
+test_that("batch_load() with merging loads 3 particpants with same result as 
+           individual load_tac() and tac_roi()", {
+
+  participants <- c(system.file("extdata", "AD06.tac", package="tacmagic"),
+                    system.file("extdata", "AD07.tac", package="tacmagic"),
+                    system.file("extdata", "AD08.tac", package="tacmagic"))
+
+  participants <- strtrim(participants, nchar(participants) - 4)
+
+  batchtest2 <- batch_load(participants, tac_file_suffix=".tac", roi_m=TRUE,
+                           vol_file_suffix="_TAC.voistat", 
+                           vol_format="voistat", merge=TRUE, 
+                           ROI_def=roi_ham_stand())
+  
+  AD07 <- load_tac(system.file("extdata", "AD07.tac", package="tacmagic"))
+  AD07_vol <- load_vol(system.file("extdata", "AD07_TAC.voistat", 
+                       package="tacmagic"))
+  AD07_m <- tac_roi(AD07, AD07_vol, roi_ham_stand(), PVC=FALSE, merge=TRUE)
+
+  expect_identical(AD07_m, batchtest2[[2]])
+  
+})

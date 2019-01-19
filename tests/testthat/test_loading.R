@@ -1,6 +1,6 @@
 # test_loading.R
 
-context(".voistat file loading")
+context("file loading tests")
 
 test_that("load_voistat() accurately loads and weights model data", {
 
@@ -20,3 +20,25 @@ test_that("load_voistat() accurately loads and weights model data", {
   expect_equal(vs["lefttemporal",], 0.755352081868971)   
 
 })
+
+test_that("validate_tac() properly rejects malformed tac objects", {
+
+  f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic") 
+  
+  tac <- load_tac(f_raw_tac)
+  attributes(tac)$tm_type <- "fail"
+  expect_error(validate_tac(tac))
+
+  tac <- load_tac(f_raw_tac)
+  attributes(tac)$time_unit <- "sec"
+  expect_error(validate_tac(tac))
+
+  tac <- load_tac(f_raw_tac)
+  names(tac)[1] <- "mid"
+  expect_error(validate_tac(tac))
+
+  tac <- load_tac(f_raw_tac)
+  names(tac)[2] <- "mid"
+  expect_error(validate_tac(tac))
+
+})	

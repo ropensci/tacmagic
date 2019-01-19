@@ -59,7 +59,7 @@ batch_tm <- function(all_tacs, models=c("SUVR", "Logan"), ref, SUVR_def=NULL,
 #' this loads the tac files. If roi_m = T, then can also merge ROIs into 
 #' larger ROIs based on the optional parameters that follow.
 #'
-#' See load_voistat() for specifics.
+#' See load_tac() for specifics.
 #'
 #'@export
 #'@param participants A vector of participant IDs

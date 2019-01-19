@@ -129,5 +129,38 @@ test_that("plot_tac runs without error and contains correct axis label", {
   p <- recordPlot()
   
   expect_equal(unlist(p)[[123]], "Time (minutes)")
+  expect_equal(unlist(p)[[37]], 80) # 80 mins last value on x-axis
+
+})
+
+test_that("plot_tac with 2 tacs and conversion runs without error and 
+           contains correct axis label", {
+
+
+  f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic") 
+  f_raw_vol <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
+ 
+  f_raw_tac2 <- system.file("extdata", "AD07.tac", package="tacmagic") 
+  f_raw_vol2 <- system.file("extdata", "AD07_TAC.voistat", package="tacmagic")
+ 
+
+  tac <- load_tac(f_raw_tac)
+  vol <- load_vol(f_raw_vol)
+  AD06_tac_nc <- tac_roi(tac, vol, roi_ham_full(), merge=FALSE, PVC=FALSE)
+  tac2 <- load_tac(f_raw_tac2)
+  vol2 <- load_vol(f_raw_vol2)
+  AD07_tac_nc <- tac_roi(tac2, vol2, roi_ham_full(), merge=FALSE, PVC=FALSE)
+
+  pdf(NULL)
+  on.exit(dev.off())
+  dev.control(displaylist="enable")
+
+  plot_tac(AD06_tac_nc, AD07_tac_nc, ROIs=c("frontal", "cerebellum"), 
+           title="Example Plot", time="seconds")
+
+  p <- recordPlot()
+  
+  expect_equal(unlist(p)[[123]], "Time (seconds)")
+  expect_equal(unlist(p)[[37]], 4800) #4800 secs on last walk
 
 })

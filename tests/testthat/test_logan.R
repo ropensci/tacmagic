@@ -57,6 +57,14 @@ test_that("DVR_all_ref_Logan() produces the same results as existing tools", {
   expect_equal(k2_integrate[1:17,], tpcc_logan_k2, tolerance=0.0001)
   expect_equal(k2_trapz[1:17,], tpcc_logan_k2, tolerance=0.0001)
 
+
+  # can run without error ----------------------------------------------------- 
+  nok2_integrate_t0 <- DVR_all_ref_Logan(AD06_tac_nc, 
+                                         ref="cerebellum", 
+                                         k2prime=NULL, 
+                                         t_star=0, 
+                                         method="integrate")
+
 })
 
 test_that("find_t_star gets right answer for reasonable parameters", {
