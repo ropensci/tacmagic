@@ -38,5 +38,5 @@ this loads the tac files. If roi_m = T, then can also merge ROIs into
 larger ROIs based on the optional parameters that follow.
 }
 \details{
-See load_voistat() for specifics.
+See load_tac() for specifics.
 }

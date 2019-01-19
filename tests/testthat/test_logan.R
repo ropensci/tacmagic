@@ -67,6 +67,40 @@ test_that("DVR_all_ref_Logan() produces the same results as existing tools", {
 
 })
 
+
+test_that("plot_ref_logan creates the plots without error", {
+
+  f <- system.file("extdata", "AD06.tac", package="tacmagic")
+  fv <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
+  AD06_tac <- load_tac(f, format="PMOD")
+  AD06_volume <- load_vol(fv, format="voistat")
+
+  AD06 <- tac_roi(tac=AD06_tac,          
+                  volumes=AD06_volume, ROI_def=roi_ham_pib(), merge=F, PVC=F)
+
+  pdf(NULL)
+  on.exit(dev.off())
+  dev.control(displaylist="enable")
+
+  plot_ref_Logan(AD06, 
+                 target="frontal",
+                 ref="cerebellum", 
+                 k2prime=0.2,     
+                 t_star=0,        
+                 )
+
+  p <- recordPlot()
+
+  sample <- as.vector(unlist(unlist(p)[c(123, 124,304, 305, 317, 318,586)]))
+  expected <- c("Time (minutes)", "Activity (kBq/cc)", "frontal", "cerebellum",
+                "frontal", "cerebellum", "Logan plot")
+
+  expect_identical(sample, expected)
+
+})
+
+
+
 test_that("find_t_star gets right answer for reasonable parameters", {
 
   x <- c(1,2,3,4,5,6,7,8,9,10)
