@@ -24,6 +24,15 @@ plot_ref_Logan(tac_data, target, ref, k2prime, t_star = 0, error = 0.1,
 }
 \value{
 No return
+f <- system.file("extdata", "AD06.tac", package="tacmagic")
+fv <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
+AD06_tac <- load_tac(f, format="PMOD")
+AD06_volume <- load_vol(fv, format="voistat")
+AD06 <- tac_roi(tac=AD06_tac, volumes=AD06_volume, ROI_def=roi_ham_pib(),  
+                merge=FALSE, PVC=FALSE)  
+
+plot_ref_Logan(AD06, target="frontal", ref="cerebellum", 
+               k2prime=0.2, t_star=0)
 }
 \description{
 This plots the non-invasive Logan plot.

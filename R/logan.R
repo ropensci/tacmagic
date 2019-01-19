@@ -26,6 +26,17 @@
 #'@param error For find_t_star()
 #'@param method Method of inntegration, "trapz" or "integrate"
 #'@return Data frame with calculate DVRs for all ROIs
+#'@examples
+#' f <- system.file("extdata", "AD06.tac", package="tacmagic")
+#' fv <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
+#' AD06_tac <- load_tac(f, format="PMOD")
+#' AD06_volume <- load_vol(fv, format="voistat")
+#' AD06 <- tac_roi(tac=AD06_tac, volumes=AD06_volume, ROI_def=roi_ham_pib(),  
+#'                 merge=FALSE, PVC=FALSE)                             
+#'                
+#' AD06_DVR_fr <- DVR_ref_Logan(AD06, target="frontal", ref="cerebellum",
+#'                              k2prime=0.2, t_star=0) 
+#'                             
 DVR_ref_Logan <- function(tac_data, target, ref, k2prime, t_star, error=0.10, 
                           method="trapz") {
     model <- ref_Logan_lm(tac_data=tac_data, target=target, ref=ref, 
@@ -49,6 +60,16 @@ DVR_ref_Logan <- function(tac_data, target, ref, k2prime, t_star, error=0.10,
 #'@param error For find_t_star()
 #'@param method Method of inntegration, "trapz" or "integrate"
 #'@return Data frame with calculate DVRs for all ROIs
+#'@examples
+#' f <- system.file("extdata", "AD06.tac", package="tacmagic")
+#' fv <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
+#' AD06_tac <- load_tac(f, format="PMOD")
+#' AD06_volume <- load_vol(fv, format="voistat")
+#' AD06 <- tac_roi(tac=AD06_tac, volumes=AD06_volume, ROI_def=roi_ham_pib(),  
+#'                 merge=FALSE, PVC=FALSE)  
+#' 
+#' AD06_DVR <- DVR_all_ref_Logan(AD06, ref="cerebellum", k2prime=0.2, t_star=23)
+#' 
 DVR_all_ref_Logan <- function(tac_data, ref, k2prime, t_star, error=0.10, 
                               method="trapz") {
     
@@ -87,6 +108,16 @@ DVR_all_ref_Logan <- function(tac_data, ref, k2prime, t_star, error=0.10,
 #'@param error For find_t_star()
 #'@param method Method of inntegration, "trapz" or "integrate"
 #'@return No return
+#' f <- system.file("extdata", "AD06.tac", package="tacmagic")
+#' fv <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
+#' AD06_tac <- load_tac(f, format="PMOD")
+#' AD06_volume <- load_vol(fv, format="voistat")
+#' AD06 <- tac_roi(tac=AD06_tac, volumes=AD06_volume, ROI_def=roi_ham_pib(),  
+#'                 merge=FALSE, PVC=FALSE)  
+#' 
+#' plot_ref_Logan(AD06, target="frontal", ref="cerebellum", 
+#'                k2prime=0.2, t_star=0)
+#' 
 plot_ref_Logan <- function(tac_data, target, ref, k2prime, t_star=0, error=0.1,
                            method="trapz") {
     model <- ref_Logan_lm(tac_data=tac_data, target=target, ref=ref, 

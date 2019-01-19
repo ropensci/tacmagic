@@ -9,7 +9,8 @@
 #'
 #'@export
 #'@return List of references.
-#'@examples references()
+#'@examples 
+#' references()
 references <- function() {
 
   ref_list <- list(

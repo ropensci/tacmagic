@@ -15,6 +15,16 @@
 #'@param SUVR_def a vector of start times for window to be used in SUVR
 #'@param ref is a string, e.g. "cerbellum", to specify reference region
 #'@return A data.frame of SUVR values for the specified ROIs
+#'@examples
+#' f <- system.file("extdata", "AD06.tac", package="tacmagic")
+#' fv <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
+#' AD06_tac <- load_tac(f, format="PMOD")
+#' AD06_volume <- load_vol(fv, format="voistat")
+#' AD06 <- tac_roi(tac=AD06_tac, volumes=AD06_volume, ROI_def=roi_ham_pib(),  
+#'                 merge=FALSE, PVC=FALSE)
+#' 
+#' AD06_SUVR <- suvr(AD06, SUVR_def=c(3000,3300,3600), ref="cerebellum")
+#' 
 suvr <- function(tac, SUVR_def, ref) {
 
     SUVRtable <- new_table(tac, "SUVR")
@@ -42,6 +52,15 @@ suvr <- function(tac, SUVR_def, ref) {
 #'@param SUVR_def a vector of start times for window to be used in SUVR
 #'@param ref is a string, e.g. "cerbellum", to specify reference region
 #'@return A data.frame of SUVR values for the specified ROIs
+#' #' f <- system.file("extdata", "AD06.tac", package="tacmagic")
+#' fv <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
+#' AD06_tac <- load_tac(f, format="PMOD")
+#' AD06_volume <- load_vol(fv, format="voistat")
+#' AD06 <- tac_roi(tac=AD06_tac, volumes=AD06_volume, ROI_def=roi_ham_pib(),  
+#'                 merge=FALSE, PVC=FALSE)
+#' 
+#' AD06_SUVR <- suvr_auc(AD06, SUVR_def=c(3000,3300,3600), ref="cerebellum")
+#' 
 suvr_auc <- function(tac, SUVR_def, ref) {
 
     SUVRtable <- new_table(tac, "SUVR")

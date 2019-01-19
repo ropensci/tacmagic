@@ -24,6 +24,10 @@
 #'@param activity_unit NULL if in file (e.g. PMOD .tac), or set to "kBq/cc", 
 #'                     "Bq/cc", "nCi/cc"
 #'@return data.frame with loaded TAC data
+#'@examples
+#' f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic") 
+#' tac <- load_tac(f_raw_tac)
+#' 
 load_tac <- function(filename, format="PMOD", acqtimes=NULL, time_unit=NULL, 
                      activity_unit=NULL) {
   
@@ -65,7 +69,12 @@ load_tac <- function(filename, format="PMOD", acqtimes=NULL, time_unit=NULL,
 
 #' Loads ROI volumes from file for use by other functions
 #'
+#' 
 #'@export
+#'@examples
+#' f_raw_vol <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
+#' 
+#' vol <- load_vol(f_raw_vol)
 #'@param filename (e.g. participant.voistat)
 #'@param format (default is the TAC .voistat format from PMOD)
 #'@return data.frame with loaded TAC data

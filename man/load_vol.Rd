@@ -17,3 +17,8 @@ data.frame with loaded TAC data
 \description{
 Loads ROI volumes from file for use by other functions
 }
+\examples{
+f_raw_vol <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
+
+vol <- load_vol(f_raw_vol)
+}

@@ -26,6 +26,16 @@
 #'@param master Optionally, a data.frame of same format as return, to add to
 #'@param outfile Specify a filename to save the data
 #'@return A table of SUVR values for the specified ROIs for all participants
+#'@examples
+#' participants <- c(system.file("extdata", "AD06.tac", package="tacmagic"),
+#'                   system.file("extdata", "AD07.tac", package="tacmagic"),
+#'                   system.file("extdata", "AD08.tac", package="tacmagic"))
+#' 
+#' tacs <- batch_load(participants, tac_file_suffix="")
+#' for (i in 1:3) tacs[[i]][,1:80] # to remove the PVC values for this example
+#' 
+#' batch <- batch_tm(tacs, models=c("SUVR", "Logan"), ref="Cerebellum_r",
+#'                   SUVR_def=c(3000,3300,3600), k2prime=0.2, t_star=23)
 #'
 batch_tm <- function(all_tacs, models=c("SUVR", "Logan"), ref, SUVR_def=NULL, 
                      k2prime=NULL, t_star=NULL, master=NULL, outfile=NULL) {
@@ -73,7 +83,13 @@ batch_tm <- function(all_tacs, models=c("SUVR", "Logan"), ref, SUVR_def=NULL,
 #'@param PVC For PVC, true where the data is stored as _C in same tac file
 #'@param merge Passes value to tac_roi(); T to also incl. original atomic ROIs
 #'@return A list of data.frames, each is a participant's TACs
+#'@examples
+#' # For the working example, the participants are full filenames.
+#' participants <- c(system.file("extdata", "AD06.tac", package="tacmagic"),
+#'                   system.file("extdata", "AD07.tac", package="tacmagic"),
+#'                   system.file("extdata", "AD08.tac", package="tacmagic"))
 #' 
+#' tacs <- batch_load(participants, tac_file_suffix="")
 batch_load <- function(participants, PVC=FALSE, dir="", tac_format="PMOD", 
                        tac_file_suffix=".tac", roi_m=FALSE,
                        vol_file_suffix=NULL, vol_format=NULL, 
