@@ -58,3 +58,36 @@ test_that("DVR_all_ref_Logan() produces the same results as existing tools", {
   expect_equal(k2_trapz[1:17,], tpcc_logan_k2, tolerance=0.0001)
 
 })
+
+test_that("find_t_star gets right answer for reasonable parameters", {
+
+  x <- c(1,2,3,4,5,6,7,8,9,10)
+  y <- c(1,2,3,4,5,6,7,8,9,10)
+  
+  expect_equal(find_t_star(x,y), 1)
+
+  x[[1]] <- 5
+
+  expect_equal(find_t_star(x,y), 2)
+
+  x[[1]] <- 1
+  y[[5]] <- 20
+
+  expect_equal(find_t_star(x,y), 6)
+
+  x[[1]] <- 1
+  x[[9]] <- 1
+
+  expect_error(find_t_star(x,y))
+
+  x <- c(1,2,3,4,5,6,7,8,9,10)
+  y <- c(-1,-2,-3,-4,-5,-6,-7,-8,-9,-10)
+
+  expect_equal(find_t_star(x,y), 1)
+
+  x[[1]] <- 1.2
+
+  expect_equal(find_t_star(x,y), 2)
+  expect_equal(find_t_star(x,y, error=0.15), 1)
+
+})

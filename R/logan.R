@@ -175,17 +175,18 @@ ref_Logan_lm <- function(tac_data, target, ref, k2prime, t_star, error,
 find_t_star <- function(x, y, error=0.1) {
     
     frames <- length(y)
-    
-    for (i in 1:frames) {
+    t_star <- 0
+
+    for (i in 1:(frames - 2)) {
         linear_model <- lm(y[i:frames]~x[i:frames])
-        if (all((linear_model$residuals / y[i:frames]) < error )) {
+        if (all(abs(linear_model$residuals / y[i:frames]) < error )) {
             t_star <- i
             break
         }
     }
-    if (t_star == 0) {
-        stop("No suitable t* found.")
-    }
+
+    if (t_star == 0) stop("No suitable t* found.")
+    
     return(t_star)
 }
 
