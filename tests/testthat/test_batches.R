@@ -27,24 +27,37 @@ test_that("tac_roi() accurately calculates weighted averages from PMOD .tac and
   	                       k2prime=0.2,
   	                       t_star=24)
 
-  expect_equal(length(roi_ham_full()) * length(models_to_run), length(batch_result))
+  expect_equal(length(roi_ham_full()) * length(models_to_run), 
+               length(batch_result))
   expect_equal(3, nrow(batch_result))
 
-  expect_equal(as.numeric(unlist(suvr(Fake1, SUVR_def=c(3000, 3300, 3600),ref="cerebellum"))), as.numeric(unlist(t(batch_result[1,1:22]))))
-  expect_equal(as.numeric(unlist(suvr(AD06_tac_pvc, SUVR_def=c(3000, 3300, 3600),ref="cerebellum"))), as.numeric(unlist(t(batch_result[2,1:22]))))
+  expect_equal(as.numeric(unlist(suvr(Fake1, SUVR_def=c(3000, 3300, 3600),
+                                      ref="cerebellum"))), 
+               as.numeric(unlist(t(batch_result[1,1:22]))))
+  expect_equal(as.numeric(unlist(suvr(AD06_tac_pvc, 
+                                      SUVR_def=c(3000, 3300, 3600),
+                                      ref="cerebellum"))), 
+               as.numeric(unlist(t(batch_result[2,1:22]))))
 
 })
 
-test_that("batch_voistat() loads 3 participants and produces same result as individual load_voistat()", {
+test_that("batch_voistat() loads 3 participants and produces same result as 
+           individual load_voistat()", {
   
 
-  participants <- c(system.file("extdata", "AD06_BPnd_BPnd_Logan.voistat", package="tacmagic"),
-                    system.file("extdata", "AD07_BPnd_BPnd_Logan.voistat", package="tacmagic"),
-                    system.file("extdata", "AD08_BPnd_BPnd_Logan.voistat", package="tacmagic"))
+  participants <- c(system.file("extdata", "AD06_BPnd_BPnd_Logan.voistat", 
+                                 package="tacmagic"),
+                    system.file("extdata", "AD07_BPnd_BPnd_Logan.voistat", 
+                                 package="tacmagic"),
+                    system.file("extdata", "AD08_BPnd_BPnd_Logan.voistat", 
+                                 package="tacmagic"))
 
-  batchtest <- batch_voistat(participants=participants, ROI_def=roi_ham_pib(), dir="", filesuffix="", varname="Logan", otherdata=NULL, outfile=NULL) 
+  batchtest <- batch_voistat(participants=participants, ROI_def=roi_ham_pib(), 
+                             dir="", filesuffix="", varname="Logan", 
+                             otherdata=NULL, outfile=NULL) 
 
-  vs_f <- system.file("extdata", "AD06_BPnd_BPnd_Logan.voistat", package="tacmagic")
+  vs_f <- system.file("extdata", "AD06_BPnd_BPnd_Logan.voistat", 
+                      package="tacmagic")
   vs <- load_voistat(vs_f, roi_ham_pib(), model="Logan")
 
   expect_equal(as.numeric(unlist(vs)), as.numeric(unlist(batchtest[1,])))

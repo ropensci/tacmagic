@@ -41,7 +41,7 @@ model_batch <- function(all_tacs, model,
   model_fn <- fn_list[[model]]
   participants <- names(all_tacs)
 
-  # Empty data.frame to store the calculated values----------------------------   
+  # Empty data.frame to store the calculated values----------------------------
   tac_data1 <- all_tacs[[1]]
   master <- as.data.frame(matrix(nrow = length(participants), 
                    ncol=(length(names(tac_data1))-2) ))
@@ -65,7 +65,7 @@ model_batch <- function(all_tacs, model,
 
 #' Used by the user-facing function batch_load()
 #'
-#' Takes a participant ID, and what is needed to make the file names, and loads 
+#' Takes a participant ID, and what is needed to make the file names, and loads
 #' the tac/vol files, then does ROI merging as specified; returns a list of tac
 #' information, each element is a participant.
 #'@noRd

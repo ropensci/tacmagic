@@ -5,7 +5,8 @@ context("TAC data loading and weighted averages")
 test_that("tac_roi() accurately calculates weighted averages from PMOD .tac and 
 	      .voistat files", {
   
-  f_ans_nc <- system.file("extdata", "AD06_man_fullROI.csv", package="tacmagic")
+  f_ans_nc <- system.file("extdata", "AD06_man_fullROI.csv", 
+                          package="tacmagic")
   f_ans_pvc <- system.file("extdata", "AD06_man_fullROI_c.csv", 
   	                       package="tacmagic")
   f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic")
@@ -38,7 +39,8 @@ test_that("tac_roi() accurately calculates weighted averages from PMOD .tac and
 test_that("tac_roi() accurately calculates weighted averages from PMOD .voistat 
 	      and .acqtimes files", {
   
-  f_ans_nc <- system.file("extdata", "AD06_man_fullROI.csv", package="tacmagic")
+  f_ans_nc <- system.file("extdata", "AD06_man_fullROI.csv", 
+                          package="tacmagic")
   f_ans_pvc <- system.file("extdata", "AD06_man_fullROI_c.csv", 
   	                       package="tacmagic")
   f_acq <- system.file("extdata", "AD06.acqtimes", package="tacmagic")
@@ -86,7 +88,8 @@ test_that("validate_tac() successfully rejects bad files", {
 
   # good files are tested in tests above
 
-  f_ans_nc <- system.file("extdata", "AD06_man_fullROI.csv", package="tacmagic")
+  f_ans_nc <- system.file("extdata", "AD06_man_fullROI.csv", 
+                          package="tacmagic")
   ans_nc <- read.csv(f_ans_nc)
   
   expect_error(validate_tac(ans_nc))

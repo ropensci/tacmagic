@@ -4,7 +4,8 @@ context(".voistat file loading")
 
 test_that("load_voistat() accurately loads and weights model data", {
 
-  vs_f <- system.file("extdata", "AD06_BPnd_BPnd_Logan.voistat", package="tacmagic")
+  vs_f <- system.file("extdata", "AD06_BPnd_BPnd_Logan.voistat", 
+  	                  package="tacmagic")
   vs <- load_voistat(vs_f, roi_ham_pib(), model="Logan")
   vs_null <- load_voistat(vs_f, model="Logan")
 

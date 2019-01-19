@@ -4,7 +4,7 @@ context("Non-invasive Logan graphical method")
 
 test_that("DVR_all_ref_Logan() produces the same results as existing tools", {
 
-  # Prepare tac data -----------------------------------------------------------
+  # Prepare tac data ----------------------------------------------------------
   f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic")
   f_raw_vol <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
 
@@ -13,7 +13,7 @@ test_that("DVR_all_ref_Logan() produces the same results as existing tools", {
 
   AD06_tac_nc <- tac_roi(tac, vol, roi_ham_full(), merge=F, PVC=F)
 
-  # Calculate Logan DVRs with different settings -------------------------------
+  # Calculate Logan DVRs with different settings ------------------------------
   nok2_integrate <- DVR_all_ref_Logan(AD06_tac_nc, 
                                       ref="cerebellum", 
                                       k2prime=NULL, 
@@ -38,7 +38,7 @@ test_that("DVR_all_ref_Logan() produces the same results as existing tools", {
                                 t_star=24, 
                                 method="trapz")  
 
-  # externally calculated data--------------------------------------------------
+  # externally calculated data-------------------------------------------------
 
   #c("leftfrontal", "rightfrontal", "lefttemporal", "righttemporal", 
   #"leftparietal", "rightparietal", "leftoccipital", "rightoccipital", 
@@ -51,7 +51,7 @@ test_that("DVR_all_ref_Logan() produces the same results as existing tools", {
   tpcc_logan_k2 <- c(1.7564,1.8467,1.7251,1.8210,1.7429,1.8282,1.4535,1.5803,
                    1.9468,1.9820,1.8021,1.7731,1.7859,1.5172,1.9642,1,1.7537)
 
-  # tests ----------------------------------------------------------------------
+  # tests ---------------------------------------------------------------------
   expect_equal(nok2_integrate[1:17,], tpcc_logan_nok2, tolerance=0.0001)
   expect_equal(nok2_trapz[1:17,], tpcc_logan_nok2, tolerance=0.0001)
   expect_equal(k2_integrate[1:17,], tpcc_logan_k2, tolerance=0.0001)
