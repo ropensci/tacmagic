@@ -26,6 +26,7 @@
 #'@param master Optionally, a data.frame of same format as return, to add to
 #'@param outfile Specify a filename to save the data
 #'@return A table of SUVR values for the specified ROIs for all participants
+#'@family Batch functions
 #'@examples
 #' participants <- c(system.file("extdata", "AD06.tac", package="tacmagic"),
 #'                   system.file("extdata", "AD07.tac", package="tacmagic"),
@@ -83,6 +84,7 @@ batch_tm <- function(all_tacs, models=c("SUVR", "Logan"), ref, SUVR_def=NULL,
 #'@param PVC For PVC, true where the data is stored as _C in same tac file
 #'@param merge Passes value to tac_roi(); T to also incl. original atomic ROIs
 #'@return A list of data.frames, each is a participant's TACs
+#'@family Batch functions
 #'@examples
 #' # For the working example, the participants are full filenames.
 #' participants <- c(system.file("extdata", "AD06.tac", package="tacmagic"),
@@ -122,7 +124,8 @@ batch_load <- function(participants, PVC=FALSE, dir="", tac_format="PMOD",
 #'@param varname The name of the variable being exctracted, e.g. "SRTM"
 #'@param otherdata A data.frame of the same participants to add the new data to
 #'@param outfile Specify a filename to save the data
-#'@return A table of values for the specified ROIs for all participants.
+#'@return A table of values for the specified ROIs for all participants
+#'@family Batch functions
 #'@examples
 #' participants <- c(system.file("extdata", "AD06_BPnd_BPnd_Logan.voistat", 
 #'                               package="tacmagic"),

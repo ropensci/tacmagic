@@ -26,6 +26,7 @@
 #'@param error For find_t_star()
 #'@param method Method of inntegration, "trapz" or "integrate"
 #'@return Data frame with calculate DVRs for all ROIs
+#'@family Logan plot functions
 #'@examples
 #' f <- system.file("extdata", "AD06.tac", package="tacmagic")
 #' fv <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
@@ -60,6 +61,7 @@ DVR_ref_Logan <- function(tac_data, target, ref, k2prime, t_star, error=0.10,
 #'@param error For find_t_star()
 #'@param method Method of inntegration, "trapz" or "integrate"
 #'@return Data frame with calculate DVRs for all ROIs
+#'@family Logan plot functions
 #'@examples
 #' f <- system.file("extdata", "AD06.tac", package="tacmagic")
 #' fv <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
@@ -107,6 +109,7 @@ DVR_all_ref_Logan <- function(tac_data, ref, k2prime, t_star, error=0.10,
 #'@param t_star If 0, t* will be calculated using find_t_star()
 #'@param error For find_t_star()
 #'@param method Method of inntegration, "trapz" or "integrate"
+#'@family Logan plot functions
 #'@return No return
 #' f <- system.file("extdata", "AD06.tac", package="tacmagic")
 #' fv <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")

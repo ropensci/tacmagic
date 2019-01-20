@@ -38,3 +38,8 @@ AD06 <- tac_roi(tac=AD06_tac, volumes=AD06_volume, ROI_def=roi_ham_pib(),
 AD06_DVR <- DVR_all_ref_Logan(AD06, ref="cerebellum", k2prime=0.2, t_star=23)
 
 }
+\seealso{
+Other Logan plot functions: \code{\link{DVR_ref_Logan}},
+  \code{\link{plot_ref_Logan}}
+}
+\concept{Logan plot functions}

@@ -48,3 +48,8 @@ batch <- batch_tm(tacs, models=c("SUVR", "Logan"), ref="Cerebellum_r",
                   SUVR_def=c(3000,3300,3600), k2prime=0.2, t_star=23)
 
 }
+\seealso{
+Other Batch functions: \code{\link{batch_load}},
+  \code{\link{batch_voistat}}
+}
+\concept{Batch functions}

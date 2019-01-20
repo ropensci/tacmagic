@@ -31,3 +31,7 @@ each ROI is set as the upper inner fence.
 4. For all participants, if there is any ROI above the cutoff for that 
 region, then the participant is deemed to be PIB+.
 }
+\seealso{
+Other Cutoff functions: \code{\link{pos_anyroi}}
+}
+\concept{Cutoff functions}

@@ -23,7 +23,7 @@ batch_voistat(participants, ROI_def, dir = "", filesuffix = ".voistat",
 \item{outfile}{Specify a filename to save the data}
 }
 \value{
-A table of values for the specified ROIs for all participants.
+A table of values for the specified ROIs for all participants
 }
 \description{
 For a vector of participant IDs and correspondingly named .voistat files,
@@ -47,3 +47,8 @@ batchtest <- batch_voistat(participants=participants, ROI_def=roi_ham_pib(),
                            otherdata=NULL, outfile=NULL) 
 
 }
+\seealso{
+Other Batch functions: \code{\link{batch_load}},
+  \code{\link{batch_tm}}
+}
+\concept{Batch functions}

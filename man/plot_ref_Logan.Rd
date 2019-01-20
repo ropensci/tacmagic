@@ -37,3 +37,8 @@ plot_ref_Logan(AD06, target="frontal", ref="cerebellum",
 \description{
 This plots the non-invasive Logan plot.
 }
+\seealso{
+Other Logan plot functions: \code{\link{DVR_all_ref_Logan}},
+  \code{\link{DVR_ref_Logan}}
+}
+\concept{Logan plot functions}

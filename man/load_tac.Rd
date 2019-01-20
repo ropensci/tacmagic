@@ -32,3 +32,8 @@ f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic")
 tac <- load_tac(f_raw_tac)
 
 }
+\seealso{
+Other Loading functions: \code{\link{load_voistat}},
+  \code{\link{load_vol}}
+}
+\concept{Loading functions}

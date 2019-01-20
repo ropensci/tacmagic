@@ -18,3 +18,8 @@ atlas (see references()$Hammers_2003).
 \examples{
 roi_ham_stand()
 }
+\seealso{
+Other ROI definitions: \code{\link{roi_ham_full}},
+  \code{\link{roi_ham_pib}}
+}
+\concept{ROI definitions}

@@ -24,6 +24,7 @@
 #'@param activity_unit NULL if in file (e.g. PMOD .tac), or set to "kBq/cc", 
 #'                     "Bq/cc", "nCi/cc"
 #'@return data.frame with loaded TAC data
+#'@family Loading functions 
 #'@examples
 #' f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic") 
 #' tac <- load_tac(f_raw_tac)
@@ -78,6 +79,7 @@ load_tac <- function(filename, format="PMOD", acqtimes=NULL, time_unit=NULL,
 #'@param filename (e.g. participant.voistat)
 #'@param format (default is the TAC .voistat format from PMOD)
 #'@return data.frame with loaded TAC data
+#'@family Loading functions
 load_vol <- function(filename, format="voistat") {
   if (format == "voistat") {
       volumes <- volumesFromVoistatTAC(filename)
@@ -104,6 +106,7 @@ load_vol <- function(filename, format="voistat") {
 #'@param ROI_def Optional ROI definitions to combine ROIs (e.g. roi_ham_pib())
 #'@param model A string to name the variable being extracted, e.g. "Logan_DVR"
 #'@return data.frame with loaded model data in specified combined weighted ROIs
+#'@family Loading functions
 #' @examples
 #' f <- system.file("extdata", "AD06_BPnd_BPnd_Logan.voistat", 
 #'                  package="tacmagic")

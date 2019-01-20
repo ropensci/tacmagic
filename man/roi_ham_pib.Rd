@@ -18,3 +18,8 @@ See PMOD Neuro Tool (PNEURO) (Version 4.0) documentation.
 \examples{
 roi_ham_pib()
 }
+\seealso{
+Other ROI definitions: \code{\link{roi_ham_full}},
+  \code{\link{roi_ham_stand}}
+}
+\concept{ROI definitions}

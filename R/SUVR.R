@@ -15,6 +15,7 @@
 #'@param SUVR_def a vector of start times for window to be used in SUVR
 #'@param ref is a string, e.g. "cerbellum", to specify reference region
 #'@return A data.frame of SUVR values for the specified ROIs
+#'@family SUVR functions
 #'@examples
 #' f <- system.file("extdata", "AD06.tac", package="tacmagic")
 #' fv <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
@@ -51,6 +52,7 @@ suvr <- function(tac, SUVR_def, ref) {
 #'@param tac The time-activity curve data from tac_roi()
 #'@param SUVR_def a vector of start times for window to be used in SUVR
 #'@param ref is a string, e.g. "cerbellum", to specify reference region
+#'@family SUVR functions
 #'@return A data.frame of SUVR values for the specified ROIs
 #' #' f <- system.file("extdata", "AD06.tac", package="tacmagic")
 #' fv <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")

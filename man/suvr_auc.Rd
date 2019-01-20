@@ -29,3 +29,7 @@ Calculate the standardized uptake value ratio (SUVR) for all ROIs in the
 provided tac data, using the specified reference region. This is an 
 alternate to suvr() which should provide very similar values.
 }
+\seealso{
+Other SUVR functions: \code{\link{suvr}}
+}
+\concept{SUVR functions}

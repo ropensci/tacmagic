@@ -71,7 +71,8 @@ tac_roi <- function(tac, volumes, ROI_def, merge, PVC) {
 #'@param ymax The maximum value on the y-axis
 #'@param time "seconds" or "minutes" depending on desired x-axis, converts tac
 #'@param title A title for the plot
-#'@return Creates a plot.
+#'@return Creates a plot
+#'@family tac functions 
 #'@examples
 #' # f_raw_tac and f_raw_vol are the filenames of PMOD-generated files
 #' f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic") 

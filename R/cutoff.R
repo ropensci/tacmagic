@@ -27,6 +27,7 @@
 #' @param modelstats SUVR or DVR data for group of participants from batch_tm()
 #' @param ROIs list of variables (ROIs) to use for cutoff detection
 #' @return Cutoff values for each ROI based on the above method
+#' @family Cutoff functions
 cutoff_aiz <- function(modelstats, ROIs) {
 
   if (length(ROIs) < 2) stop("You must specify at least 2 ROIs.")
@@ -71,6 +72,7 @@ cutoff_aiz <- function(modelstats, ROIs) {
 #' @param modelstats SUVR or DVR data for group of participants from batch_tm()
 #' @param cutoff cutoffs for ROIs as from cutoff_aiz()
 #' @return data.frame of participants and positive/negative status
+#' @family Cutoff functions
 pos_anyroi <- function(modelstats, cutoff) {
   pos_tab <- modelstats
   pos_tab[,] <- NA 

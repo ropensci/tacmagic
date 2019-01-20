@@ -1,16 +1,19 @@
 Package: tacmagic
 Type: Package
-Title: tacmagic: PET Time Activity Curve Analysis in R
+Title: tacmagic: PET Analysis in R
 Version: 0.1.8.9000
 Authors@R: c(person("Eric", "Brown", 
                     role = c("aut", "cre"),
                     email = "eb@ericebrown.com",
                     comment = c(ORCID = "0000-0002-1575-2606")))
-Description: This package provides functions to analyze of PET time activity 
-    curve (tac) data, including loading from various formats, merging ROIs 
-    weighted for volume, calculating models including SUVR and DVR, plotting 
-    functions and calculation of cutoff values. Please see the vignette for a 
-    detailed overview of tacmagic functions.
+Description: To faciliate analysis of positron emission tomography (PET) time
+    activity curve data, and to encourage open science and replicability, this 
+    package supports data loading and analysis of multiple tac file formats.
+    Functions are available to analyze loaded tac data for individual 
+    participants or in batches. Major functionality includes merging tacs by 
+    region of interest (ROI), calculating models including SUVR and DVR, 
+    basic plotting functions and calculation of cutoff values. Please see the 
+    vignette for a detailed overview of tacmagic functions.
 Depends: R (>= 3.4)
 License: GPL-3
 URL: https://github.com/eebrown/PET
