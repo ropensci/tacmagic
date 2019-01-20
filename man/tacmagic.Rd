@@ -9,6 +9,6 @@
 This package provides functions to analyze of PET time activity curve (tac) 
 data, including loading from various fomrmats, merging ROIs weighted for 
 volume, calculating models including SUVR and DVR, plotting functions and
-calculation of cutoff values. Please see the vignette for a detailed overview
-of tacmagic functions.
+calculation of cutoff values. Please see the vignette for a detailed 
+overview of tacmagic functions.
 }

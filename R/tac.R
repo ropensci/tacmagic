@@ -13,8 +13,16 @@
 #'@param ROI_def The definition of ROIs by combining smaller ROIs from TAC file
 #'@param merge If TRUE, includes the original ROIs in the output data
 #'@param PVC If TRUE, appends "_C" to ROI name header (as in PMOD TAC files)
+#'@family tac functions 
 #'@return Time-activity curves for the specified ROIs
-#examples tac_roi(p1tac, p1vol, standardROIs(), merge=T)
+#'@examples 
+#' # f_raw_tac and f_raw_vol are the filenames of PMOD-generated files
+#' f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic") 
+#' f_raw_vol <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
+#' 
+#' tac <- load_tac(f_raw_tac)
+#' vol <- load_vol(f_raw_vol)
+#' AD06_tac_nc <- tac_roi(tac, vol, roi_ham_full(), merge=FALSE, PVC=FALSE)
 tac_roi <- function(tac, volumes, ROI_def, merge, PVC) {
     
   if(!validate_tac(tac)) stop("Supplied tac file did not validate.")
@@ -22,7 +30,7 @@ tac_roi <- function(tac, volumes, ROI_def, merge, PVC) {
   ROI_PVC <- ROI_def
     
   if (PVC) {
-      for (i in 1:length(ROI_PVC)) {
+      for (i in seq_along(ROI_PVC)) {
         ROI_PVC[i] <- lapply(ROI_PVC[i], paste, "_C", sep="")
       }
   }
@@ -33,7 +41,7 @@ tac_roi <- function(tac, volumes, ROI_def, merge, PVC) {
   names(calculated_TACs) <- names(ROI_def)
 
   # Calculate the weighted mean TACs for each ROI in the definition list
-  for (i in 1:length(ROI_def)) {
+  for (i in seq_along(ROI_def)) {
       calculated_TACs[i] <- apply(tac[,ROI_PVC[[i]]], 1, weighted.mean,
                                   volumes[ROI_def[[i]],])
   }
@@ -64,6 +72,15 @@ tac_roi <- function(tac, volumes, ROI_def, merge, PVC) {
 #'@param time "seconds" or "minutes" depending on desired x-axis, converts tac
 #'@param title A title for the plot
 #'@return Creates a plot.
+#'@examples
+#' # f_raw_tac and f_raw_vol are the filenames of PMOD-generated files
+#' f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic") 
+#' f_raw_vol <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
+#' 
+#' tac <- load_tac(f_raw_tac)
+#' vol <- load_vol(f_raw_vol)
+#' AD06_tac_nc <- tac_roi(tac, vol, roi_ham_full(), merge=FALSE, PVC=FALSE)
+#' plot_tac(AD06_tac_nc, ROIs=c("frontal", "cerebellum"), title="Example Plot")
 plot_tac <- function(TACtable1, TACtable2=NULL, ROIs, ymax=25, 
                      time="minutes", title="") {
   
@@ -102,8 +119,7 @@ plot_tac <- function(TACtable1, TACtable2=NULL, ROIs, ymax=25,
   colour2 <- rainbow(length(ROIs), start=0.5, end=0.8)
   
   # Plots the ROIs as specified in the ROIs argument
-  index <- c(1:length(ROIs))
-  for (ROI in index) {
+  for (ROI in seq_along(ROIs)) {
 
     lines(x=TACtable1$start/time_conversion, 
           y=TACtable1[,ROIs[ROI]], 

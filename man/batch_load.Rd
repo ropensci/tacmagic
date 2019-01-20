@@ -4,8 +4,8 @@
 \alias{batch_load}
 \title{Load (+/- merge) ROIs for batch of participants}
 \usage{
-batch_load(participants, PVC = F, dir = "", tac_format = "PMOD",
-  tac_file_suffix = ".tac", roi_m = F, vol_file_suffix = NULL,
+batch_load(participants, PVC = FALSE, dir = "", tac_format = "PMOD",
+  tac_file_suffix = ".tac", roi_m = FALSE, vol_file_suffix = NULL,
   vol_format = NULL, merge = NULL, ROI_def = NULL)
 }
 \arguments{
@@ -38,5 +38,13 @@ this loads the tac files. If roi_m = T, then can also merge ROIs into
 larger ROIs based on the optional parameters that follow.
 }
 \details{
-See load_voistat() for specifics.
+See load_tac() for specifics.
+}
+\examples{
+# For the working example, the participants are full filenames.
+participants <- c(system.file("extdata", "AD06.tac", package="tacmagic"),
+                  system.file("extdata", "AD07.tac", package="tacmagic"),
+                  system.file("extdata", "AD08.tac", package="tacmagic"))
+
+tacs <- batch_load(participants, tac_file_suffix="")
 }

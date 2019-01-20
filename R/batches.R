@@ -26,6 +26,16 @@
 #'@param master Optionally, a data.frame of same format as return, to add to
 #'@param outfile Specify a filename to save the data
 #'@return A table of SUVR values for the specified ROIs for all participants
+#'@examples
+#' participants <- c(system.file("extdata", "AD06.tac", package="tacmagic"),
+#'                   system.file("extdata", "AD07.tac", package="tacmagic"),
+#'                   system.file("extdata", "AD08.tac", package="tacmagic"))
+#' 
+#' tacs <- batch_load(participants, tac_file_suffix="")
+#' for (i in 1:3) tacs[[i]][,1:80] # to remove the PVC values for this example
+#' 
+#' batch <- batch_tm(tacs, models=c("SUVR", "Logan"), ref="Cerebellum_r",
+#'                   SUVR_def=c(3000,3300,3600), k2prime=0.2, t_star=23)
 #'
 batch_tm <- function(all_tacs, models=c("SUVR", "Logan"), ref, SUVR_def=NULL, 
                      k2prime=NULL, t_star=NULL, master=NULL, outfile=NULL) {
@@ -59,7 +69,7 @@ batch_tm <- function(all_tacs, models=c("SUVR", "Logan"), ref, SUVR_def=NULL,
 #' this loads the tac files. If roi_m = T, then can also merge ROIs into 
 #' larger ROIs based on the optional parameters that follow.
 #'
-#' See load_voistat() for specifics.
+#' See load_tac() for specifics.
 #'
 #'@export
 #'@param participants A vector of participant IDs
@@ -73,9 +83,15 @@ batch_tm <- function(all_tacs, models=c("SUVR", "Logan"), ref, SUVR_def=NULL,
 #'@param PVC For PVC, true where the data is stored as _C in same tac file
 #'@param merge Passes value to tac_roi(); T to also incl. original atomic ROIs
 #'@return A list of data.frames, each is a participant's TACs
+#'@examples
+#' # For the working example, the participants are full filenames.
+#' participants <- c(system.file("extdata", "AD06.tac", package="tacmagic"),
+#'                   system.file("extdata", "AD07.tac", package="tacmagic"),
+#'                   system.file("extdata", "AD08.tac", package="tacmagic"))
 #' 
-batch_load <- function(participants, PVC=F, dir="", tac_format="PMOD", 
-                       tac_file_suffix=".tac", roi_m=F,
+#' tacs <- batch_load(participants, tac_file_suffix="")
+batch_load <- function(participants, PVC=FALSE, dir="", tac_format="PMOD", 
+                       tac_file_suffix=".tac", roi_m=FALSE,
                        vol_file_suffix=NULL, vol_format=NULL, 
                        merge=NULL, ROI_def=NULL) {
   
@@ -93,9 +109,12 @@ batch_load <- function(participants, PVC=F, dir="", tac_format="PMOD",
 #'
 #' For a vector of participant IDs and correspondingly named .voistat files,
 #' this extracts the value from the files for the specified ROIs.
+#' participants can also be a vector of filenames, in which case set dir="" and
+#' filesuffix="", as in the example.
 #'
 #' See load_voistat() for specifics.
 #'
+#'@export
 #'@param participants A vector of participant IDs
 #'@param ROI_def Object that defines combined ROIs, see ROI_definitions.R
 #'@param dir Directory and/or filename prefix of the files
@@ -104,26 +123,37 @@ batch_load <- function(participants, PVC=F, dir="", tac_format="PMOD",
 #'@param otherdata A data.frame of the same participants to add the new data to
 #'@param outfile Specify a filename to save the data
 #'@return A table of values for the specified ROIs for all participants.
+#'@examples
+#' participants <- c(system.file("extdata", "AD06_BPnd_BPnd_Logan.voistat", 
+#'                               package="tacmagic"),
+#'                    system.file("extdata", "AD07_BPnd_BPnd_Logan.voistat", 
+#'                                package="tacmagic"),
+#'                    system.file("extdata", "AD08_BPnd_BPnd_Logan.voistat", 
+#'                                package="tacmagic"))
+#' 
+#' batchtest <- batch_voistat(participants=participants, ROI_def=roi_ham_pib(), 
+#'                            dir="", filesuffix="", varname="Logan", 
+#'                            otherdata=NULL, outfile=NULL) 
 #'
-batch_voistat <- function(participants, ROI_def, dir="", filesuffix, varname,
-                         otherdata=NULL, outfile) {
+batch_voistat <- function(participants, ROI_def, dir="", filesuffix=".voistat", 
+                          varname="VALUE", otherdata=NULL, outfile=NULL) {
 
-  voistat_file = paste(dir, participants[1], filesuffix, ".voistat", sep="")
+  voistat_file <- paste0(dir, participants[1], filesuffix)
 
   first <- load_voistat(voistat_file, ROI_def)
   master <- t(first)
   master <- master[-1,]
 
   for (each in participants) {
-    message(paste("Working on...", each))
-    voistat_file = paste(dir, each, filesuffix, ".voistat", sep="")
+    voistat_file <- paste0(dir, each, filesuffix)
     VALUE <- load_voistat(voistat_file, ROI_def)
     trans <- t(VALUE)
     row.names(trans) <- each
     master <- rbind(master,trans)
   }
+
   master <- as.data.frame(master)
-  names(master) <- lapply(names(master), paste, "_", varname, sep="")
+  names(master) <- lapply(names(master), paste0, "_", varname)
   if (!(is.null(otherdata))) master <- data.frame(otherdata, master)
   if (!(is.null(outfile))) write.csv(master, file = outfile)
   return(master)

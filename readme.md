@@ -1,14 +1,10 @@
 # tacmagic: PET Analysis in R
 
-[![Coverage status](https://codecov.io/gh/eebrown/PET/branch/master/graph/badge.svg)](https://codecov.io/github/eebrown/PET?branch=master)
-[![Build Status](https://travis-ci.org/eebrown/PET.svg?branch=master)](https://travis-ci.org/eebrown/PET)
+[![Build Status](https://travis-ci.org/eebrown/PET.svg?branch=master)](https://travis-ci.org/eebrown/PET) [![Coverage status](https://codecov.io/gh/eebrown/PET/branch/master/graph/badge.svg)](https://codecov.io/github/eebrown/PET?branch=master)
 
-This is a beta version (not fully tested; use at own risk) of an R package to process and analyze time-activity curve (TAC) data from positron emission tomography (PET) studies.
+Aiming to improve openness, replicability, and ease of use, tacmagic facilitates loading and analyzing positron emission tomography data for various sources and formats. This then enables subsequent statistical calculations to answer research questions.
 
-The package provides loading functions to work with processed PET data, such as TAC, ROI volumes and ROI statistics (e.g. Logan, R1, etc.) in a common format regardless of the software that created them (e.g. PMOD). This then enables subsequent statistical calculations.
 
-If you are interested in these scripts, or have any questions, suggestions, and especially if you see any problems, please contact me at eb@ericebrown.com. I am interested in improving these scripts and making them more useful. If you 
-do use them, please acknowledge/cite this in your work.
 
 ## Features
 
@@ -23,6 +19,8 @@ do use them, please acknowledge/cite this in your work.
 ### Batch and group-wise analysis
 
 ## Licence
+
+If you are interested in this package, or have any questions, suggestions, and especially if you see any problems, please contact me at eb@ericebrown.com. I am interested in improving these scripts and making them more useful. 
 
     Copyright (C) 2018 Eric Brown
 

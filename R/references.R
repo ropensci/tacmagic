@@ -9,7 +9,8 @@
 #'
 #'@export
 #'@return List of references.
-#'@examples references()
+#'@examples 
+#' references()
 references <- function() {
 
   ref_list <- list(
@@ -41,7 +42,5 @@ references <- function() {
     magia="http://aivo.utu.fi/magia/"
      )
 
-  print(ref_list)
   return(ref_list)
 }
-

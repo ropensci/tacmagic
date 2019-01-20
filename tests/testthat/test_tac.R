@@ -5,7 +5,8 @@ context("TAC data loading and weighted averages")
 test_that("tac_roi() accurately calculates weighted averages from PMOD .tac and 
 	      .voistat files", {
   
-  f_ans_nc <- system.file("extdata", "AD06_man_fullROI.csv", package="tacmagic")
+  f_ans_nc <- system.file("extdata", "AD06_man_fullROI.csv", 
+                          package="tacmagic")
   f_ans_pvc <- system.file("extdata", "AD06_man_fullROI_c.csv", 
   	                       package="tacmagic")
   f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic")
@@ -25,18 +26,21 @@ test_that("tac_roi() accurately calculates weighted averages from PMOD .tac and
 
   AD06_tac_nc <- tac_roi(tac, vol, roi_ham_full(), merge=F, PVC=F)
   AD06_tac_pvc <- tac_roi(tac, vol, roi_ham_full(), merge=F, PVC=T)
-  
+  AD06_merge <- tac_roi(tac, vol, roi_ham_full(), merge=T, PVC=F)
+
   expect_equal(AD06_tac_nc, ans_nc)
   expect_equal(AD06_tac_pvc, ans_pvc)
   expect_equal(validate_tac(AD06_tac_nc), TRUE)
   expect_equal(validate_tac(AD06_tac_pvc), TRUE)
+  expect_equal(length(names(AD06_merge)), 196)
 
 })
 
 test_that("tac_roi() accurately calculates weighted averages from PMOD .voistat 
 	      and .acqtimes files", {
   
-  f_ans_nc <- system.file("extdata", "AD06_man_fullROI.csv", package="tacmagic")
+  f_ans_nc <- system.file("extdata", "AD06_man_fullROI.csv", 
+                          package="tacmagic")
   f_ans_pvc <- system.file("extdata", "AD06_man_fullROI_c.csv", 
   	                       package="tacmagic")
   f_acq <- system.file("extdata", "AD06.acqtimes", package="tacmagic")
@@ -84,7 +88,8 @@ test_that("validate_tac() successfully rejects bad files", {
 
   # good files are tested in tests above
 
-  f_ans_nc <- system.file("extdata", "AD06_man_fullROI.csv", package="tacmagic")
+  f_ans_nc <- system.file("extdata", "AD06_man_fullROI.csv", 
+                          package="tacmagic")
   ans_nc <- read.csv(f_ans_nc)
   
   expect_error(validate_tac(ans_nc))
@@ -102,5 +107,60 @@ test_that("validate_tac() successfully rejects bad files", {
   attributes(ans_nc)$tm_type <- "tac"
 
   expect_error(validate_tac(ans_nc))
+
+})
+
+test_that("plot_tac runs without error and contains correct axis label", {
+
+
+  f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic") 
+  f_raw_vol <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
+ 
+  tac <- load_tac(f_raw_tac)
+  vol <- load_vol(f_raw_vol)
+  AD06_tac_nc <- tac_roi(tac, vol, roi_ham_full(), merge=FALSE, PVC=FALSE)
+
+  pdf(NULL)
+  on.exit(dev.off())
+  dev.control(displaylist="enable")
+
+  plot_tac(AD06_tac_nc, ROIs=c("frontal", "cerebellum"), title="Example Plot")
+
+  p <- recordPlot()
+  
+  expect_equal(unlist(p)[[123]], "Time (minutes)")
+  expect_equal(unlist(p)[[37]], 80) # 80 mins last value on x-axis
+
+})
+
+test_that("plot_tac with 2 tacs and conversion runs without error and 
+           contains correct axis label", {
+
+
+  f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic") 
+  f_raw_vol <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
+ 
+  f_raw_tac2 <- system.file("extdata", "AD07.tac", package="tacmagic") 
+  f_raw_vol2 <- system.file("extdata", "AD07_TAC.voistat", package="tacmagic")
+ 
+
+  tac <- load_tac(f_raw_tac)
+  vol <- load_vol(f_raw_vol)
+  AD06_tac_nc <- tac_roi(tac, vol, roi_ham_full(), merge=FALSE, PVC=FALSE)
+  tac2 <- load_tac(f_raw_tac2)
+  vol2 <- load_vol(f_raw_vol2)
+  AD07_tac_nc <- tac_roi(tac2, vol2, roi_ham_full(), merge=FALSE, PVC=FALSE)
+
+  pdf(NULL)
+  on.exit(dev.off())
+  dev.control(displaylist="enable")
+
+  plot_tac(AD06_tac_nc, AD07_tac_nc, ROIs=c("frontal", "cerebellum"), 
+           title="Example Plot", time="seconds")
+
+  p <- recordPlot()
+  
+  expect_equal(unlist(p)[[123]], "Time (seconds)")
+  expect_equal(unlist(p)[[37]], 4800) #4800 secs on last walk
 
 })

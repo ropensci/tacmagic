@@ -15,10 +15,10 @@ pos_anyroi(modelstats, cutoff)
 data.frame of participants and positive/negative status
 }
 \description{
-See references()$Aizenstein. The authors proposed a standardized method of 
-calculating PIB+ cutoff values to classify participants as PIB+ or PIB-. They
-used the DVR from 7 ROIs associated with amyloid deposition. This function 
-takes the ROI-based cutoff-values, e.g. from cutoff_aiz(), and returns a 
-table specifying which participants are positive, i.e. which have at least
-one ROI greater than the cutoff.
+See references()$Aizenstein. The authors proposed a standardized method of
+calculating PIB+ cutoff values to classify participants as PIB+ or PIB-.
+They used the DVR from 7 ROIs associated with amyloid deposition. This
+function takes the ROI-based cutoff-values, e.g. from cutoff_aiz(), and
+returns a table specifying which participants are positive, i.e. which have
+at least one ROI greater than the cutoff.
 }

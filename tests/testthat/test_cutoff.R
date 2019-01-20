@@ -32,9 +32,13 @@ test_that("cutoff_aiz() produces accurate error and messages", {
   # Need to specify > 1 ROI
   expect_error(cutoff_aiz(fake_DVR, c("ROI1_DVR")))
 
-  expect_message(cutoff_aiz(fake_DVR, c("ROI1_DVR", "ROI2_DVR", "ROI3_DVR")) , "Iteration: 1 Removed: 10")
-  expect_message(cutoff_aiz(fake_DVR, c("ROI1_DVR", "ROI2_DVR", "ROI3_DVR")) , "Iteration: 2 Removed: 0")
-  expect_message(cutoff_aiz(fake_DVR, c("ROI1_DVR", "ROI2_DVR", "ROI3_DVR", "ROI4_DVR")) , "Iteration: 3 Removed: 0")
+  expect_message(cutoff_aiz(fake_DVR, c("ROI1_DVR", "ROI2_DVR", "ROI3_DVR")), 
+                 "Iteration: 1 Removed: 10")
+  expect_message(cutoff_aiz(fake_DVR, c("ROI1_DVR", "ROI2_DVR", "ROI3_DVR")), 
+                 "Iteration: 2 Removed: 0")
+  expect_message(cutoff_aiz(fake_DVR, c("ROI1_DVR", "ROI2_DVR", "ROI3_DVR", 
+                                        "ROI4_DVR")),
+                 "Iteration: 3 Removed: 0")
 
 })
 
@@ -110,28 +114,33 @@ test_that("cutoff_aiz() calculates ROI-based cutoffs accurately", {
 
   clean <- c(11:33, 35:50)
 
-  expect_equal(cutoff_aiz(fake_DVR, c("ROI1_DVR", "ROI2_DVR", "ROI3_DVR", "ROI4_DVR"))[[1]], 
+  expect_equal(cutoff_aiz(fake_DVR, c("ROI1_DVR", "ROI2_DVR", "ROI3_DVR", 
+                                      "ROI4_DVR"))[[1]], 
   	           upper_inner_fence(fake_DVR[clean,]$ROI1_DVR))
 
-  expect_equal(cutoff_aiz(fake_DVR, c("ROI1_DVR", "ROI2_DVR", "ROI3_DVR", "ROI4_DVR"))[[2]], 
+  expect_equal(cutoff_aiz(fake_DVR, c("ROI1_DVR", "ROI2_DVR", "ROI3_DVR", 
+                                      "ROI4_DVR"))[[2]], 
   	           upper_inner_fence(fake_DVR[clean,]$ROI2_DVR))
 
   #> upper_inner_fence(fake_DVR[clean,]$ROI3_DVR)
   #[1] 1.3330504
 
-  expect_equal(cutoff_aiz(fake_DVR, c("ROI1_DVR", "ROI2_DVR", "ROI3_DVR", "ROI4_DVR"))[[3]], 
+  expect_equal(cutoff_aiz(fake_DVR, c("ROI1_DVR", "ROI2_DVR", "ROI3_DVR", 
+                                      "ROI4_DVR"))[[3]], 
   	           1.330504, tol=0.00001)
 
   #> upper_inner_fence(fake_DVR[clean,]$ROI4_DVR)
   #[1] 1.27347
-  expect_equal(cutoff_aiz(fake_DVR, c("ROI1_DVR", "ROI2_DVR", "ROI3_DVR", "ROI4_DVR"))[[4]], 
+  expect_equal(cutoff_aiz(fake_DVR, c("ROI1_DVR", "ROI2_DVR", "ROI3_DVR", 
+                                      "ROI4_DVR"))[[4]], 
   	           1.27347, tol=0.00001)  
 
 })
 
 test_that("pos_anyroi() dichotomizes participants accurately", {
 
-  cutoffs <- cutoff_aiz(fake_DVR, c("ROI1_DVR", "ROI2_DVR", "ROI3_DVR", "ROI4_DVR"))
+  cutoffs <- cutoff_aiz(fake_DVR, c("ROI1_DVR", "ROI2_DVR", "ROI3_DVR", 
+                                    "ROI4_DVR"))
   pos_table <- pos_anyroi(fake_DVR, cutoffs)
 
   expect_type(pos_table, "logical")

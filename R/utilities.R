@@ -13,4 +13,3 @@ new_table <- function(tac, varname="VALUE") {
   names(VALUEtable) <- varname
   return(VALUEtable)
 }
-    

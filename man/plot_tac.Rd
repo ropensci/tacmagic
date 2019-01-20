@@ -26,3 +26,13 @@ Creates a plot.
 \description{
 Plots time activity curves from 1 or 2 participants or groups.
 }
+\examples{
+# f_raw_tac and f_raw_vol are the filenames of PMOD-generated files
+f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic") 
+f_raw_vol <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
+
+tac <- load_tac(f_raw_tac)
+vol <- load_vol(f_raw_vol)
+AD06_tac_nc <- tac_roi(tac, vol, roi_ham_full(), merge=FALSE, PVC=FALSE)
+plot_tac(AD06_tac_nc, ROIs=c("frontal", "cerebellum"), title="Example Plot")
+}

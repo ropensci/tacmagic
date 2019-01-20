@@ -20,8 +20,8 @@ model_definitions <- function() {
 #' Calculate a model, e.g. SUVR or Logan DVR, for ROIs in a participant batch
 #'
 #' Use tm_batch instead. For a vector of participant IDs and correspondingly 
-#' named tac and volume files, this calculates a model, e.g. SUVR, and stores in 
-#' a single table.
+#' named tac and volume files, this calculates a model, e.g. SUVR, and stores 
+#' in a single table.
 #'
 #' See suvr() for how SUVR is calculated.
 #'
@@ -36,20 +36,20 @@ model_definitions <- function() {
 model_batch <- function(all_tacs, model, 
                         ref=NULL, SUVR_def=NULL, k2prime=NULL, t_star=NULL) {
 
-  # Specify function to use (except Logan, which needs different params) -------
+  # Specify function to use (except Logan, which needs different params) ------
   fn_list <- model_definitions()
   model_fn <- fn_list[[model]]
   participants <- names(all_tacs)
 
-  # Empty data.frame to store the calculated values-----------------------------   
+  # Empty data.frame to store the calculated values----------------------------
   tac_data1 <- all_tacs[[1]]
   master <- as.data.frame(matrix(nrow = length(participants), 
                    ncol=(length(names(tac_data1))-2) ))
   names(master) <- names(tac_data1)[3:length(names(tac_data1))]
   row.names(master) <- participants
 
-  # Runs through each participant to calculate the model and store the values---
-  for (i in 1:length(participants)) {
+  # Runs through each participant to calculate the model and store the values--
+  for (i in seq_along(participants)) {
     message(paste("Working on...", participants[i]))
         
     tac_data <- all_tacs[[i]]
@@ -65,7 +65,7 @@ model_batch <- function(all_tacs, model,
 
 #' Used by the user-facing function batch_load()
 #'
-#' Takes a participant ID, and what is needed to make the file names, and loads 
+#' Takes a participant ID, and what is needed to make the file names, and loads
 #' the tac/vol files, then does ROI merging as specified; returns a list of tac
 #' information, each element is a participant.
 #'@noRd

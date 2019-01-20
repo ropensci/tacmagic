@@ -26,6 +26,17 @@
 #'@param error For find_t_star()
 #'@param method Method of inntegration, "trapz" or "integrate"
 #'@return Data frame with calculate DVRs for all ROIs
+#'@examples
+#' f <- system.file("extdata", "AD06.tac", package="tacmagic")
+#' fv <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
+#' AD06_tac <- load_tac(f, format="PMOD")
+#' AD06_volume <- load_vol(fv, format="voistat")
+#' AD06 <- tac_roi(tac=AD06_tac, volumes=AD06_volume, ROI_def=roi_ham_pib(),  
+#'                 merge=FALSE, PVC=FALSE)                             
+#'                
+#' AD06_DVR_fr <- DVR_ref_Logan(AD06, target="frontal", ref="cerebellum",
+#'                              k2prime=0.2, t_star=0) 
+#'                             
 DVR_ref_Logan <- function(tac_data, target, ref, k2prime, t_star, error=0.10, 
                           method="trapz") {
     model <- ref_Logan_lm(tac_data=tac_data, target=target, ref=ref, 
@@ -49,6 +60,16 @@ DVR_ref_Logan <- function(tac_data, target, ref, k2prime, t_star, error=0.10,
 #'@param error For find_t_star()
 #'@param method Method of inntegration, "trapz" or "integrate"
 #'@return Data frame with calculate DVRs for all ROIs
+#'@examples
+#' f <- system.file("extdata", "AD06.tac", package="tacmagic")
+#' fv <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
+#' AD06_tac <- load_tac(f, format="PMOD")
+#' AD06_volume <- load_vol(fv, format="voistat")
+#' AD06 <- tac_roi(tac=AD06_tac, volumes=AD06_volume, ROI_def=roi_ham_pib(),  
+#'                 merge=FALSE, PVC=FALSE)  
+#' 
+#' AD06_DVR <- DVR_all_ref_Logan(AD06, ref="cerebellum", k2prime=0.2, t_star=23)
+#' 
 DVR_all_ref_Logan <- function(tac_data, ref, k2prime, t_star, error=0.10, 
                               method="trapz") {
     
@@ -87,6 +108,16 @@ DVR_all_ref_Logan <- function(tac_data, ref, k2prime, t_star, error=0.10,
 #'@param error For find_t_star()
 #'@param method Method of inntegration, "trapz" or "integrate"
 #'@return No return
+#' f <- system.file("extdata", "AD06.tac", package="tacmagic")
+#' fv <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
+#' AD06_tac <- load_tac(f, format="PMOD")
+#' AD06_volume <- load_vol(fv, format="voistat")
+#' AD06 <- tac_roi(tac=AD06_tac, volumes=AD06_volume, ROI_def=roi_ham_pib(),  
+#'                 merge=FALSE, PVC=FALSE)  
+#' 
+#' plot_ref_Logan(AD06, target="frontal", ref="cerebellum", 
+#'                k2prime=0.2, t_star=0)
+#' 
 plot_ref_Logan <- function(tac_data, target, ref, k2prime, t_star=0, error=0.1,
                            method="trapz") {
     model <- ref_Logan_lm(tac_data=tac_data, target=target, ref=ref, 
@@ -108,7 +139,7 @@ plot_ref_Logan <- function(tac_data, target, ref, k2prime, t_star=0, error=0.1,
 }
 
 
-## Helper functions-------------------------------------------------------------
+## Helper functions------------------------------------------------------------
 
 # The non-invasive reference Logan method
 #' @noRd
@@ -122,18 +153,20 @@ ref_Logan_xy <- function(tac, target, ref, k2prime, method) {
   }
   
   # Derive functions for TACs by interpolation.
-  target_tac <- approxfun(x=mid_time, y=tac[,target], method = "linear", rule=2)
+  target_tac <- approxfun(x=mid_time, y=tac[,target], method="linear", rule=2)
   ref_tac <- approxfun(x=mid_time, y=tac[,ref], method = "linear", rule=2)
 
   if (!is.null(k2prime)) k2r <- (tac[,ref] / k2prime) else k2r <- 0
 
   if (method == "trapz") {
-    frames <- 1:length(mid_time)
-    yA <- sapply(frames, FUN=vAUC, x=mid_time, y=tac[,target])
-    xA <- sapply(frames, FUN=vAUC, x=mid_time, y=tac[,ref]) + k2r
+    frames <- seq_along(mid_time)
+    yA <- vapply(frames, FUN=vAUC, FUN.VALUE=0, x=mid_time, y=tac[,target])
+    xA <- vapply(frames, FUN=vAUC, FUN.VALUE=0, x=mid_time, y=tac[,ref]) + k2r
   } else if (method == "integrate") {
-    yA <- sapply(mid_time, FUN=vintegrate, lower=mid_time[1], f=target_tac)
-    xA <- sapply(mid_time, FUN=vintegrate, lower=mid_time[1], f=ref_tac) + k2r
+    yA <- vapply(mid_time, FUN=vintegrate, FUN.VALUE=0, lower=mid_time[1], 
+                 f=target_tac)
+    xA <- vapply(mid_time, FUN=vintegrate, FUN.VALUE=0, lower=mid_time[1], 
+                 f=ref_tac) + k2r
   }
 
   y <- yA / tac[,target]
@@ -147,7 +180,8 @@ ref_Logan_xy <- function(tac, target, ref, k2prime, method) {
 
 # The non-invasive reference Logan method -- linear model starting from t*
 #' @noRd
-ref_Logan_lm <- function(tac_data, target, ref, k2prime, t_star, error, method) {
+ref_Logan_lm <- function(tac_data, target, ref, k2prime, t_star, error, 
+                         method) {
     
   xy <- ref_Logan_xy(tac_data, target=target, ref=ref, k2prime=k2prime,
                      method=method)
@@ -172,27 +206,28 @@ ref_Logan_lm <- function(tac_data, target, ref, k2prime, t_star, error, method) 
 find_t_star <- function(x, y, error=0.1) {
     
     frames <- length(y)
-    
-    for (i in 1:frames) {
+    t_star <- 0
+
+    for (i in 1:(frames - 2)) {
         linear_model <- lm(y[i:frames]~x[i:frames])
-        if (all((linear_model$residuals / y[i:frames]) < error )) {
+        if (all(abs(linear_model$residuals / y[i:frames]) < error )) {
             t_star <- i
             break
         }
     }
-    if (t_star == 0) {
-        stop("No suitable t* found.")
-    }
+
+    if (t_star == 0) stop("No suitable t* found.")
+    
     return(t_star)
 }
 
 
-# Helper function to use integrate() with sapply(), simply re-arranging the
+# Helper function to use integrate() with vapply(), simply re-arranging the
 # arguments of integrate() so that upper is the first argument, and returns
 # just the integrate() value.
 #' @noRd
 vintegrate <- function(upper, lower, fn) {
-    v <- integrate(fn, lower=lower, upper=upper, stop.on.error=F, 
+    v <- integrate(fn, lower=lower, upper=upper, stop.on.error=FALSE, 
                    subdivisions=10000L)
     return(v$value)
 }

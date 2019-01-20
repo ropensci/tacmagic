@@ -27,3 +27,8 @@ data.frame with loaded TAC data
 \description{
 Loads TAC from file for use by other functions (default is PMOD .tac format)
 }
+\examples{
+f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic") 
+tac <- load_tac(f_raw_tac)
+
+}
