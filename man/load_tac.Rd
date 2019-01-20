@@ -10,7 +10,8 @@ load_tac(filename, format = "PMOD", acqtimes = NULL,
 \arguments{
 \item{filename}{(e.g. participant.TAC)}
 
-\item{format}{Options include "PMOD", "voistat" (also from PMOD), and "magia"}
+\item{format}{Options include PMOD formats--"PMOD" for .tac, "voistat"; "DFT"
+from TPC, and "magia"}
 
 \item{acqtimes}{Filename for a .acqtimes file (as in PMOD), required for 
 format="voistat"}

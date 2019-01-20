@@ -9,7 +9,8 @@ load_vol(filename, format = "voistat")
 \arguments{
 \item{filename}{(e.g. participant.voistat)}
 
-\item{format}{(default is the TAC .voistat format from PMOD)}
+\item{format}{(default is the TAC .voistat format from PMOD, also accepts 
+"DFT and "BPndPaste")}
 }
 \value{
 data.frame with loaded TAC data

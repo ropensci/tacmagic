@@ -42,3 +42,42 @@ test_that("validate_tac() properly rejects malformed tac objects", {
   expect_error(validate_tac(tac))
 
 })	
+
+test_that("load_tac() properly loads example DFT file", {
+
+  f <- system.file("extdata", "sample.dft", package="tacmagic")
+
+  tac <- load_tac(f, format="DFT")
+
+  expect_equal(TRUE, validate_tac(tac))
+
+  vars <- c("start","end","putam_dx","putam_sin","cereb_.")
+
+  start <- c(0,0.25,0.5,0.75,1,1.5,2,3,4,5,10)
+  end <- c(0.25,0.5,0.75,1,1.5,2,3,4,5,10,15)
+  putam_dx <- c(0,1.24,4.68,12.1,18.9,21.2,24.5,23.7,26.8,25.6,26.60)
+  putam_sin <- c(-0.00918,1.11,4.71,11.5,19.7,25.6,28.7,26.7,29.2,NA,28)
+  cereb_. <- c(0.000298,1.43,5.22,9.87,1.03,9.36,8.69,8.57,6.99,7.05,6.54)
+  ans <- data.frame(start, end, putam_dx, putam_sin, cereb_.)
+  attributes(ans)$tm_type <- "tac"
+  attributes(ans)$time_unit <- "minutes"
+  attributes(ans)$activity_unit <- "kBq/cc"
+
+  expect_equal(ans, tac)
+
+})
+
+test_that("load_vol() properly loads example DFT file", {
+
+  f <- system.file("extdata", "sample.dft", package="tacmagic")
+  vol <- load_vol(f, format="DFT")
+
+  vars <- c("putam_dx", "putam_sin", "cereb_.")
+  actual_vols <- c(675.2, 712.8, 9167.1)
+  ans <- data.frame(row.names=vars, volume=actual_vols)
+
+  expect_equal(vol, ans)
+
+})
+
+

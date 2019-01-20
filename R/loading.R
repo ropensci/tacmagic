@@ -16,7 +16,8 @@
 #'
 #'@export
 #'@param filename (e.g. participant.TAC)
-#'@param format Options include "PMOD", "voistat" (also from PMOD), and "magia"
+#'@param format Options include PMOD formats--"PMOD" for .tac, "voistat"; "DFT"
+#'              from TPC, and "magia"
 #'@param acqtimes Filename for a .acqtimes file (as in PMOD), required for 
 #'                format="voistat"
 #'@param time_unit NULL if in file (e.g. PMOD .tac), or set to "seconds" or 
@@ -48,19 +49,23 @@ load_tac <- function(filename, format="PMOD", acqtimes=NULL, time_unit=NULL,
       
       tac <- load_tac_voistat(filename, acqtimes)
     
-    } else if (format == "magia") {
+  } else if (format == "magia") {
     
-        if ((is.null(time_unit) | is.null(activity_unit))) {
-          stop("You must specify both time and activity units.")
-        }
+      if ((is.null(time_unit) | is.null(activity_unit))) {
+        stop("You must specify both time and activity units.")
+      }
     
-        tac <- load_tac_magia(filename)
+      tac <- load_tac_magia(filename)
     
-      } else stop("Specified format for tac not supported.")
+  } else if (format == "DFT") {
+
+      tac <- load_tac_DFT(filename)
+
+  } else stop("Specified format for tac not supported.")
 
   attributes(tac)$tm_type <- "tac"
   if (!is.null(time_unit)) attributes(tac)$time_unit <- time_unit
-  if (!is.null(time_unit)) attributes(tac)$activity_unit <- activity_unit
+  if (!is.null(activity_unit)) attributes(tac)$activity_unit <- activity_unit
   validate_tac(tac)
   return(tac)
 }
@@ -77,7 +82,8 @@ load_tac <- function(filename, format="PMOD", acqtimes=NULL, time_unit=NULL,
 #' 
 #' vol <- load_vol(f_raw_vol)
 #'@param filename (e.g. participant.voistat)
-#'@param format (default is the TAC .voistat format from PMOD)
+#'@param format (default is the TAC .voistat format from PMOD, also accepts 
+#'              "DFT and "BPndPaste")
 #'@return data.frame with loaded TAC data
 #'@family Loading functions
 load_vol <- function(filename, format="voistat") {
@@ -85,6 +91,8 @@ load_vol <- function(filename, format="voistat") {
       volumes <- volumesFromVoistatTAC(filename)
   } else if (format == "BPndPaste") {
       volumes <- volumesFromBPndPaste(filename)
+  } else if (format == "DFT") {
+      volumes <- load_vol_DFT(filename)
   } else stop("Specified format for volume data not supported.")
     
   return(volumes)
