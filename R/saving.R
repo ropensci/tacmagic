@@ -20,7 +20,7 @@
 #'@return Does not return an object, only saves a file
 save_tac <- function(tac, outfile) {
 
-	validate_tac(tac)
+	if (!(validate_tac(tac))) stop("Invalid tac object supplied.")
 
 	if (!((class(outfile) == "character") & (length(outfile) == 1))) {
 		stop("outfile must be a character string")

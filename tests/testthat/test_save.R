@@ -4,7 +4,6 @@ context("SUVR calculation")
 
 test_that("save_tac() gives error if outfile is bad format", {
 
-  tmp <- tempfile()
   f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic") 
   tac <- load_tac(f_raw_tac)
   expect_error(save_tac(tac, c("hi", "bye")))

@@ -84,32 +84,6 @@ test_that("tac_roi() can load magia matlab files to the proper format", {
 
 })	
 
-test_that("validate_tac() successfully rejects bad files", {
-
-  # good files are tested in tests above
-
-  f_ans_nc <- system.file("extdata", "AD06_man_fullROI.csv", 
-                          package="tacmagic")
-  ans_nc <- read.csv(f_ans_nc)
-  
-  expect_error(validate_tac(ans_nc))
-
-  attributes(ans_nc)$time_unit <- "sec"
-  attributes(ans_nc)$activity_unit <- "kBq/cc"
-  attributes(ans_nc)$tm_type <- "tac"
-
-  expect_error(validate_tac(ans_nc))
-
-  ans_nc <- read.csv(f_ans_nc)
-  ans_nc <- ans_nc[,-(1:2)]
-  attributes(ans_nc)$time_unit <- "seconds"
-  attributes(ans_nc)$activity_unit <- "kBq/cc"
-  attributes(ans_nc)$tm_type <- "tac"
-
-  expect_error(validate_tac(ans_nc))
-
-})
-
 test_that("plot_tac runs without error and contains correct axis label", {
 
 

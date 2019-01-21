@@ -66,7 +66,7 @@ load_tac <- function(filename, format="PMOD", acqtimes=NULL, time_unit=NULL,
   attributes(tac)$tm_type <- "tac"
   if (!is.null(time_unit)) attributes(tac)$time_unit <- time_unit
   if (!is.null(activity_unit)) attributes(tac)$activity_unit <- activity_unit
-  validate_tac(tac)
+  if (!(validate_tac(tac))) stop("TAC object created by load_tac was invalid.")
   return(tac)
 }
 

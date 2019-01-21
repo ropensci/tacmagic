@@ -11,27 +11,33 @@
 #' @noRd
 validate_tac <- function(tac) {
   # are first 2 variables "start" and "end"
+
+  status <- TRUE
+
   if (FALSE == (startsWith(names(tac)[1], "start") && 
                 startsWith(names(tac)[2], "end"))) {
-    stop("The first two columns of the TAC file should be start and end times, 
-          with headers starting with 'start' and 'end'.")
+    message("The first two columns of the TAC file should be start and end 
+             times, with headers starting with 'start' and 'end'.")
+    status <- FALSE
   }
 
   # Are the correct attributes set
   if (!(attributes(tac)$tm_type == "tac")) {
-    stop("The tac data should have attribute tm_type=tac")
+    message("TAC data should have attribute tm_type=tac")
+    status <- FALSE
   }
 
   if (!(attributes(tac)$time_unit %in% c("seconds", "minutes"))) {
-    stop("The tac data missing attribute time_unit (\"seconds\"/\"minutes\")")
+    message("TAC data missing attribute time_unit")
+    status <- FALSE
   }
 
   if (!(attributes(tac)$activity_unit %in% c("kBq/cc", "nCi/cc", "Bq/cc"))) {
-    stop("The tac data missing attribute activity_unit e.g. kBq/cc, nCi/cc, 
-          Bq/cc")
+    message("TAC data missing attribute activity_unit")
+    status <- FALSE
   }
 
-  return(TRUE)
+  return(status)
 }
 
 #### PMOD file types ----------------------------------------------------------
