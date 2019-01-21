@@ -14,14 +14,26 @@
 
 #' Loads TAC from file for use by other functions (default is PMOD .tac format)
 #'
+#' This is the main function for loading an individual participant's TAC data.
+#' The minimal required information within the supplied files is the start and 
+#' stop times and a time unit (either seconds or minutes), as well as the 
+#' activity values for 1 or more ROIs, and units for activity. The currently 
+#' supported formats (with the corresponding format argument), include:
+#' \itemize{
+#'   \item "PMOD": PMOD .tac files
+#'   \item "voistat": PMOD TAC .voistat files used in combination with PMOD 
+#'          .acqtimes file for start/stop times.
+#'   \item "magia": magia pipeline .mat tac file
+#'   \item "DFF": Turku PET Centre's DFT format
+#' }
+#' 
 #'@export
-#'@param filename (e.g. participant.TAC)
-#'@param format Options include PMOD formats--"PMOD" for .tac, "voistat"; "DFT"
-#'              from TPC, and "magia"
+#'@param filename (e.g. "participant01.tac")
+#'@param format A character string, with options listed above (e.g. "PMOD")
 #'@param acqtimes Filename for a .acqtimes file (as in PMOD), required for 
 #'                format="voistat"
 #'@param time_unit NULL if in file (e.g. PMOD .tac), or set to "seconds" or 
-#'                 "minutes"
+#'                 "minutes" if not in file or to override file
 #'@param activity_unit NULL if in file (e.g. PMOD .tac), or set to "kBq/cc", 
 #'                     "Bq/cc", "nCi/cc"
 #'@return data.frame with loaded TAC data
