@@ -39,7 +39,7 @@
 #'                   SUVR_def=c(3000,3300,3600), k2prime=0.2, t_star=23)
 #'
 batch_tm <- function(all_tacs, models=c("SUVR", "Logan"), ref, SUVR_def=NULL, 
-                     k2prime=NULL, t_star=NULL, master=NULL,
+                     k2prime=NULL, t_star=NULL,
                      custom_model=NULL, custom_params=NULL) {
 
   #----------------------------------------------------------------------------
@@ -49,6 +49,7 @@ batch_tm <- function(all_tacs, models=c("SUVR", "Logan"), ref, SUVR_def=NULL,
   all_models <- names(model_definitions())
   if (!(all(models %in% all_models))) stop("Invalid model name(s) supplied.")
   
+  master <- NULL
   
   # Run each model from available models --------------------------------------
   for (this_model in models) {

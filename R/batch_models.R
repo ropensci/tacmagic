@@ -52,10 +52,10 @@ model_batch <- function(all_tacs, model=NULL, params) {
 
   # Runs through each participant to calculate the model and store the values--
   for (i in seq_along(participants)) {
-    message(paste("Working on...", participants[i]))
+    #message(paste("Working on...", participants[i]))
         
     tac_data <- all_tacs[[i]]    
-    VALUE <- model_fn(tac_data, params=params)
+    VALUE <- suppressMessages(model_fn(tac_data, params=params))
     master[participants[i], ] <- t(VALUE)
   }
 

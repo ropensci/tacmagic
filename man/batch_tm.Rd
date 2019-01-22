@@ -5,8 +5,8 @@
 \title{Calculate one or more models for a batch of participants}
 \usage{
 batch_tm(all_tacs, models = c("SUVR", "Logan"), ref, SUVR_def = NULL,
-  k2prime = NULL, t_star = NULL, master = NULL,
-  custom_model = NULL, custom_params = NULL)
+  k2prime = NULL, t_star = NULL, custom_model = NULL,
+  custom_params = NULL)
 }
 \arguments{
 \item{all_tacs}{A list by participant, of tac data (load_batch())}
@@ -20,8 +20,6 @@ batch_tm(all_tacs, models = c("SUVR", "Logan"), ref, SUVR_def = NULL,
 \item{k2prime}{Fixed k2' for DVR calculation}
 
 \item{t_star}{Change from 0 to manually specify a t* for DVR calculation}
-
-\item{master}{Optionally, a data.frame of same format as return, to add to}
 
 \item{custom_model}{A function that can be run like other models (advanced)}
 
