@@ -26,25 +26,27 @@ model_definitions <- function() {
 #' See suvr() for how SUVR is calculated.
 #'
 #'@param all_tacs A list of tac data.frames (e.g. from load_batch())
-#'@param model The chosen model e.g. "SUVR"
-#'@param SUVR_def is a vector of the start times for window to be used in SUVR
-#'@param ref The name of the reference region for SUVR calculation
-#'@param k2prime A fixed value for k2' must be specified (e.g. 0.2)
-#'@param t_star If 0, t* will be calculated using find_t_star()
+#'@param model Either a character string representing an available model, 
+#'             e.g."SUVR", or a custom function passed to it from batch_tm
+#'@param params Parameters passed from batch_tm()
 #'@return A data.frame of SUVR values for the ROIs for all participants
 #'@noRd
-model_batch <- function(all_tacs, model, 
-                        ref=NULL, SUVR_def=NULL, k2prime=NULL, t_star=NULL) {
+model_batch <- function(all_tacs, model=NULL, params) {
 
   # Specify function to use (except Logan, which needs different params) ------
-  fn_list <- model_definitions()
-  model_fn <- fn_list[[model]]
+  if (class(model) == "function") {
+    model_fn <- model
+  } else if (class(model)=="character") {
+      fn_list <- model_definitions()
+      model_fn <- fn_list[[model]]
+  }
+
   participants <- names(all_tacs)
 
   # Empty data.frame to store the calculated values----------------------------
   tac_data1 <- all_tacs[[1]]
   master <- as.data.frame(matrix(nrow = length(participants), 
-                   ncol=(length(names(tac_data1))-2) ))
+                          ncol=(length(names(tac_data1))-2) ))
   names(master) <- names(tac_data1)[3:length(names(tac_data1))]
   row.names(master) <- participants
 
@@ -52,11 +54,8 @@ model_batch <- function(all_tacs, model,
   for (i in seq_along(participants)) {
     message(paste("Working on...", participants[i]))
         
-    tac_data <- all_tacs[[i]]
-        
-    if (model == "Logan") {
-      VALUE <- model_fn(tac_data, ref=ref, k2prime=k2prime, t_star=t_star)
-      } else VALUE <- model_fn(tac_data, SUVR_def=SUVR_def, ref=ref) 
+    tac_data <- all_tacs[[i]]    
+    VALUE <- model_fn(tac_data, params=params)
     master[participants[i], ] <- t(VALUE)
   }
 

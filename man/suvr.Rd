@@ -4,14 +4,17 @@
 \alias{suvr}
 \title{Calculate weighted SUVRs for specified regions of interest}
 \usage{
-suvr(tac, SUVR_def, ref)
+suvr(tac, SUVR_def = NULL, ref = NULL, params = NULL)
 }
 \arguments{
 \item{tac}{The time-activity curve data from tac_roi()}
 
 \item{SUVR_def}{a vector of start times for window to be used in SUVR}
 
-\item{ref}{is a string, e.g. "cerbellum", to specify reference region}
+\item{ref}{a string, e.g. "cerbellum", to specify reference region}
+
+\item{params}{a list of paramters passed from the batch_tm function and is
+not needed when calling for individual participants.}
 }
 \value{
 A data.frame of SUVR values for the specified ROIs
