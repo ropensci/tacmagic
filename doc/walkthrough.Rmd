@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-This vignette demonstrates the main features of tacmagic. There are two approaches to using the tacmagic package: either by loading participant data individually and using the various functions to analyze it, or via the batch functions to list and analyze data from multiple participants. Here, to illustrate the main features of tacmagic, we will cover the analysis of a single participant, with an explanation of the batch mode at the end.
+There are two approaches to using the tacmagic package to analyze PET time-activity curve data: either by loading participant data individually and using the various functions to analyze it, or via the batch functions to list and analyze data from multiple participants. Here, we illustrate the main features of tacmagic, by walking through the analysis of a single participant. We provide an explanation of the batch mode at the end.
 
 ## Background
 
@@ -33,7 +33,11 @@ The sample data for this analysis uses an anonymized scans of a participant with
 
 ### Data loading
 
-Time-activity curve data is loaded via `load_tac()`, regardless of format, which is specified by the `format` parameter. In addition to time activity curve (tac) data for 1 or more region of interest (ROI), the start and stop times of each frame are required. This information may be in 1 or more files depending on the software that created it. For example, PMOD's .tac files contain all of the information, but the tac .voistat files do not contain start and stop times, but this information could be specified using a .acqtimes file. Support is also available for DFT format, which contains both TAC and volume data.
+Time-activity curve (TAC) data is loaded via `load_tac()`, which is a wrapper for format-specific functions. To specify which file format the tac data is stored as, use the `format` parameter. Supported formats can be viewed in `help(load_tac())`.
+
+The minimal amount of information required is the TAC data for one or more ROI, including the start and stop times of each frame, the time units and the activity units. This information may be in 1 or more files depending on the format and software that created it. 
+
+For example, PMOD's `.tac` files contain all of the information, but the TAC .voistat files do not contain start and stop times, but this information could be specified using a `.acqtimes` file. Support is also available for DFT format, which contains both TAC and volume data.
 
 We processed the PIB PET and T1 MRI data with the [PMOD](https://www.pmod.com/) PNEURO software suite to produce a `.tac` file with tacs for all ROIs in the Hammer's atlas. The `.tac` file can be loaded with `load_tac()`:
 
@@ -74,7 +78,7 @@ AD06_tac_magia[1:5,1:5]
 
 Often it is desirable to combine tac ROIs into larger ROIs. For example, if the PET analysis pipeline created tacs for each atlas ROI, your analysis may call for merging these atomic ROIs into larger regions, such as merging all of the atlas ROIs that make up the frontal lobe into a single frontal lobe ROI.
 
-If this is done, the means must be weighted for the relative volumes of the atomic ROIs. If volume information is available, `tac_roi()` provides this functionality.
+If this is done, the means should be weighted for the relative volumes of the atomic ROIs. If volume information is available, `tac_roi()` provides this functionality.
 
 In PMOD's software, volume information is available in `.voistat` files. Units do not matter because it is the relative volume information that is needed.
 
