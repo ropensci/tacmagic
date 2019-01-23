@@ -42,6 +42,8 @@ suvr <- function(tac, SUVR_def=NULL, ref=NULL, params=NULL) {
       SUVR_def <- params$SUVR
     }
 
+    #TODO: validate that SUVR_def is suitable
+
     SUVRtable <- new_table(tac, "SUVR")
     
     # TODO validate that t1$start and t2$end are numeric

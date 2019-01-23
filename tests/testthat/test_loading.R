@@ -45,7 +45,21 @@ test_that("validate_tac() properly rejects malformed tac objects", {
   expect_message(validate_tac(tac))
   expect_equal(FALSE, validate_tac(tac))
 
+  
+
 })	
+
+test_that("load_tac() gives proper errors and warnings", {
+
+  f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic") 
+
+  expect_warning(load_tac(f_raw_tac, time_unit="minutes"))
+  expect_warning(load_tac(f_raw_tac, activity_unit="kBq/cc"))
+
+  expect_error(load_tac(f_raw_tac, format="magia"))
+  expect_error(load_tac(f_raw_tac, format="solidgold"))
+
+})
 
 test_that("load_tac() properly loads example DFT file", {
 
@@ -82,6 +96,15 @@ test_that("load_vol() properly loads example DFT file", {
 
   expect_equal(vol, ans)
 
+})
+
+test_that("load_vol() gives suitable errors", {
+
+  f_raw_vol <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
+
+  vol <- load_vol(f_raw_vol)
+
+  expect_error(load_vol(f_raw_vol), format="titanium")
 })
 
 
