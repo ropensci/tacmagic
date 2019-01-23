@@ -102,9 +102,7 @@ test_that("load_vol() gives suitable errors", {
 
   f_raw_vol <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
 
-  vol <- load_vol(f_raw_vol)
-
-  expect_error(load_vol(f_raw_vol), format="titanium")
+  expect_error(load_vol(f_raw_vol, format="titanium"))
 })
 
 
