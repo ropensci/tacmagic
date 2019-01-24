@@ -36,6 +36,11 @@ test_that("validate_tac() properly rejects malformed tac objects", {
   expect_equal(FALSE, validate_tac(tac))
 
   tac <- load_tac(f_raw_tac)
+  attributes(tac)$activity_unit <- "nogood"
+  expect_message(validate_tac(tac))
+  expect_equal(FALSE, validate_tac(tac))
+
+  tac <- load_tac(f_raw_tac)
   names(tac)[1] <- "mid"
   expect_message(validate_tac(tac))
   expect_equal(FALSE, validate_tac(tac))
@@ -44,9 +49,7 @@ test_that("validate_tac() properly rejects malformed tac objects", {
   names(tac)[2] <- "mid"
   expect_message(validate_tac(tac))
   expect_equal(FALSE, validate_tac(tac))
-
   
-
 })	
 
 test_that("load_tac() gives proper errors and warnings", {
@@ -106,3 +109,26 @@ test_that("load_vol() gives suitable errors", {
 })
 
 
+test_that("load_tac_PMOD() can deal with seconds and minutes", {
+
+  f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic") 
+  a <- read.csv(f_raw_tac, sep="\t")
+  expect_equal(names(a)[1], "start.seconds.")
+  names(a)[1] <- "start.minutes."
+  tmp <- tempfile()
+  write.table(a, tmp, row.names=FALSE, sep="\t")
+  
+  fake_minutes <- load_tac(tmp)
+  expect_equal(attributes(fake_minutes)$time_unit, "minutes")
+
+  names(a)[1] <- "start.invalid."
+  write.table(a, tmp, row.names=FALSE, sep="\t")
+  expect_error(load_tac(tmp))
+
+  a <- read.csv(f_raw_tac, sep="\t")
+  expect_equal(names(a)[2], "end.kBq.cc.")
+  names(a)[2] <- "end.invalid."
+  write.table(a, tmp, row.names=FALSE, sep="\t")
+  expect_error(load_tac(tmp))
+
+})

@@ -66,6 +66,8 @@ test_that("tac_roi() accurately calculates weighted averages from PMOD .voistat
   expect_equal(validate_tac(AD06_tac_nc_vs), TRUE)
   expect_equal(validate_tac(AD06_tac_pvc_vs), TRUE)
 
+
+
 })
 
 test_that("tac_roi() can load magia matlab files to the proper format", {
@@ -136,5 +138,15 @@ test_that("plot_tac with 2 tacs and conversion runs without error and
   
   expect_equal(unlist(p)[[123]], "Time (seconds)")
   expect_equal(unlist(p)[[37]], 4800) #4800 secs on last walk
+
+})
+
+test_that("load_tac_voistat procudes errors appropriately", {
+
+  f_acq_bad <- system.file("extdata", "AD06_invalid.acqtimes", 
+                           package="tacmagic")
+  f_voistat <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
+
+  expect_error(load_tac(f_voistat, format="voistat", acqtimes=f_acq_bad))
 
 })
