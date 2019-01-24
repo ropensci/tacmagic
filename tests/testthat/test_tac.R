@@ -66,7 +66,26 @@ test_that("tac_roi() accurately calculates weighted averages from PMOD .voistat
   expect_equal(validate_tac(AD06_tac_nc_vs), TRUE)
   expect_equal(validate_tac(AD06_tac_pvc_vs), TRUE)
 
+})
 
+test_that("tac_roi() rejects a bad tac", {
+
+  f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic") 
+  f_voistat <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
+
+  tac_good <- load_tac(f_raw_tac)
+  tac_bad <- tac_good
+  attributes(tac_bad)$tm_type <- "fail"  # ruin the tac object
+
+  vol <- load_vol(f_voistat)
+
+  expect_error(tac_roi(tac_bad, vol, roi_ham_full(), merge=F, PVC=F))
+
+  expect_error(plot_tac(tac_good, tac_bad, ROI=c("Amygdala_l", "Hippocampus_l"),
+                        title="Example Plot"))
+
+  expect_error(plot_tac(tac_bad, tac_good, ROI=c("Amygdala_l", "Hippocampus_l"),
+                        title="Example Plot"))
 
 })
 
@@ -100,18 +119,28 @@ test_that("plot_tac runs without error and contains correct axis label", {
   on.exit(dev.off())
   dev.control(displaylist="enable")
 
-  plot_tac(AD06_tac_nc, ROIs=c("frontal", "cerebellum"), title="Example Plot")
+  plot_tac(AD06_tac_nc, ROIs=c("frontal", "cerebellum"), time="minutes", 
+           title="Example Plot")
 
   p <- recordPlot()
   
   expect_equal(unlist(p)[[123]], "Time (minutes)")
   expect_equal(unlist(p)[[37]], 80) # 80 mins last value on x-axis
 
+  pdf(NULL)
+  on.exit(dev.off())
+  dev.control(displaylist="enable")
+
+  plot_tac(AD06_tac_nc, ROIs=c("frontal", "cerebellum"), time="seconds", 
+           title="Example Plot")
+
+  p <- recordPlot()
+
+  expect_equal(unlist(p)[[123]], "Time (seconds)")
 })
 
 test_that("plot_tac with 2 tacs and conversion runs without error and 
            contains correct axis label", {
-
 
   f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic") 
   f_raw_vol <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
@@ -119,7 +148,6 @@ test_that("plot_tac with 2 tacs and conversion runs without error and
   f_raw_tac2 <- system.file("extdata", "AD07.tac", package="tacmagic") 
   f_raw_vol2 <- system.file("extdata", "AD07_TAC.voistat", package="tacmagic")
  
-
   tac <- load_tac(f_raw_tac)
   vol <- load_vol(f_raw_vol)
   AD06_tac_nc <- tac_roi(tac, vol, roi_ham_full(), merge=FALSE, PVC=FALSE)
@@ -138,6 +166,16 @@ test_that("plot_tac with 2 tacs and conversion runs without error and
   
   expect_equal(unlist(p)[[123]], "Time (seconds)")
   expect_equal(unlist(p)[[37]], 4800) #4800 secs on last walk
+
+  ## and errors
+
+  expect_error(plot_tac(AD06_tac_nc, AD07_tac_nc, 
+                        ROIs=c("notROI", "cerebellum"), 
+                        title="Example Plot", time="seconds"))
+
+  expect_error(plot_tac(AD06_tac_nc, tac, 
+                        ROIs=c("frontal", "cerebellum"), 
+                        title="Example Plot", time="seconds"))
 
 })
 
