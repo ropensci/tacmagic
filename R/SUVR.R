@@ -13,8 +13,11 @@
 #'@export 
 #'@param tac The time-activity curve data from tac_roi()
 #'@param SUVR_def a vector of start times for window to be used in SUVR
-#'@param ref is a string, e.g. "cerbellum", to specify reference region
+#'@param ref a string, e.g. "cerbellum", to specify reference region
+#'@param params a list of paramters passed from the batch_tm function and is
+#'              not needed when calling for individual participants.
 #'@return A data.frame of SUVR values for the specified ROIs
+#'@family SUVR functions
 #'@examples
 #' f <- system.file("extdata", "AD06.tac", package="tacmagic")
 #' fv <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
@@ -25,7 +28,21 @@
 #' 
 #' AD06_SUVR <- suvr(AD06, SUVR_def=c(3000,3300,3600), ref="cerebellum")
 #' 
-suvr <- function(tac, SUVR_def, ref) {
+suvr <- function(tac, SUVR_def=NULL, ref=NULL, params=NULL) {
+
+    if (!(is.null(params))) {
+      if(!is.null(c(SUVR_def, ref))) {
+        stop("Only provide either params argument or both SUVR_def and ref.")
+      } 
+      if ( is.null(params$SUVR_def) | is.null(params$ref) ) {
+        stop("Both SUVR_def and ref are needed to calculate SUVR.")
+      }
+      
+      ref <- params$ref
+      SUVR_def <- params$SUVR
+    }
+
+    #TODO: validate that SUVR_def is suitable
 
     SUVRtable <- new_table(tac, "SUVR")
     
@@ -51,6 +68,7 @@ suvr <- function(tac, SUVR_def, ref) {
 #'@param tac The time-activity curve data from tac_roi()
 #'@param SUVR_def a vector of start times for window to be used in SUVR
 #'@param ref is a string, e.g. "cerbellum", to specify reference region
+#'@family SUVR functions
 #'@return A data.frame of SUVR values for the specified ROIs
 #' #' f <- system.file("extdata", "AD06.tac", package="tacmagic")
 #' fv <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")

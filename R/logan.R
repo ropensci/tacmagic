@@ -26,6 +26,7 @@
 #'@param error For find_t_star()
 #'@param method Method of inntegration, "trapz" or "integrate"
 #'@return Data frame with calculate DVRs for all ROIs
+#'@family Logan plot functions
 #'@examples
 #' f <- system.file("extdata", "AD06.tac", package="tacmagic")
 #' fv <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
@@ -54,12 +55,15 @@ DVR_ref_Logan <- function(tac_data, target, ref, k2prime, t_star, error=0.10,
 #'
 #'@export
 #'@param tac_data The time-activity curve data from tac_roi()
-#'@param ref The reference region, e.g. "cerebellum"
-#'@param k2prime A fixed value for k2' must be specified (e.g. 0.2)
-#'@param t_star If 0, t* will be calculated using find_t_star()
+#'@param ref Required -- The reference region, e.g. "cerebellum"
+#'@param k2prime Required -- A fixed value for k2' must be specified (e.g. 0.2)
+#'@param t_star Required -- If 0, t* will be calculated using find_t_star()
 #'@param error For find_t_star()
 #'@param method Method of inntegration, "trapz" or "integrate"
+#'@param params Used by batch_tm (not for calling individually) to pass model
+#'              parameters
 #'@return Data frame with calculate DVRs for all ROIs
+#'@family Logan plot functions
 #'@examples
 #' f <- system.file("extdata", "AD06.tac", package="tacmagic")
 #' fv <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
@@ -70,28 +74,43 @@ DVR_ref_Logan <- function(tac_data, target, ref, k2prime, t_star, error=0.10,
 #' 
 #' AD06_DVR <- DVR_all_ref_Logan(AD06, ref="cerebellum", k2prime=0.2, t_star=23)
 #' 
-DVR_all_ref_Logan <- function(tac_data, ref, k2prime, t_star, error=0.10, 
-                              method="trapz") {
+DVR_all_ref_Logan <- function(tac_data, 
+                              ref=NULL, k2prime=NULL, t_star=NULL, 
+                              error=0.10, method="trapz", params=NULL) {
     
-    DVRtable <- new_table(tac_data, "DVR")
-    
-    ROIs <- names(tac_data)[3:length(names(tac_data))]
-    for (ROI in ROIs) {
-        message(paste("Trying", ROI))
-        if (any(is.na(tac_data[,ROI]))) {
-          attempt <- NA
-        } else {
-            attempt <- try(DVR_ref_Logan(tac_data, target=ROI, ref=ref,
-                                         k2prime=k2prime, t_star=t_star, 
-                                         error=error, method=method))
-            if (class(attempt) == "try-error") {
-              attempt <- NA
-            }  
-        }
-        
-        DVRtable[ROI, "DVR"] <- attempt
+  if (!is.null(params)) {
+  if(!is.null(c(ref, k2prime, t_star))) {
+    stop("Provide EITHER params or ALL of ref, k2prime and t_star")
+  } 
+  if (any(is.null(params$ref), is.null(params$k2prime), 
+      is.null(params$t_star))) {
+        stop("Provide ALL of ref, k2prime and t_star")
+      }
+      ref <- params$ref
+      k2prime <- params$k2prime
+      t_star <- params$t_star
     }
-    return(DVRtable)
+
+  DVRtable <- new_table(tac_data, "DVR")
+    
+  ROIs <- names(tac_data)[3:length(names(tac_data))]
+  for (ROI in ROIs) {
+    message(paste("Trying", ROI))
+    if (any(is.na(tac_data[,ROI]))) {
+      attempt <- NA
+    } else {
+        attempt <- try(DVR_ref_Logan(tac_data, target=ROI, ref=ref,
+                                     k2prime=k2prime, t_star=t_star, 
+                                     error=error, method=method))
+        if (class(attempt) == "try-error") {
+          attempt <- NA
+        }  
+      }
+        
+    DVRtable[ROI, "DVR"] <- attempt
+  }
+
+  return(DVRtable)
 }
 
 
@@ -107,6 +126,7 @@ DVR_all_ref_Logan <- function(tac_data, ref, k2prime, t_star, error=0.10,
 #'@param t_star If 0, t* will be calculated using find_t_star()
 #'@param error For find_t_star()
 #'@param method Method of inntegration, "trapz" or "integrate"
+#'@family Logan plot functions
 #'@return No return
 #' f <- system.file("extdata", "AD06.tac", package="tacmagic")
 #' fv <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")

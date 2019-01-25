@@ -48,3 +48,8 @@ participants <- c(system.file("extdata", "AD06.tac", package="tacmagic"),
 
 tacs <- batch_load(participants, tac_file_suffix="")
 }
+\seealso{
+Other Batch functions: \code{\link{batch_tm}},
+  \code{\link{batch_voistat}}
+}
+\concept{Batch functions}

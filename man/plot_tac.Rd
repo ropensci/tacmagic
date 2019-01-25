@@ -21,7 +21,7 @@ plot_tac(TACtable1, TACtable2 = NULL, ROIs, ymax = 25,
 \item{title}{A title for the plot}
 }
 \value{
-Creates a plot.
+Creates a plot
 }
 \description{
 Plots time activity curves from 1 or 2 participants or groups.
@@ -36,3 +36,8 @@ vol <- load_vol(f_raw_vol)
 AD06_tac_nc <- tac_roi(tac, vol, roi_ham_full(), merge=FALSE, PVC=FALSE)
 plot_tac(AD06_tac_nc, ROIs=c("frontal", "cerebellum"), title="Example Plot")
 }
+\seealso{
+Other tac functions: \code{\link{save_tac}},
+  \code{\link{tac_roi}}
+}
+\concept{tac functions}

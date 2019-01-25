@@ -41,3 +41,8 @@ AD06_DVR_fr <- DVR_ref_Logan(AD06, target="frontal", ref="cerebellum",
                              k2prime=0.2, t_star=0) 
                             
 }
+\seealso{
+Other Logan plot functions: \code{\link{DVR_all_ref_Logan}},
+  \code{\link{plot_ref_Logan}}
+}
+\concept{Logan plot functions}

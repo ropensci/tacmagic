@@ -4,21 +4,24 @@
 \alias{DVR_all_ref_Logan}
 \title{Non-invasive reference Logan method for all ROIs in tac data}
 \usage{
-DVR_all_ref_Logan(tac_data, ref, k2prime, t_star, error = 0.1,
-  method = "trapz")
+DVR_all_ref_Logan(tac_data, ref = NULL, k2prime = NULL,
+  t_star = NULL, error = 0.1, method = "trapz", params = NULL)
 }
 \arguments{
 \item{tac_data}{The time-activity curve data from tac_roi()}
 
-\item{ref}{The reference region, e.g. "cerebellum"}
+\item{ref}{Required -- The reference region, e.g. "cerebellum"}
 
-\item{k2prime}{A fixed value for k2' must be specified (e.g. 0.2)}
+\item{k2prime}{Required -- A fixed value for k2' must be specified (e.g. 0.2)}
 
-\item{t_star}{If 0, t* will be calculated using find_t_star()}
+\item{t_star}{Required -- If 0, t* will be calculated using find_t_star()}
 
 \item{error}{For find_t_star()}
 
 \item{method}{Method of inntegration, "trapz" or "integrate"}
+
+\item{params}{Used by batch_tm (not for calling individually) to pass model
+parameters}
 }
 \value{
 Data frame with calculate DVRs for all ROIs
@@ -38,3 +41,8 @@ AD06 <- tac_roi(tac=AD06_tac, volumes=AD06_volume, ROI_def=roi_ham_pib(),
 AD06_DVR <- DVR_all_ref_Logan(AD06, ref="cerebellum", k2prime=0.2, t_star=23)
 
 }
+\seealso{
+Other Logan plot functions: \code{\link{DVR_ref_Logan}},
+  \code{\link{plot_ref_Logan}}
+}
+\concept{Logan plot functions}

@@ -28,3 +28,8 @@ f <- system.file("extdata", "AD06_BPnd_BPnd_Logan.voistat",
                  package="tacmagic")
 vs <- load_voistat(f, ROI_def=roi_ham_pib(), model="Logan")
 }
+\seealso{
+Other Loading functions: \code{\link{load_tac}},
+  \code{\link{load_vol}}
+}
+\concept{Loading functions}

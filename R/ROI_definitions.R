@@ -14,6 +14,7 @@
 #'@export
 #'@return A list of lists, where each list is an ROI (e.g.) frontal lobe that 
 #' specifies the atomic ROIs from the atlas that make it up.
+#'@family ROI definitions
 #'@examples 
 #' roi_ham_stand()
 roi_ham_stand <- function() {
@@ -75,6 +76,7 @@ roi_ham_stand <- function() {
 #'@export
 #'@return A list of lists, where each list is an ROI (e.g.) frontal lobe that 
 #' specifies the atomic ROIs from the atlas that make it up.
+#'@family ROI definitions
 #'@examples roi_ham_full()
 roi_ham_full <- function() {
 
@@ -104,6 +106,7 @@ roi_ham_full <- function() {
 #'@export
 #'@return A list of lists, where each list is an ROI (e.g.) frontal lobe that 
 #' specifies the atomic ROIs from the atlas that make it up.
+#'@family ROI definitions
 #'@examples 
 #' roi_ham_pib()
 roi_ham_pib <- function() {

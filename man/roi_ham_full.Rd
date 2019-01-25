@@ -17,3 +17,8 @@ It can be modified to suit the user's needs.
 \examples{
 roi_ham_full()
 }
+\seealso{
+Other ROI definitions: \code{\link{roi_ham_pib}},
+  \code{\link{roi_ham_stand}}
+}
+\concept{ROI definitions}

@@ -22,3 +22,7 @@ function takes the ROI-based cutoff-values, e.g. from cutoff_aiz(), and
 returns a table specifying which participants are positive, i.e. which have
 at least one ROI greater than the cutoff.
 }
+\seealso{
+Other Cutoff functions: \code{\link{cutoff_aiz}}
+}
+\concept{Cutoff functions}

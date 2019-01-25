@@ -71,7 +71,8 @@ tac_roi <- function(tac, volumes, ROI_def, merge, PVC) {
 #'@param ymax The maximum value on the y-axis
 #'@param time "seconds" or "minutes" depending on desired x-axis, converts tac
 #'@param title A title for the plot
-#'@return Creates a plot.
+#'@return Creates a plot
+#'@family tac functions 
 #'@examples
 #' # f_raw_tac and f_raw_vol are the filenames of PMOD-generated files
 #' f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic") 
@@ -84,6 +85,8 @@ tac_roi <- function(tac, volumes, ROI_def, merge, PVC) {
 plot_tac <- function(TACtable1, TACtable2=NULL, ROIs, ymax=25, 
                      time="minutes", title="") {
   
+  if (!all(ROIs %in% names(TACtable1))) stop("ROIs are not in TACtable1")
+
   if (!validate_tac(TACtable1)) stop("The 1st tac object did not validate.")
   if (!is.null(TACtable2)) {
     if (!validate_tac(TACtable2)) stop("The 2nd tac object did not validate.")
@@ -129,6 +132,8 @@ plot_tac <- function(TACtable1, TACtable2=NULL, ROIs, ymax=25,
     
     # Only if 2nd TAC table is provided, plots second on same plot
     if (is.data.frame(TACtable2)) {
+      if (!all(ROIs %in% names(TACtable2))) stop("ROIs are not in TACtable2")
+      compare_tac_form(TACtable1, TACtable2)
       lines(x=TACtable2$start/time_conversion, 
             y=TACtable2[,ROIs[ROI]], 
             type='o', 
