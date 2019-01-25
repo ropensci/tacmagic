@@ -2,27 +2,43 @@
 
 [![Build Status](https://travis-ci.org/eebrown/PET.svg?branch=master)](https://travis-ci.org/eebrown/PET) [![Coverage status](https://codecov.io/gh/eebrown/PET/branch/master/graph/badge.svg)](https://codecov.io/github/eebrown/PET?branch=master)
 
-Aiming to improve openness, replicability, and ease of use, tacmagic facilitates loading and analyzing positron emission tomography data for various sources and formats. This then enables subsequent statistical calculations to answer research questions.
+Aiming to improve openness, replicability, and efficiency, tacmagic facilitates loading and analyzing positron emission tomography data for various sources and formats. This then enables subsequent statistical calculations to answer research questions.
 
+As a ```tacmagic``` is a new package, we strongly recommend checking all work against existing analyses to confirm the results are as expected.
 
+## Installation
+
+Currently, the package can be installed within R from the github repository. The devtools package is required for installation:
+
+```r
+devtools::install_github("eebrown/PET")
+```
 
 ## Features
 
+The features of `tacmagic` are demonstrated in the package's walkthrough vignette, which is highly recommended for first-time uses.
+
 ### Data loading and weighted-averages
+
+Time-activity curve (TAC) and/or region of interest (ROI) volume data can be loaded from various file formats including [PMOD](https://www.pmod.com/web/) .tac and .voistat files, a .mat file from the [magia](http://aivo.utu.fi/magia/) pipeline, and [Turku PET Centre's](http://turkupetcentre.fi) .DFT format. 
+
+This package is not affiliated with any of the above pipelines.
 
 ### Time-activity curve plotting
 
-### SUVR calculation
+Basic plotting of one or more TAC from one or more participants is available.
 
-### Non-invasive Logan reference method
+### Binding potential models
+
+Non-invasive models are implemented including the standardize uptake volume ratio (SUVR )and the non-invasive Logan reference method.
 
 ### Batch and group-wise analysis
 
+Loading and analysis functions can be run as a batch or by individual participant.
+
 ## Licence
 
-If you are interested in this package, or have any questions, suggestions, and especially if you see any problems, please contact me at eb@ericebrown.com. I am interested in improving these scripts and making them more useful. 
-
-    Copyright (C) 2018 Eric Brown
+    Copyright (C) 2018 Eric E. Brown
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
