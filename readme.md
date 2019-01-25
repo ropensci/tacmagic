@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/eebrown/PET.svg?branch=master)](https://travis-ci.org/eebrown/PET) [![Coverage status](https://codecov.io/gh/eebrown/PET/branch/master/graph/badge.svg)](https://codecov.io/github/eebrown/PET?branch=master)
 
-Aiming to improve openness, replicability, and efficiency, tacmagic facilitates loading and analyzing positron emission tomography data for various sources and formats. This then enables subsequent statistical calculations to answer research questions.
+To foster openness, replicability, and efficiency, ```tacmagic``` facilitates loading and analysis of positron emission tomography data in R.
 
 As a ```tacmagic``` is a new package, we strongly recommend checking all work against existing analyses to confirm the results are as expected.
 
@@ -30,7 +30,7 @@ Basic plotting of one or more TAC from one or more participants is available.
 
 ### Binding potential models
 
-Non-invasive models are implemented including the standardize uptake volume ratio (SUVR )and the non-invasive Logan reference method.
+Non-invasive models are implemented including the standardize uptake volume ratio (SUVR) and the non-invasive Logan reference method.
 
 ### Batch and group-wise analysis
 
