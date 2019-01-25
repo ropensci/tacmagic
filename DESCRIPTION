@@ -1,11 +1,13 @@
 Package: tacmagic
 Type: Package
 Title: tacmagic: PET Analysis in R
-Version: 0.1.8.9000
+Version: 0.1.9
 Authors@R: c(person("Eric", "Brown", 
                     role = c("aut", "cre"),
                     email = "eb@ericebrown.com",
-                    comment = c(ORCID = "0000-0002-1575-2606")))
+                    comment = c(ORCID = "0000-0002-1575-2606")),
+             person("Ariel", "Graff-Guerrero",
+                    role = c("dgs")))
 Description: To faciliate analysis of positron emission tomography (PET) time
     activity curve (TAC) data, and to encourage open science and replicability,
     this package supports data loading and analysis of multiple TAC file 
