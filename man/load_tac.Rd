@@ -35,7 +35,7 @@ supported formats (with the corresponding format argument), include:
   \item "voistat": PMOD TAC .voistat files used in combination with PMOD 
          .acqtimes file for start/stop times.
   \item "magia": magia pipeline .mat tac file
-  \item "DFF": Turku PET Centre's DFT format
+  \item "DFT": Turku PET Centre's DFT format
 }
 }
 \examples{
