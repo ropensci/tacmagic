@@ -21,6 +21,10 @@ validate_tac <- function(tac) {
     status <- FALSE
   }
 
+  if (!all(as.character(apply(tac, 2, class)) == "numeric")) {
+   message("All tac columns should be numeric. Check input data.")
+  }
+
   # Are the correct attributes set
   if (!(attributes(tac)$tm_type == "tac")) {
     message("TAC data should have attribute tm_type=tac")
@@ -48,7 +52,7 @@ validate_tac <- function(tac) {
 #' @noRd
 load_tac_PMOD <- function(tac_file) {
 
-  tac <- read.csv(tac_file, sep="")
+  tac <- read.csv(tac_file, sep="", comment.char="#")
 
   if (names(tac)[1] == "start.seconds.") {
     attributes(tac)$time_unit <- "seconds"
@@ -212,10 +216,13 @@ load_tac_DFT <- function(f) {
   header <- load_header_DFT(f) 
   ROIs <- load_ROIs_DFT(header)
 
-  if (header[3,1] == "kBq/ml") {
+  if (header[3,1] %in% c("kBq/ml", "kBq/mL", "kBq/cc")) {
     activity_unit <- "kBq/cc"
+  } else if (header[3,1] %in% c("Bq/ml", "Bq/mL", "Bq/cc")) {
+    activity_unit <- "Bq/cc"
   } else {
-    stop(paste("Was expecting activity units kBq/ml but got", header[3,1]))
+    stop(paste("Was expecting activity units kBq or Bq / ml or cc but got", 
+               header[3,1]))
   }
 
   if (header[4,2] %in% c("(min)")) {
@@ -248,7 +255,7 @@ load_header_DFT <- function(f) {
   
   header <- read.delim(f, nrows=4, header=FALSE, sep="", stringsAsFactors=FALSE)
 
-  if (header[1,1] != "DFT") stop("Bad DFT file: no \"DFT\" string")
+  if (!startsWith(header[1,1], "DFT")) stop("Bad DFT file: no \"DFT\" string")
 
   # This is expected format when there are start and stop times
   if (header[4,1] != "Times") stop("Bad DFT file: expected \"Times\" at 4,1")
