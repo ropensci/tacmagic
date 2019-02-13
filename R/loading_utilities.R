@@ -79,7 +79,7 @@ load_tac_voistat <- function(voistat_file, acqtimes) {
   voistat <- read.csv(voistat_file, sep="\t", skip=6, header=TRUE,
                       stringsAsFactors=FALSE)
 
-  voistat_type <- validateTACvoistat(voistat)
+  voistat_type <- validate_tac_vs(voistat)
   
   if (voistat_type == "invalid") stop("Invalid voistat TAC file.")
 
@@ -107,7 +107,7 @@ load_tac_voistat <- function(voistat_file, acqtimes) {
   }
 
   startend <- load_acq(acqtimes)
-  if (checkACQtimes(startend$start, startend$end, tac$time)) {
+  if (check_times(startend$start, startend$end, tac$time)) {
   tac <- data.frame(startend, tac) 
   } else stop("Supplied acqtimes do not match midframe time data.")
 
@@ -134,7 +134,7 @@ load_acq <- function(acqtimes_file) {
 
 # TAC .voistat files contain volume information for each ROI. This extracts it
 #' @noRd
-volumesFromVoistatTAC <- function(voistat_file) {
+load_vol_vstac <- function(voistat_file) {
     voistat <- read.csv(voistat_file, sep="\t", skip=6, header=TRUE,
                         stringsAsFactors=FALSE)
     # create a list of each unique ROI name
@@ -150,7 +150,8 @@ volumesFromVoistatTAC <- function(voistat_file) {
 # BPnd data can be copied from PNEURO and saved as a CSV. It contains ROI
 # volume information. This extracts that. Not needed unless volume information
 # is otherwise unavailable.
-volumesFromBPndPaste <- function(BPnd_file) {
+#' @noRd
+load_vol_bpndpaste <- function(BPnd_file) {
     BPnd <- read.csv(BPnd_file, header=TRUE, row.names=1)
     return(BPnd["Volume..ccm."])
 }
@@ -161,7 +162,7 @@ volumesFromBPndPaste <- function(BPnd_file) {
 
 # Ensures consistency between start/end and mid-frame times.
 #' @noRd
-checkACQtimes <- function(start, end, mid) {
+check_times <- function(start, end, mid) {
   return(all(mid == ((start + end) / 2)))
 }
 
@@ -169,7 +170,7 @@ checkACQtimes <- function(start, end, mid) {
 # and returns C if there is a PVC value, NC if not, and invalid if headers
 # are not as expected.
 #' @noRd
-validateTACvoistat <- function(voistat) {
+validate_tac_vs <- function(voistat) {
 
   PVC <- c("X...Component..string.", "File..string.", "PatientName..string.", 
            "PatientID..string.", "PatientInfo..string.", 

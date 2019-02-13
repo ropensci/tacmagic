@@ -100,9 +100,9 @@ load_tac <- function(filename, format="PMOD", acqtimes=NULL, time_unit=NULL,
 #'@family Loading functions
 load_vol <- function(filename, format="voistat") {
   if (format == "voistat") {
-      volumes <- volumesFromVoistatTAC(filename)
+      volumes <- load_vol_vstac(filename)
   } else if (format == "BPndPaste") {
-      volumes <- volumesFromBPndPaste(filename)
+      volumes <- load_vol_bpndpaste(filename)
   } else if (format == "DFT") {
       volumes <- load_vol_DFT(filename)
   } else stop("Specified format for volume data not supported.")

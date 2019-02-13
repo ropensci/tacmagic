@@ -180,12 +180,12 @@ ref_Logan_xy <- function(tac, target, ref, k2prime, method) {
 
   if (method == "trapz") {
     frames <- seq_along(mid_time)
-    yA <- vapply(frames, FUN=vAUC, FUN.VALUE=0, x=mid_time, y=tac[,target])
-    xA <- vapply(frames, FUN=vAUC, FUN.VALUE=0, x=mid_time, y=tac[,ref]) + k2r
+    yA <- vapply(frames, FUN=wrap_auc, FUN.VALUE=0, x=mid_time, y=tac[,target])
+    xA <- vapply(frames, FUN=wrap_auc, FUN.VALUE=0, x=mid_time, y=tac[,ref]) + k2r
   } else if (method == "integrate") {
-    yA <- vapply(mid_time, FUN=vintegrate, FUN.VALUE=0, lower=mid_time[1], 
+    yA <- vapply(mid_time, FUN=wrap_integrate, FUN.VALUE=0, lower=mid_time[1], 
                  f=target_tac)
-    xA <- vapply(mid_time, FUN=vintegrate, FUN.VALUE=0, lower=mid_time[1], 
+    xA <- vapply(mid_time, FUN=wrap_integrate, FUN.VALUE=0, lower=mid_time[1], 
                  f=ref_tac) + k2r
   }
 
@@ -246,7 +246,7 @@ find_t_star <- function(x, y, error=0.1) {
 # arguments of integrate() so that upper is the first argument, and returns
 # just the integrate() value.
 #' @noRd
-vintegrate <- function(upper, lower, fn) {
+wrap_integrate <- function(upper, lower, fn) {
     v <- integrate(fn, lower=lower, upper=upper, stop.on.error=FALSE, 
                    subdivisions=10000L)
     return(v$value)
@@ -254,7 +254,7 @@ vintegrate <- function(upper, lower, fn) {
 
 
 #' @noRd
-vAUC <- function(frames,x,y) {
+wrap_auc <- function(frames,x,y) {
     AUC <- pracma::trapz(x[1:frames], y[1:frames])
     return(AUC)
 }
