@@ -115,7 +115,7 @@ test_that("load_tac_PMOD() can deal with seconds and minutes", {
   a <- read.csv(f_raw_tac, sep="\t")
   expect_equal(names(a)[1], "start.seconds.")
   names(a)[1] <- "start.minutes."
-  tmp <- tempfile()
+  tmp <- tempfile(fileext = ".tac")
   write.table(a, tmp, row.names=FALSE, sep="\t")
   
   fake_minutes <- load_tac(tmp)

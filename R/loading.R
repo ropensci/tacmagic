@@ -47,13 +47,23 @@ load_tac <- function(filename, format="PMOD", acqtimes=NULL, time_unit=NULL,
   
   if (format == "PMOD") {
       
-      if (!(is.null(time_unit) & is.null(activity_unit))) {
-        warning("Your specified units will override any data in the files.")
+    if (tools::file_ext(filename) != "tac") {
+      warning("PMOD format was specified,
+               but filename did not end in .tac")
       }
-      
-      tac <- load_tac_PMOD(filename)
 
-  } else if (format == "voistat") {  
+    if (!(is.null(time_unit) & is.null(activity_unit))) {
+      warning("Your specified units will override any data in the files.")
+    }
+      
+    tac <- load_tac_PMOD(filename)
+
+  } else if (format == "voistat") { 
+
+      if (tools::file_ext(filename) != "voistat") {
+        warning("PMOD voistat format was specified, 
+                 but filename did not end in .voistat")
+      } 
       
       if (!(is.null(time_unit) & is.null(activity_unit))) {
         warning("Your specified units will override any data in the files.")
@@ -67,9 +77,18 @@ load_tac <- function(filename, format="PMOD", acqtimes=NULL, time_unit=NULL,
         stop("You must specify both time and activity units.")
       }
     
+      if (tools::file_ext(filename) != "mat") {
+        warning("magia format was specified, but filename did not end in .mat")
+      } 
+
       tac <- load_tac_magia(filename)
     
   } else if (format == "DFT") {
+
+      if (tools::file_ext(filename) != "dft") {
+        warning("DFT format was specified, 
+                 but filename did not end in .dft")
+      } 
 
       tac <- load_tac_DFT(filename)
 
@@ -100,10 +119,18 @@ load_tac <- function(filename, format="PMOD", acqtimes=NULL, time_unit=NULL,
 #'@family Loading functions
 load_vol <- function(filename, format="voistat") {
   if (format == "voistat") {
+      if (tools::file_ext(filename) != "voistat") {
+        warning("voistat format was specified, 
+                 but filename did not end in .voistat")
+      } 
       volumes <- load_vol_vstac(filename)
   } else if (format == "BPndPaste") {
       volumes <- load_vol_bpndpaste(filename)
   } else if (format == "DFT") {
+      if (tools::file_ext(filename) != "dft") {
+        warning("DFT format was specified, 
+                 but filename did not end in .dft")
+      } 
       volumes <- load_vol_DFT(filename)
   } else stop("Specified format for volume data not supported.")
     
@@ -133,6 +160,11 @@ load_vol <- function(filename, format="voistat") {
 #' vs <- load_voistat(f, ROI_def=roi_ham_pib(), model="Logan")
 load_voistat <- function(filename, ROI_def=NULL, model="VALUE") {
     
+
+  if (tools::file_ext(filename) != "voistat") {
+        warning(".voistat filename extension was expected.")
+  } 
+
   voistat <- read.csv(filename, sep="\t", skip=6, header=TRUE, 
                       stringsAsFactors=FALSE)
 

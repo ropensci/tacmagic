@@ -13,7 +13,7 @@ test_that("save_tac() gives error if outfile is bad format", {
 
 test_that("save_tac() reproduces the original PMOD .tac file", {
 
-  tmp <- tempfile()
+  tmp <- tempfile(fileext = ".tac")
   f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic") 
   tac <- load_tac(f_raw_tac)
 
@@ -27,14 +27,14 @@ test_that("save_tac() reproduces the original PMOD .tac file", {
 
 test_that("save_tac() saves a merged tac object without error", {
 
-  tmp <- tempfile()
+  tmp <- tempfile(fileext=".tac")
   f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic") 
   f_raw_vol <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
   tac <- load_tac(f_raw_tac)
   vol <- load_vol(f_raw_vol)
   AD06_tac_nc <- tac_roi(tac, vol, roi_ham_full(), merge=TRUE, PVC=FALSE)
 
-  tmp <- tempfile()
+  tmp <- tempfile(fileext=".tac")
   save_tac(AD06_tac_nc, tmp)
   new <- load_tac(tmp)
 
@@ -46,7 +46,7 @@ test_that("save_tac() saves a merged tac object without error", {
 
 test_that("save_tac() saves a magia tac object without error", {
 
-  tmp <- tempfile()
+  tmp <- tempfile(fileext=".tac")
   f_magia <- system.file("extdata", "AD06_tac_magia.mat", package="tacmagic")
   n <- load_tac(f_magia, format="magia", time_unit="seconds", 
   	            activity_unit="kBq/cc")
