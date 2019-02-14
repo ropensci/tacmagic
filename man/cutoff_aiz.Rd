@@ -15,11 +15,13 @@ cutoff_aiz(modelstats, ROIs)
 Cutoff values for each ROI based on the above method
 }
 \description{
-See references()$Aizenstein. The authors proposed a standardized method of 
-calculating PIB+ cutoff values to classify participants as PIB+ or PIB-. They
-used the DVR from several ROIs associated with amyloid deposition. The steps 
-are summarized below. cutoff_aiz() implements 1-3, returning cutoff values
-for each ROI. It can be used to dichotomize participants, with pos_anyroi().
+See references()$Aizenstein and the tacmagic walkthrough vignette. The 
+authors proposed a standardized method of calculating Pittsburg Compound B 
+(PIB) cutoff values to classify participants as PIB+ or PIB-. They used the 
+distribution volume ratio (DVR) from several ROIs associated with amyloid 
+deposition. The steps are summarized below. cutoff_aiz() implements 1-3, 
+returning cutoff valuesfor each ROI. It can be used to dichotomize 
+participants, with pos_anyroi().
 }
 \details{
 1. Remove outliers from a group of cognitively normal individuals. An outlier
@@ -30,6 +32,9 @@ quartile + (1.5 * IQR).
 each ROI is set as the upper inner fence. 
 4. For all participants, if there is any ROI above the cutoff for that 
 region, then the participant is deemed to be PIB+.
+}
+\examples{
+cutoff_aiz(fake_DVR, c("ROI1_DVR", "ROI2_DVR", "ROI3_DVR", "ROI4_DVR"))
 }
 \seealso{
 Other Cutoff functions: \code{\link{pos_anyroi}}
