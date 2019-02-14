@@ -114,51 +114,6 @@ DVR_all_ref_Logan <- function(tac_data,
 }
 
 
-#' Non-invasive reference Logan plot
-#'
-#' This plots the non-invasive Logan plot.
-#'
-#'@export
-#'@param tac_data The time-activity curve data from tac_roi()
-#'@param target The name of the receptor-rich region, e.g. "frontal"
-#'@param ref The reference region, e.g. "cerebellum"
-#'@param k2prime A fixed value for k2' must be specified (e.g. 0.2)
-#'@param t_star If 0, t* will be calculated using find_t_star()
-#'@param error For find_t_star()
-#'@param method Method of inntegration, "trapz" or "integrate"
-#'@family Logan plot functions
-#'@return No return
-#' f <- system.file("extdata", "AD06.tac", package="tacmagic")
-#' fv <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
-#' AD06_tac <- load_tac(f, format="PMOD")
-#' AD06_volume <- load_vol(fv, format="voistat")
-#' AD06 <- tac_roi(tac=AD06_tac, volumes=AD06_volume, ROI_def=roi_ham_pib(),  
-#'                 merge=FALSE, PVC=FALSE)  
-#' 
-#' plot_ref_Logan(AD06, target="frontal", ref="cerebellum", 
-#'                k2prime=0.2, t_star=0)
-#' 
-plot_ref_Logan <- function(tac_data, target, ref, k2prime, t_star=0, error=0.1,
-                           method="trapz") {
-    model <- ref_Logan_lm(tac_data=tac_data, target=target, ref=ref, 
-                          k2prime=k2prime, t_star=t_star, error=error, 
-                          method=method)
-    xy <- ref_Logan_xy(tac=tac_data, target=target, ref=ref, 
-                       k2prime=k2prime, method=method)
-    x <- xy$x
-    y <- xy$y
-    if (t_star == 0) t_star <- find_t_star(x, y, error=error)
-    
-    par(mfrow=c(1,2))
-    
-    plot_tac(tac_data, ROIs=c(target,ref))
-    
-    plot(y~x, main="Logan plot")
-    abline(model)
-    abline(v=x[t_star])
-}
-
-
 ## Helper functions------------------------------------------------------------
 
 # The non-invasive reference Logan method
