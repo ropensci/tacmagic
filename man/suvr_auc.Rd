@@ -4,7 +4,7 @@
 \alias{suvr_auc}
 \title{Calculate SUVRs for regions of interest with AUC from mid-frame times}
 \usage{
-suvr_auc(tac, SUVR_def, ref)
+suvr_auc(tac, SUVR_def = NULL, ref = NULL, params = NULL)
 }
 \arguments{
 \item{tac}{The time-activity curve data from tac_roi()}
@@ -12,6 +12,9 @@ suvr_auc(tac, SUVR_def, ref)
 \item{SUVR_def}{a vector of start times for window to be used in SUVR}
 
 \item{ref}{is a string, e.g. "cerbellum", to specify reference region}
+
+\item{params}{a list of paramters passed from the batch_tm function and is
+not needed when calling for individual participants.}
 }
 \value{
 A data.frame of SUVR values for the specified ROIs
