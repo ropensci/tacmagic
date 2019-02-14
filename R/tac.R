@@ -147,3 +147,18 @@ plot_tac <- function(TACtable1, TACtable2=NULL, ROIs, ymax=25,
     legend("bottomright", legend=ROIs, col=colour2, pch=1)
   }
 } 
+
+# Utility functions -----------------------------------------------------------
+
+# Used by the plot, or any function that needs 2 tacs, to ensure their overall
+# form and attributes are equal (except the ROIs)
+compare_tac_form <- function(tac, tac2) {
+  if (!all.equal(tac$start, tac2$start)) stop("tac start times not equal")
+  if (!all.equal(tac$end, tac2$end)) stop("tac end times not equal")
+  a1 <- attributes(tac)
+  a2 <- attributes(tac2)
+  if (!all.equal(a1$time_unit, a2$time_unit)) stop("tac time units not equal")
+  if (!all.equal(a1$activity_unit, a2$activity_unit)) stop("tac start times 
+                                                            not equal")
+  return(TRUE) 
+}
