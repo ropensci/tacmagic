@@ -136,7 +136,8 @@ ref_Logan_xy <- function(tac, target, ref, k2prime, method) {
   if (method == "trapz") {
     frames <- seq_along(mid_time)
     yA <- vapply(frames, FUN=wrap_auc, FUN.VALUE=0, x=mid_time, y=tac[,target])
-    xA <- vapply(frames, FUN=wrap_auc, FUN.VALUE=0, x=mid_time, y=tac[,ref]) + k2r
+    xA <- vapply(frames, FUN=wrap_auc, FUN.VALUE=0, x=mid_time, y=tac[,ref]) + 
+                         k2r
   } else if (method == "integrate") {
     yA <- vapply(mid_time, FUN=wrap_integrate, FUN.VALUE=0, lower=mid_time[1], 
                  f=target_tac)
