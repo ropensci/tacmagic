@@ -43,7 +43,9 @@ participants <- c(system.file("extdata", "AD06.tac", package="tacmagic"),
                   system.file("extdata", "AD08.tac", package="tacmagic"))
 
 tacs <- batch_load(participants, tac_file_suffix="")
-for (i in 1:3) tacs[[i]][,1:80] # to remove the PVC values for this example
+
+# Keeps only the ROIs without partial-volume correction (PMOD convention)
+lapply(tacs, split_pvc, FALSE)
 
 batch <- batch_tm(tacs, models=c("SUVR", "Logan"), ref="Cerebellum_r",
                   SUVR_def=c(3000,3300,3600), k2prime=0.2, t_star=23)

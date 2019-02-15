@@ -33,7 +33,9 @@
 #'                   system.file("extdata", "AD08.tac", package="tacmagic"))
 #' 
 #' tacs <- batch_load(participants, tac_file_suffix="")
-#' for (i in 1:3) tacs[[i]][,1:80] # to remove the PVC values for this example
+#'
+#' # Keeps only the ROIs without partial-volume correction (PMOD convention)
+#' lapply(tacs, split_pvc, FALSE)
 #' 
 #' batch <- batch_tm(tacs, models=c("SUVR", "Logan"), ref="Cerebellum_r",
 #'                   SUVR_def=c(3000,3300,3600), k2prime=0.2, t_star=23)
@@ -81,7 +83,8 @@ batch_tm <- function(all_tacs, models=c("SUVR", "Logan"), ref, SUVR_def=NULL,
 #'@param dir A directory and/or file name prefix for the tac/volume files
 #'@param tac_format Format of tac files provided: See load_tac()
 #'@param tac_file_suffix How participant IDs corresponds to the TAC files
-#'@param roi_m T if you want to merge atomic ROIs into larger ROIs
+#'@param roi_m TRUE if you want to merge atomic ROIs into larger ROIs (and if 
+#' not, the following parameters are not used)
 #'@param vol_format The file format that includes volumes: See load_vol()
 #'@param vol_file_suffix How participant IDs correspond to volume files
 #'@param ROI_def Object that defines combined ROIs, see ROI_definitions.R
@@ -96,11 +99,19 @@ batch_tm <- function(all_tacs, models=c("SUVR", "Logan"), ref, SUVR_def=NULL,
 #'                   system.file("extdata", "AD08.tac", package="tacmagic"))
 #' 
 #' tacs <- batch_load(participants, tac_file_suffix="")
-batch_load <- function(participants, PVC=FALSE, dir="", tac_format="PMOD", 
-                       tac_file_suffix=".tac", roi_m=FALSE,
+batch_load <- function(participants, dir="", tac_file_suffix=".tac",
+                       tac_format="PMOD", roi_m=FALSE, PVC=NULL, 
                        vol_file_suffix=NULL, vol_format=NULL, 
                        merge=NULL, ROI_def=NULL) {
   
+  if (!roi_m) {
+    if (!all(c(is.null(vol_format), is.null(vol_file_suffix), is.null(ROI_def), 
+              is.null(PVC)))) {
+      warning("You specified parameters used for volume-based ROI merging, but 
+               roi_m is FALSE so those parameters will not be used.")
+    }
+  }
+
   r <- lapply(participants, load_tacs, dir=dir, tac_format=tac_format, 
               roi_m=roi_m, tac_file_suffix=tac_file_suffix, 
               vol_file_suffix=vol_file_suffix, 

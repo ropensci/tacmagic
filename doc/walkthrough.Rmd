@@ -217,6 +217,21 @@ The above would load the appropriate tac and voistat files, perform the ROI merg
 
 Once the tac data is loaded, all analyses can be run using `batch_tm()`. The output from `batch_load()` is the first argument for `batch_tm()`. The models implemented in tacmagic can be specified using the `models` argument, e.g. `models = c("SUVR", "Logan")` to calculate both SUVR and Logan DVR. The relevant model parameters will also need to be specified, so see `help(batch_tm)` for all possible arguments.
 
+For example:
+
+```{r}
+participants <- c(system.file("extdata", "AD06.tac", package="tacmagic"),
+                   system.file("extdata", "AD07.tac", package="tacmagic"),
+                   system.file("extdata", "AD08.tac", package="tacmagic"))
+ 
+tacs <- batch_load(participants, tac_file_suffix="", PVC=FALSE)
+ 
+batch <- batch_tm(tacs, models=c("SUVR", "Logan"), ref="Cerebellum_r",
+                  SUVR_def=c(3000,3300,3600), k2prime=0.2, t_star=23)
+
+
+```
+
 ## Cut-off calculations
 
 In the analysis of PIB/amyloid PET data, often researchers want to dichotomize patients into PIB+ vs. PIB-, i.e. to identify those with significant AD-related amyloid pathology (PIB+).

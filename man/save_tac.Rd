@@ -21,6 +21,6 @@ file name is recommended.
 }
 \seealso{
 Other tac functions: \code{\link{plot_tac}},
-  \code{\link{tac_roi}}
+  \code{\link{split_pvc}}, \code{\link{tac_roi}}
 }
 \concept{tac functions}

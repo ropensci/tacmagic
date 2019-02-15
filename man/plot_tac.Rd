@@ -38,6 +38,6 @@ plot_tac(AD06_tac_nc, ROIs=c("frontal", "cerebellum"), title="Example Plot")
 }
 \seealso{
 Other tac functions: \code{\link{save_tac}},
-  \code{\link{tac_roi}}
+  \code{\link{split_pvc}}, \code{\link{tac_roi}}
 }
 \concept{tac functions}
