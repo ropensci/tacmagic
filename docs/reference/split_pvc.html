@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plots time activity curves from 1 or 2 participants or groups. — plot_tac • tacmagic</title>
+<title>Subset PMOD tacs with or without PVC — split_pvc • tacmagic</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,13 @@
 
 
 
-<meta property="og:title" content="Plots time activity curves from 1 or 2 participants or groups. — plot_tac" />
+<meta property="og:title" content="Subset PMOD tacs with or without PVC — split_pvc" />
 
-<meta property="og:description" content="Plots time activity curves from 1 or 2 participants or groups." />
+<meta property="og:description" content="When partial volume correction (PVC) is used in PMOD, the saved tac files
+have ROIs with and without PVC. When loaded with load_tac()) it may be 
+desirable to keep only either the PVC or non-PVC tacs. This returns a tac 
+object that is a subset of the input tac object with only the PVC or non-PVC
+tacs. This relies on PMOD's convention of labelling tac columns with &quot;_C&quot;." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -111,68 +115,53 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Plots time activity curves from 1 or 2 participants or groups.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/eebrown/PET/blob/master/R/plot.R'><code>R/plot.R</code></a></small>
-    <div class="hidden name"><code>plot_tac.Rd</code></div>
+    <h1>Subset PMOD tacs with or without PVC</h1>
+    <small class="dont-index">Source: <a href='https://github.com/eebrown/PET/blob/master/R/tac.R'><code>R/tac.R</code></a></small>
+    <div class="hidden name"><code>split_pvc.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Plots time activity curves from 1 or 2 participants or groups.</p>
+    <p>When partial volume correction (PVC) is used in PMOD, the saved tac files
+have ROIs with and without PVC. When loaded with load_tac()) it may be 
+desirable to keep only either the PVC or non-PVC tacs. This returns a tac 
+object that is a subset of the input tac object with only the PVC or non-PVC
+tacs. This relies on PMOD's convention of labelling tac columns with "_C".</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>plot_tac</span>(<span class='no'>TACtable1</span>, <span class='kw'>TACtable2</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>ROIs</span>, <span class='kw'>ymax</span> <span class='kw'>=</span> <span class='fl'>25</span>,
-  <span class='kw'>time</span> <span class='kw'>=</span> <span class='st'>"minutes"</span>, <span class='kw'>title</span> <span class='kw'>=</span> <span class='st'>""</span>)</pre>
+    <pre class="usage"><span class='fu'>split_pvc</span>(<span class='no'>tac</span>, <span class='kw'>PVC</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>TACtable1</th>
-      <td><p>(e.g. from tac_roi() or load_tac())</p></td>
+      <th>tac</th>
+      <td><p>The time-activity curve data from loading function (PMOD)</p></td>
     </tr>
     <tr>
-      <th>TACtable2</th>
-      <td><p>An optional, second TAC, to plot for comparison</p></td>
-    </tr>
-    <tr>
-      <th>ROIs</th>
-      <td><p>A vector of ROIs to plot, names matching the TAC headers</p></td>
-    </tr>
-    <tr>
-      <th>ymax</th>
-      <td><p>The maximum value on the y-axis</p></td>
-    </tr>
-    <tr>
-      <th>time</th>
-      <td><p>"seconds" or "minutes" depending on desired x-axis, converts tac</p></td>
-    </tr>
-    <tr>
-      <th>title</th>
-      <td><p>A title for the plot</p></td>
+      <th>PVC</th>
+      <td><p>If TRUE, includes columns with "_C", if FALSE, ones without "_C"</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Creates a plot</p>
+    <p>Time-activity curve object</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other tac functions: <code><a href='save_tac.html'>save_tac</a></code>,
-  <code><a href='split_pvc.html'>split_pvc</a></code>, <code><a href='tac_roi.html'>tac_roi</a></code></p></div>
+    <div class='dont-index'><p>Other tac functions: <code><a href='plot_tac.html'>plot_tac</a></code>,
+  <code><a href='save_tac.html'>save_tac</a></code>, <code><a href='tac_roi.html'>tac_roi</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># f_raw_tac and f_raw_vol are the filenames of PMOD-generated files</span>
 <span class='no'>f_raw_tac</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"AD06.tac"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"tacmagic"</span>)
-<span class='no'>f_raw_vol</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"AD06_TAC.voistat"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"tacmagic"</span>)
 
 <span class='no'>tac</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='load_tac.html'>load_tac</a></span>(<span class='no'>f_raw_tac</span>)
-<span class='no'>vol</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='load_vol.html'>load_vol</a></span>(<span class='no'>f_raw_vol</span>)
-<span class='no'>AD06_tac_nc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='tac_roi.html'>tac_roi</a></span>(<span class='no'>tac</span>, <span class='no'>vol</span>, <span class='fu'><a href='roi_ham_full.html'>roi_ham_full</a></span>(), <span class='kw'>merge</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>PVC</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
-<span class='fu'>plot_tac</span>(<span class='no'>AD06_tac_nc</span>, <span class='kw'>ROIs</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"frontal"</span>, <span class='st'>"cerebellum"</span>), <span class='kw'>title</span><span class='kw'>=</span><span class='st'>"Example Plot"</span>)</div><div class='img'><img src='plot_tac-1.png' alt='' width='700' height='433' /></div></pre>
+<span class='no'>tac_pvc</span> <span class='kw'>&lt;-</span> <span class='fu'>split_pvc</span>(<span class='no'>tac</span>, <span class='fl'>TRUE</span>)
+<span class='no'>tac_nc</span> <span class='kw'>&lt;-</span> <span class='fu'>split_pvc</span>(<span class='no'>tac</span>, <span class='fl'>FALSE</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

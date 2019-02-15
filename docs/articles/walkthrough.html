@@ -80,7 +80,7 @@
       <h1>Analysis with tacmagic</h1>
                         <h4 class="author">Eric Brown</h4>
             
-            <h4 class="date">2019-02-12</h4>
+            <h4 class="date">2019-02-15</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/eebrown/PET/blob/master/vignettes/walkthrough.Rmd"><code>vignettes/walkthrough.Rmd</code></a></small>
       <div class="hidden name"><code>walkthrough.Rmd</code></div>
@@ -335,12 +335,33 @@
 <p>The first argument is a vector of participant IDs that corresponds to file names, e.g.:</p>
 <p><code>participants &lt;- c("participant01", "participant02")</code> if the files are located e.g. <code>/mypath/participant01.tac</code> and <code>/mypath/participant01_TAC.voistat</code>. In this case, the function call might look like:</p>
 <p><code>my_data &lt;- batch_load(participants, dir="/mypath/", tac_format="PMOD", roi_m=T, vol_file_suffix="_TAC.voistat", vol_format="voistat", ROI_def=roi_ham_stand(), merge=F)</code></p>
-<p>The above would load the appropriate tac and voistat files, perform the ROI merging specified by <code>ROI_def</code> because <code>roi_m=T</code>, and would return a list where each element represents a participants, e.g. the first participant would be <code>my_data$participant1</code>.</p>
+<p>The above would load the appropriate tac and voistat files, perform the ROI merging specified by <code>ROI_def</code>, because <code>roi_m = TRUE</code>, and would return a list where each element represents a participants, e.g. the first participant would be <code>my_data$participant1</code>.</p>
 </div>
 <div id="batch-analysis-1" class="section level3">
 <h3 class="hasAnchor">
 <a href="#batch-analysis-1" class="anchor"></a>Batch analysis</h3>
 <p>Once the tac data is loaded, all analyses can be run using <code><a href="../reference/batch_tm.html">batch_tm()</a></code>. The output from <code><a href="../reference/batch_load.html">batch_load()</a></code> is the first argument for <code><a href="../reference/batch_tm.html">batch_tm()</a></code>. The models implemented in tacmagic can be specified using the <code>models</code> argument, e.g. <code>models = c("SUVR", "Logan")</code> to calculate both SUVR and Logan DVR. The relevant model parameters will also need to be specified, so see <code><a href="https://www.rdocumentation.org/packages/utils/topics/help">help(batch_tm)</a></code> for all possible arguments.</p>
+</div>
+<div id="batch-example" class="section level3">
+<h3 class="hasAnchor">
+<a href="#batch-example" class="anchor"></a>Batch example</h3>
+<p>For the purpose of the vignette, the list of participants will be a list of the full tac filenames (hence tac_file_suffix=""). In real-world data, the participants parameter can be a list of participant IDs that correspond to the actual filenames, i.e. the filename is made up of dir + participant + tac_file_suffix.</p>
+<p>We will also choose not to use the roi_m option in batch_load(), which could be used to combine ROIs as outlined above.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">participants &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"AD06.tac"</span>, <span class="dt">package=</span><span class="st">"tacmagic"</span>),</a>
+<a class="sourceLine" id="cb11-3" data-line-number="3">                   <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"AD07.tac"</span>, <span class="dt">package=</span><span class="st">"tacmagic"</span>),</a>
+<a class="sourceLine" id="cb11-4" data-line-number="4">                   <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"AD08.tac"</span>, <span class="dt">package=</span><span class="st">"tacmagic"</span>))</a>
+<a class="sourceLine" id="cb11-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb11-6" data-line-number="6">tacs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/batch_load.html">batch_load</a></span>(participants, <span class="dt">dir=</span><span class="st">""</span>, <span class="dt">tac_file_suffix=</span><span class="st">""</span>)</a>
+<a class="sourceLine" id="cb11-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb11-8" data-line-number="8"><span class="co"># Since the PMOD tac files used here have 2 copies of ROIs, with and without </span></a>
+<a class="sourceLine" id="cb11-9" data-line-number="9"><span class="co"># PVC, we can use split_pvc to keep the PVC-corrected verions. If we had used </span></a>
+<a class="sourceLine" id="cb11-10" data-line-number="10"><span class="co"># roi_m here to combine ROIs, we could have specified to use the PVC versions </span></a>
+<a class="sourceLine" id="cb11-11" data-line-number="11"><span class="co"># in batch_load() with PVC = TRUE.</span></a>
+<a class="sourceLine" id="cb11-12" data-line-number="12">tacs &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/lapply">lapply</a></span>(tacs, split_pvc, <span class="dt">PVC=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb11-13" data-line-number="13"> </a>
+<a class="sourceLine" id="cb11-14" data-line-number="14">batch &lt;-<span class="st"> </span><span class="kw"><a href="../reference/batch_tm.html">batch_tm</a></span>(tacs, <span class="dt">models=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"SUVR"</span>, <span class="st">"Logan"</span>), <span class="dt">ref=</span><span class="st">"Cerebellum_r_C"</span>,</a>
+<a class="sourceLine" id="cb11-15" data-line-number="15">                  <span class="dt">SUVR_def=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">3000</span>,<span class="dv">3300</span>,<span class="dv">3600</span>), <span class="dt">k2prime=</span><span class="fl">0.2</span>, <span class="dt">t_star=</span><span class="dv">23</span>)</a></code></pre></div>
 </div>
 </div>
 <div id="cut-off-calculations" class="section level2">
@@ -350,36 +371,36 @@
 <p>There are a number of approaches to this depending on the available data. We have implemented a method described by Aizenstein et al.<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a> which uses a group of participants with normal cognition to establish a cutoff value above which participants are unlikely to have minimal amyloid pathology.</p>
 <p>The method identifies a group of participants out of the normal cognition group with higher-PIB outliers removed. An outlier is a participant with any ROI with a DVR higher than the upper inner fence, from a set of ROIs known to be associated with amyloid deposition. Such participants are removed from the group, and this process is done iteratively until no more outliers are removed. Then, cutoff values are determined from this new group for each ROI, set again as the upper inner fence. Then these cutoff values are applied to all participants, and a participant is deemed PIB+ if they have at least 1 ROI above its cutoff.</p>
 <p>To demonstrate, a fake dataset of DVR values for 50 fake participants was generated and is available as <code>fake_DVR</code>. This would be equivalent to using <code><a href="../reference/batch_tm.html">batch_tm()</a></code> on a group of participants with the <code>"Logan"</code> model specified.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">fake_DVR[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>,]</a>
-<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="co">#&gt;    ROI1_DVR ROI2_DVR  ROI3_DVR  ROI4_DVR</span></a>
-<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="co">#&gt; p1 2.235058 3.026140 1.1420583 4.0557974</span></a>
-<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="co">#&gt; p2 1.677543 2.834710 1.2529424 3.3368371</span></a>
-<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="co">#&gt; p3 1.466090 2.856528 0.2837647 2.5383574</span></a>
-<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="co">#&gt; p4 1.046542 1.818056 1.2176133 2.5827267</span></a>
-<a class="sourceLine" id="cb11-7" data-line-number="7"><span class="co">#&gt; p5 2.934105 1.971775 1.7611040 0.8371429</span></a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">fake_DVR[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>,]</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="co">#&gt;    ROI1_DVR ROI2_DVR  ROI3_DVR  ROI4_DVR</span></a>
+<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="co">#&gt; p1 2.235058 3.026140 1.1420583 4.0557974</span></a>
+<a class="sourceLine" id="cb12-4" data-line-number="4"><span class="co">#&gt; p2 1.677543 2.834710 1.2529424 3.3368371</span></a>
+<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="co">#&gt; p3 1.466090 2.856528 0.2837647 2.5383574</span></a>
+<a class="sourceLine" id="cb12-6" data-line-number="6"><span class="co">#&gt; p4 1.046542 1.818056 1.2176133 2.5827267</span></a>
+<a class="sourceLine" id="cb12-7" data-line-number="7"><span class="co">#&gt; p5 2.934105 1.971775 1.7611040 0.8371429</span></a></code></pre></div>
 <p>To calculate the cutoff values using this iterative method, <code><a href="../reference/cutoff_aiz.html">cutoff_aiz()</a></code> takes 2 arguments: the DVR data, and the names of the variables of the ROI DVRs to use (and there must be at least 2 for this method).</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">cutoffs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cutoff_aiz.html">cutoff_aiz</a></span>(fake_DVR, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"ROI1_DVR"</span>, <span class="st">"ROI2_DVR"</span>, <span class="st">"ROI3_DVR"</span>, <span class="st">"ROI4_DVR"</span>))</a>
-<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="co">#&gt; Iteration: 1 Removed: 10</span></a>
-<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="co">#&gt; Iteration: 2 Removed: 1</span></a>
-<a class="sourceLine" id="cb12-4" data-line-number="4"><span class="co">#&gt; Iteration: 3 Removed: 0</span></a>
-<a class="sourceLine" id="cb12-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb12-6" data-line-number="6">cutoffs</a>
-<a class="sourceLine" id="cb12-7" data-line-number="7"><span class="co">#&gt; ROI1_DVR ROI2_DVR ROI3_DVR ROI4_DVR </span></a>
-<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="co">#&gt; 1.370899 1.332725 1.330504 1.273470</span></a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">cutoffs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/cutoff_aiz.html">cutoff_aiz</a></span>(fake_DVR, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"ROI1_DVR"</span>, <span class="st">"ROI2_DVR"</span>, <span class="st">"ROI3_DVR"</span>, <span class="st">"ROI4_DVR"</span>))</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="co">#&gt; Iteration: 1 Removed: 10</span></a>
+<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="co">#&gt; Iteration: 2 Removed: 1</span></a>
+<a class="sourceLine" id="cb13-4" data-line-number="4"><span class="co">#&gt; Iteration: 3 Removed: 0</span></a>
+<a class="sourceLine" id="cb13-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb13-6" data-line-number="6">cutoffs</a>
+<a class="sourceLine" id="cb13-7" data-line-number="7"><span class="co">#&gt; ROI1_DVR ROI2_DVR ROI3_DVR ROI4_DVR </span></a>
+<a class="sourceLine" id="cb13-8" data-line-number="8"><span class="co">#&gt; 1.370899 1.332725 1.330504 1.273470</span></a></code></pre></div>
 <p>The final step is to apply the cutoffs to the full set of participants. We will use the same sample data:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">positivity_table &lt;-<span class="st"> </span><span class="kw"><a href="../reference/pos_anyroi.html">pos_anyroi</a></span>(fake_DVR, cutoffs)</a>
-<a class="sourceLine" id="cb13-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb13-3" data-line-number="3">positivity_table</a>
-<a class="sourceLine" id="cb13-4" data-line-number="4"><span class="co">#&gt;    p1    p2    p3    p4    p5    p6    p7    p8    p9   p10   p11   p12 </span></a>
-<a class="sourceLine" id="cb13-5" data-line-number="5"><span class="co">#&gt;  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE </span></a>
-<a class="sourceLine" id="cb13-6" data-line-number="6"><span class="co">#&gt;   p13   p14   p15   p16   p17   p18   p19   p20   p21   p22   p23   p24 </span></a>
-<a class="sourceLine" id="cb13-7" data-line-number="7"><span class="co">#&gt; FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE </span></a>
-<a class="sourceLine" id="cb13-8" data-line-number="8"><span class="co">#&gt;   p25   p26   p27   p28   p29   p30   p31   p32   p33   p34   p35   p36 </span></a>
-<a class="sourceLine" id="cb13-9" data-line-number="9"><span class="co">#&gt; FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE </span></a>
-<a class="sourceLine" id="cb13-10" data-line-number="10"><span class="co">#&gt;   p37   p38   p39   p40   p41   p42   p43   p44   p45   p46   p47   p48 </span></a>
-<a class="sourceLine" id="cb13-11" data-line-number="11"><span class="co">#&gt; FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE </span></a>
-<a class="sourceLine" id="cb13-12" data-line-number="12"><span class="co">#&gt;   p49   p50 </span></a>
-<a class="sourceLine" id="cb13-13" data-line-number="13"><span class="co">#&gt; FALSE FALSE</span></a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">positivity_table &lt;-<span class="st"> </span><span class="kw"><a href="../reference/pos_anyroi.html">pos_anyroi</a></span>(fake_DVR, cutoffs)</a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb14-3" data-line-number="3">positivity_table</a>
+<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="co">#&gt;    p1    p2    p3    p4    p5    p6    p7    p8    p9   p10   p11   p12 </span></a>
+<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="co">#&gt;  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE </span></a>
+<a class="sourceLine" id="cb14-6" data-line-number="6"><span class="co">#&gt;   p13   p14   p15   p16   p17   p18   p19   p20   p21   p22   p23   p24 </span></a>
+<a class="sourceLine" id="cb14-7" data-line-number="7"><span class="co">#&gt; FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE </span></a>
+<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="co">#&gt;   p25   p26   p27   p28   p29   p30   p31   p32   p33   p34   p35   p36 </span></a>
+<a class="sourceLine" id="cb14-9" data-line-number="9"><span class="co">#&gt; FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE </span></a>
+<a class="sourceLine" id="cb14-10" data-line-number="10"><span class="co">#&gt;   p37   p38   p39   p40   p41   p42   p43   p44   p45   p46   p47   p48 </span></a>
+<a class="sourceLine" id="cb14-11" data-line-number="11"><span class="co">#&gt; FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE </span></a>
+<a class="sourceLine" id="cb14-12" data-line-number="12"><span class="co">#&gt;   p49   p50 </span></a>
+<a class="sourceLine" id="cb14-13" data-line-number="13"><span class="co">#&gt; FALSE FALSE</span></a></code></pre></div>
 <p>The algorithm identified 11 PIB+ participants. In the generation of the sample data, the DVRs from the first 10 participants were drawn from a normal distribution with mean 1.9, sd 0.6 and for the latter 40 participants, from mean 1.3, sd 0.3; thus this pattern is in line with what we would expect: all 10 of the first participants are PIB+, and just 1 of the latter 40 was (by chance).</p>
 </div>
 <div class="footnotes">

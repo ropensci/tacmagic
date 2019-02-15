@@ -126,9 +126,10 @@ larger ROIs based on the optional parameters that follow.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>batch_load</span>(<span class='no'>participants</span>, <span class='kw'>PVC</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>dir</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>tac_format</span> <span class='kw'>=</span> <span class='st'>"PMOD"</span>,
-  <span class='kw'>tac_file_suffix</span> <span class='kw'>=</span> <span class='st'>".tac"</span>, <span class='kw'>roi_m</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>vol_file_suffix</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>vol_format</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>merge</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ROI_def</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>batch_load</span>(<span class='no'>participants</span>, <span class='kw'>dir</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>tac_file_suffix</span> <span class='kw'>=</span> <span class='st'>".tac"</span>,
+  <span class='kw'>tac_format</span> <span class='kw'>=</span> <span class='st'>"PMOD"</span>, <span class='kw'>roi_m</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>PVC</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>vol_file_suffix</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>vol_format</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>merge</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>ROI_def</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -138,24 +139,25 @@ larger ROIs based on the optional parameters that follow.</p>
       <td><p>A vector of participant IDs</p></td>
     </tr>
     <tr>
-      <th>PVC</th>
-      <td><p>For PVC, true where the data is stored as _C in same tac file</p></td>
-    </tr>
-    <tr>
       <th>dir</th>
       <td><p>A directory and/or file name prefix for the tac/volume files</p></td>
-    </tr>
-    <tr>
-      <th>tac_format</th>
-      <td><p>Format of tac files provided: See load_tac()</p></td>
     </tr>
     <tr>
       <th>tac_file_suffix</th>
       <td><p>How participant IDs corresponds to the TAC files</p></td>
     </tr>
     <tr>
+      <th>tac_format</th>
+      <td><p>Format of tac files provided: See load_tac()</p></td>
+    </tr>
+    <tr>
       <th>roi_m</th>
-      <td><p>T if you want to merge atomic ROIs into larger ROIs</p></td>
+      <td><p>TRUE if you want to merge atomic ROIs into larger ROIs (and if 
+not, the following parameters are not used)</p></td>
+    </tr>
+    <tr>
+      <th>PVC</th>
+      <td><p>For PVC, true where the data is stored as _C in same tac file</p></td>
     </tr>
     <tr>
       <th>vol_file_suffix</th>
