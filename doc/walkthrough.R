@@ -94,15 +94,21 @@ AD06_DVR
 
 
 ## ------------------------------------------------------------------------
+
 participants <- c(system.file("extdata", "AD06.tac", package="tacmagic"),
                    system.file("extdata", "AD07.tac", package="tacmagic"),
                    system.file("extdata", "AD08.tac", package="tacmagic"))
- 
-tacs <- batch_load(participants, tac_file_suffix="", PVC=FALSE)
- 
-batch <- batch_tm(tacs, models=c("SUVR", "Logan"), ref="Cerebellum_r",
-                  SUVR_def=c(3000,3300,3600), k2prime=0.2, t_star=23)
 
+tacs <- batch_load(participants, dir="", tac_file_suffix="")
+
+# Since the PMOD tac files used here have 2 copies of ROIs, with and without 
+# PVC, we can use split_pvc to keep the PVC-corrected verions. If we had used 
+# roi_m here to combine ROIs, we could have specified to use the PVC versions 
+# in batch_load() with PVC = TRUE.
+tacs <- lapply(tacs, split_pvc, PVC=TRUE)
+ 
+batch <- batch_tm(tacs, models=c("SUVR", "Logan"), ref="Cerebellum_r_C",
+                  SUVR_def=c(3000,3300,3600), k2prime=0.2, t_star=23)
 
 
 ## ------------------------------------------------------------------------

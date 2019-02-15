@@ -318,6 +318,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <li><a href="#batch-analysis">Batch analysis</a><ul>
 <li><a href="#batch-loading">Batch loading</a></li>
 <li><a href="#batch-analysis-1">Batch analysis</a></li>
+<li><a href="#batch-example">Batch example</a></li>
 </ul></li>
 <li><a href="#cut-off-calculations">Cut-off calculations</a></li>
 </ul>
@@ -558,22 +559,31 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <p>The first argument is a vector of participant IDs that corresponds to file names, e.g.:</p>
 <p><code>participants &lt;- c(&quot;participant01&quot;, &quot;participant02&quot;)</code> if the files are located e.g. <code>/mypath/participant01.tac</code> and <code>/mypath/participant01_TAC.voistat</code>. In this case, the function call might look like:</p>
 <p><code>my_data &lt;- batch_load(participants, dir=&quot;/mypath/&quot;, tac_format=&quot;PMOD&quot;, roi_m=T, vol_file_suffix=&quot;_TAC.voistat&quot;, vol_format=&quot;voistat&quot;, ROI_def=roi_ham_stand(), merge=F)</code></p>
-<p>The above would load the appropriate tac and voistat files, perform the ROI merging specified by <code>ROI_def</code> because <code>roi_m=T</code>, and would return a list where each element represents a participants, e.g. the first participant would be <code>my_data$participant1</code>.</p>
+<p>The above would load the appropriate tac and voistat files, perform the ROI merging specified by <code>ROI_def</code>, because <code>roi_m = TRUE</code>, and would return a list where each element represents a participants, e.g. the first participant would be <code>my_data$participant1</code>.</p>
 </div>
 <div id="batch-analysis-1" class="section level3">
 <h3>Batch analysis</h3>
 <p>Once the tac data is loaded, all analyses can be run using <code>batch_tm()</code>. The output from <code>batch_load()</code> is the first argument for <code>batch_tm()</code>. The models implemented in tacmagic can be specified using the <code>models</code> argument, e.g. <code>models = c(&quot;SUVR&quot;, &quot;Logan&quot;)</code> to calculate both SUVR and Logan DVR. The relevant model parameters will also need to be specified, so see <code>help(batch_tm)</code> for all possible arguments.</p>
-<p>For example:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">participants &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;AD06.tac&quot;</span>, <span class="dt">package=</span><span class="st">&quot;tacmagic&quot;</span>),</a>
-<a class="sourceLine" id="cb11-2" data-line-number="2">                   <span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;AD07.tac&quot;</span>, <span class="dt">package=</span><span class="st">&quot;tacmagic&quot;</span>),</a>
-<a class="sourceLine" id="cb11-3" data-line-number="3">                   <span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;AD08.tac&quot;</span>, <span class="dt">package=</span><span class="st">&quot;tacmagic&quot;</span>))</a>
-<a class="sourceLine" id="cb11-4" data-line-number="4"> </a>
-<a class="sourceLine" id="cb11-5" data-line-number="5">tacs &lt;-<span class="st"> </span><span class="kw">batch_load</span>(participants, <span class="dt">tac_file_suffix=</span><span class="st">&quot;&quot;</span>, <span class="dt">PVC=</span><span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="co">#&gt; Warning in batch_load(participants, tac_file_suffix = &quot;&quot;, PVC = FALSE): You specified parameters used for volume-based ROI merging, but </span></a>
-<a class="sourceLine" id="cb11-7" data-line-number="7"><span class="co">#&gt;                roi_m is FALSE so those parameters will not be used.</span></a>
-<a class="sourceLine" id="cb11-8" data-line-number="8"> </a>
-<a class="sourceLine" id="cb11-9" data-line-number="9">batch &lt;-<span class="st"> </span><span class="kw">batch_tm</span>(tacs, <span class="dt">models=</span><span class="kw">c</span>(<span class="st">&quot;SUVR&quot;</span>, <span class="st">&quot;Logan&quot;</span>), <span class="dt">ref=</span><span class="st">&quot;Cerebellum_r&quot;</span>,</a>
-<a class="sourceLine" id="cb11-10" data-line-number="10">                  <span class="dt">SUVR_def=</span><span class="kw">c</span>(<span class="dv">3000</span>,<span class="dv">3300</span>,<span class="dv">3600</span>), <span class="dt">k2prime=</span><span class="fl">0.2</span>, <span class="dt">t_star=</span><span class="dv">23</span>)</a></code></pre></div>
+</div>
+<div id="batch-example" class="section level3">
+<h3>Batch example</h3>
+<p>For the purpose of the vignette, the list of participants will be a list of the full tac filenames (hence tac_file_suffix=&quot;&quot;). In real-world data, the participants parameter can be a list of participant IDs that correspond to the actual filenames, i.e. the filename is made up of dir + participant + tac_file_suffix.</p>
+<p>We will also choose not to use the roi_m option in batch_load(), which could be used to combine ROIs as outlined above.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">participants &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;AD06.tac&quot;</span>, <span class="dt">package=</span><span class="st">&quot;tacmagic&quot;</span>),</a>
+<a class="sourceLine" id="cb11-3" data-line-number="3">                   <span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;AD07.tac&quot;</span>, <span class="dt">package=</span><span class="st">&quot;tacmagic&quot;</span>),</a>
+<a class="sourceLine" id="cb11-4" data-line-number="4">                   <span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;AD08.tac&quot;</span>, <span class="dt">package=</span><span class="st">&quot;tacmagic&quot;</span>))</a>
+<a class="sourceLine" id="cb11-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb11-6" data-line-number="6">tacs &lt;-<span class="st"> </span><span class="kw">batch_load</span>(participants, <span class="dt">dir=</span><span class="st">&quot;&quot;</span>, <span class="dt">tac_file_suffix=</span><span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb11-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb11-8" data-line-number="8"><span class="co"># Since the PMOD tac files used here have 2 copies of ROIs, with and without </span></a>
+<a class="sourceLine" id="cb11-9" data-line-number="9"><span class="co"># PVC, we can use split_pvc to keep the PVC-corrected verions. If we had used </span></a>
+<a class="sourceLine" id="cb11-10" data-line-number="10"><span class="co"># roi_m here to combine ROIs, we could have specified to use the PVC versions </span></a>
+<a class="sourceLine" id="cb11-11" data-line-number="11"><span class="co"># in batch_load() with PVC = TRUE.</span></a>
+<a class="sourceLine" id="cb11-12" data-line-number="12">tacs &lt;-<span class="st"> </span><span class="kw">lapply</span>(tacs, split_pvc, <span class="dt">PVC=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb11-13" data-line-number="13"> </a>
+<a class="sourceLine" id="cb11-14" data-line-number="14">batch &lt;-<span class="st"> </span><span class="kw">batch_tm</span>(tacs, <span class="dt">models=</span><span class="kw">c</span>(<span class="st">&quot;SUVR&quot;</span>, <span class="st">&quot;Logan&quot;</span>), <span class="dt">ref=</span><span class="st">&quot;Cerebellum_r_C&quot;</span>,</a>
+<a class="sourceLine" id="cb11-15" data-line-number="15">                  <span class="dt">SUVR_def=</span><span class="kw">c</span>(<span class="dv">3000</span>,<span class="dv">3300</span>,<span class="dv">3600</span>), <span class="dt">k2prime=</span><span class="fl">0.2</span>, <span class="dt">t_star=</span><span class="dv">23</span>)</a></code></pre></div>
 </div>
 </div>
 <div id="cut-off-calculations" class="section level2">

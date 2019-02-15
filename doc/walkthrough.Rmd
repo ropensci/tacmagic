@@ -211,24 +211,34 @@ The first argument is a vector of participant IDs that corresponds to file names
 
 `my_data <- batch_load(participants, dir="/mypath/", tac_format="PMOD", roi_m=T, vol_file_suffix="_TAC.voistat", vol_format="voistat", ROI_def=roi_ham_stand(), merge=F)`
 
-The above would load the appropriate tac and voistat files, perform the ROI merging specified by `ROI_def` because `roi_m=T`, and would return a list where each element represents a participants, e.g. the first participant would be `my_data$participant1`.
+The above would load the appropriate tac and voistat files, perform the ROI merging specified by `ROI_def`, because `roi_m = TRUE`, and would return a list where each element represents a participants, e.g. the first participant would be `my_data$participant1`.
 
 ### Batch analysis
 
 Once the tac data is loaded, all analyses can be run using `batch_tm()`. The output from `batch_load()` is the first argument for `batch_tm()`. The models implemented in tacmagic can be specified using the `models` argument, e.g. `models = c("SUVR", "Logan")` to calculate both SUVR and Logan DVR. The relevant model parameters will also need to be specified, so see `help(batch_tm)` for all possible arguments.
 
-For example:
+### Batch example
+
+For the purpose of the vignette, the list of participants will be a list of the full tac filenames (hence tac_file_suffix=""). In real-world data, the participants parameter can be a list of participant IDs that correspond to the actual filenames, i.e. the filename is made up of dir + participant + tac_file_suffix.
+
+We will also choose not to use the roi_m option in batch_load(), which could be used to combine ROIs as outlined above.
 
 ```{r}
+
 participants <- c(system.file("extdata", "AD06.tac", package="tacmagic"),
                    system.file("extdata", "AD07.tac", package="tacmagic"),
                    system.file("extdata", "AD08.tac", package="tacmagic"))
- 
-tacs <- batch_load(participants, tac_file_suffix="", PVC=FALSE)
- 
-batch <- batch_tm(tacs, models=c("SUVR", "Logan"), ref="Cerebellum_r",
-                  SUVR_def=c(3000,3300,3600), k2prime=0.2, t_star=23)
 
+tacs <- batch_load(participants, dir="", tac_file_suffix="")
+
+# Since the PMOD tac files used here have 2 copies of ROIs, with and without 
+# PVC, we can use split_pvc to keep the PVC-corrected verions. If we had used 
+# roi_m here to combine ROIs, we could have specified to use the PVC versions 
+# in batch_load() with PVC = TRUE.
+tacs <- lapply(tacs, split_pvc, PVC=TRUE)
+ 
+batch <- batch_tm(tacs, models=c("SUVR", "Logan"), ref="Cerebellum_r_C",
+                  SUVR_def=c(3000,3300,3600), k2prime=0.2, t_star=23)
 
 ```
 
