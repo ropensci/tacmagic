@@ -41,6 +41,13 @@ AD06 <- tac_roi(tac=AD06_tac, volumes=AD06_volume, ROI_def=roi_ham_pib(),
 AD06_DVR <- DVR_all_ref_Logan(AD06, ref="cerebellum", k2prime=0.2, t_star=23)
 
 }
+\references{
+Logan, J., Fowler, J. S., Volkow, N. D., Wang, G.-J., 
+Ding, Y.-S., & Alexoff, D. L. (1996). Distribution Volume Ratios without 
+Blood Sampling from Graphical Analysis of PET Data. Journal of Cerebral 
+Blood Flow & Metabolism, 16(5), 834-840. 
+https://doi.org/10.1097/00004647-199609000-00008
+}
 \seealso{
 Other Logan plot functions: \code{\link{DVR_ref_Logan}},
   \code{\link{plot_ref_Logan}}

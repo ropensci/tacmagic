@@ -18,6 +18,13 @@ See PMOD Neuro Tool (PNEURO) (Version 4.0) documentation.
 \examples{
 roi_ham_pib()
 }
+\references{
+Hammers, Alexander, Richard Allom, Matthias J. Koepp, Samantha L. Free, 
+Ralph Myers, Louis Lemieux, Tejal N. Mitchell, David J. Brooks, and John S. 
+Duncan. 2003. Three-dimensional Maximum Probability Atlas of the Human 
+Brain, with Particular Reference to the Temporal Lobe. Human Brain Mapping 
+19 (4): 224-247. doi:10.1002/hbm.10123
+}
 \seealso{
 Other ROI definitions: \code{\link{roi_ham_full}},
   \code{\link{roi_ham_stand}}

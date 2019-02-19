@@ -6,8 +6,6 @@
 ##################################
 
 
-# See references()$Logan_1996
-
 # On testing, produces results equivalent to using Turku PET Centre's
 # logan 0.6.17 with the settings -C -mid=y (traditional regression model and 
 # mid-frame times)
@@ -27,6 +25,11 @@
 #'@param method Method of inntegration, "trapz" or "integrate"
 #'@return Data frame with calculate DVRs for all ROIs
 #'@family Logan plot functions
+#'@references Logan, J., Fowler, J. S., Volkow, N. D., Wang, G.-J., 
+#' Ding, Y.-S., & Alexoff, D. L. (1996). Distribution Volume Ratios without 
+#' Blood Sampling from Graphical Analysis of PET Data. Journal of Cerebral 
+#' Blood Flow & Metabolism, 16(5), 834-840. 
+#' https://doi.org/10.1097/00004647-199609000-00008
 #'@examples
 #' f <- system.file("extdata", "AD06.tac", package="tacmagic")
 #' fv <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
@@ -64,6 +67,11 @@ DVR_ref_Logan <- function(tac_data, target, ref, k2prime, t_star, error=0.10,
 #'              parameters
 #'@return Data frame with calculate DVRs for all ROIs
 #'@family Logan plot functions
+#'@references Logan, J., Fowler, J. S., Volkow, N. D., Wang, G.-J., 
+#' Ding, Y.-S., & Alexoff, D. L. (1996). Distribution Volume Ratios without 
+#' Blood Sampling from Graphical Analysis of PET Data. Journal of Cerebral 
+#' Blood Flow & Metabolism, 16(5), 834-840. 
+#' https://doi.org/10.1097/00004647-199609000-00008
 #'@examples
 #' f <- system.file("extdata", "AD06.tac", package="tacmagic")
 #' fv <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")

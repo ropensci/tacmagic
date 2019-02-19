@@ -191,7 +191,7 @@ validate_tac_vs <- function(voistat) {
 #### Magia file types ---------------------------------------------------------
 
 # Loads tac data from a .mat file, the output of the magia pipelines
-# magia information is found at references()$magia
+# magia information is found at http://aivo.utu.fi/magia/
 #' @noRd
 load_tac_magia <- function(filename) {
   matlab <- R.matlab::readMat(filename)
@@ -202,8 +202,6 @@ load_tac_magia <- function(filename) {
   tac <- data.frame(frames, tacs)
   return(tac)
 }
-
-
 
 
 #### Turku PET Centre DFT file type
