@@ -33,7 +33,7 @@ The sample data for this analysis uses an anonymized scans of a participant with
 
 ### Data loading
 
-Time-activity curve (TAC) data is loaded via `load_tac()`, which is a wrapper for format-specific functions. To specify which file format the tac data is stored as, use the `format` parameter. Supported formats can be viewed in `help(load_tac())`.
+Time-activity curve (TAC) data is loaded via `load_tac()`, which is a wrapper for format-specific functions. To specify which file format the tac data is stored as, use the `format` parameter. Supported formats can be viewed in `help(load_tac)`.
 
 The minimal amount of information required is the TAC data for one or more ROI, including the start and stop times of each frame, the time units and the activity units. This information may be in 1 or more files depending on the format and software that created it. 
 
@@ -203,7 +203,7 @@ All analyses can be run using 2 steps: a batch data loading step and a batch ana
 
 ### Batch loading
 
-Data loading is done by `batch_load()`. See `help(batch_load()` for the required arguements. 
+Data loading is done by `batch_load()`. See `help(batch_load)` for the required arguements. 
 
 The first argument is a vector of participant IDs that corresponds to file names, e.g.:
 

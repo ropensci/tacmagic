@@ -12,7 +12,7 @@
 
 <meta name="author" content="Eric Brown" />
 
-<meta name="date" content="2019-02-15" />
+<meta name="date" content="2019-02-19" />
 
 <title>Analysis with tacmagic</title>
 
@@ -300,7 +300,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 
 <h1 class="title toc-ignore">Analysis with tacmagic</h1>
 <h4 class="author"><em>Eric Brown</em></h4>
-<h4 class="date"><em>2019-02-15</em></h4>
+<h4 class="date"><em>2019-02-19</em></h4>
 
 
 <div id="TOC">
@@ -334,7 +334,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <h2>Time-activity curve operations</h2>
 <div id="data-loading" class="section level3">
 <h3>Data loading</h3>
-<p>Time-activity curve (TAC) data is loaded via <code>load_tac()</code>, which is a wrapper for format-specific functions. To specify which file format the tac data is stored as, use the <code>format</code> parameter. Supported formats can be viewed in <code>help(load_tac())</code>.</p>
+<p>Time-activity curve (TAC) data is loaded via <code>load_tac()</code>, which is a wrapper for format-specific functions. To specify which file format the tac data is stored as, use the <code>format</code> parameter. Supported formats can be viewed in <code>help(load_tac)</code>.</p>
 <p>The minimal amount of information required is the TAC data for one or more ROI, including the start and stop times of each frame, the time units and the activity units. This information may be in 1 or more files depending on the format and software that created it.</p>
 <p>For example, PMOD’s <code>.tac</code> files contain all of the information, but the TAC .voistat files do not contain start and stop times, but this information could be specified using a <code>.acqtimes</code> file. Support is also available for DFT format, which contains both TAC and volume data.</p>
 <p>We processed the PIB PET and T1 MRI data with the <a href="https://www.pmod.com/">PMOD</a> PNEURO software suite to produce a <code>.tac</code> file with tacs for all ROIs in the Hammer’s atlas. The <code>.tac</code> file can be loaded with <code>load_tac()</code>:</p>
@@ -555,7 +555,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <p>All analyses can be run using 2 steps: a batch data loading step and a batch analysis step.</p>
 <div id="batch-loading" class="section level3">
 <h3>Batch loading</h3>
-<p>Data loading is done by <code>batch_load()</code>. See <code>help(batch_load()</code> for the required arguements.</p>
+<p>Data loading is done by <code>batch_load()</code>. See <code>help(batch_load)</code> for the required arguements.</p>
 <p>The first argument is a vector of participant IDs that corresponds to file names, e.g.:</p>
 <p><code>participants &lt;- c(&quot;participant01&quot;, &quot;participant02&quot;)</code> if the files are located e.g. <code>/mypath/participant01.tac</code> and <code>/mypath/participant01_TAC.voistat</code>. In this case, the function call might look like:</p>
 <p><code>my_data &lt;- batch_load(participants, dir=&quot;/mypath/&quot;, tac_format=&quot;PMOD&quot;, roi_m=T, vol_file_suffix=&quot;_TAC.voistat&quot;, vol_format=&quot;voistat&quot;, ROI_def=roi_ham_stand(), merge=F)</code></p>
