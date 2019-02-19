@@ -104,7 +104,7 @@ plot_tac <- function(TACtable1, TACtable2=NULL, ROIs, ymax=25,
 #'@param k2prime A fixed value for k2' must be specified (e.g. 0.2)
 #'@param t_star If 0, t* will be calculated using find_t_star()
 #'@param error For find_t_star()
-#'@param method Method of inntegration, "trapz" or "integrate"
+#'@param method Method of integration, "trapz" or "integrate"
 #'@family Logan plot functions
 #'@return No return
 #' f <- system.file("extdata", "AD06.tac", package="tacmagic")

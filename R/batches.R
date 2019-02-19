@@ -136,7 +136,7 @@ batch_load <- function(participants, dir="", tac_file_suffix=".tac",
 #'@param ROI_def Object that defines combined ROIs, see ROI_definitions.R
 #'@param dir Directory and/or filename prefix of the files
 #'@param filesuffix Optional filename characters between ID and ".voistat"
-#'@param varname The name of the variable being exctracted, e.g. "SRTM"
+#'@param varname The name of the variable being extracted, e.g. "SRTM"
 #'@return A table of values for the specified ROIs for all participants
 #'@family Batch functions
 #'@examples

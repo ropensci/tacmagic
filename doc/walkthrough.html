@@ -411,7 +411,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 </div>
 <div id="plotting" class="section level3">
 <h3>Plotting</h3>
-<p>Basic tac plotting is done with <code>plot_tac</code>, which accepts tac data from 2 participants (or group means). The ROIs to plot are specified as a vector of ROI names as they appear in the tac object. As the tac object contains time unit information, the plot can conver to desired units, which can be specified with the <code>time</code> argument.</p>
+<p>Basic tac plotting is done with <code>plot_tac</code>, which accepts tac data from 2 participants (or group means). The ROIs to plot are specified as a vector of ROI names as they appear in the tac object. As the tac object contains time unit information, the plot can convert to desired units, which can be specified with the <code>time</code> argument.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">plot_tac</span>(AD06,                                                    <span class="co"># tac data</span></a>
 <a class="sourceLine" id="cb5-2" data-line-number="2">         <span class="dt">ROIs=</span><span class="kw">c</span>(<span class="st">&quot;frontal&quot;</span>, <span class="st">&quot;temporal&quot;</span>, <span class="st">&quot;parietal&quot;</span>, <span class="st">&quot;cerebellum&quot;</span>), <span class="co"># ROIs to plot</span></a>
 <a class="sourceLine" id="cb5-3" data-line-number="3">         <span class="dt">time=</span><span class="st">&quot;minutes&quot;</span>,             <span class="co"># Convert x axis from seconds to minutes</span></a>
@@ -555,7 +555,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <p>All analyses can be run using 2 steps: a batch data loading step and a batch analysis step.</p>
 <div id="batch-loading" class="section level3">
 <h3>Batch loading</h3>
-<p>Data loading is done by <code>batch_load()</code>. See <code>help(batch_load)</code> for the required arguements.</p>
+<p>Data loading is done by <code>batch_load()</code>. See <code>help(batch_load)</code> for the required arguments.</p>
 <p>The first argument is a vector of participant IDs that corresponds to file names, e.g.:</p>
 <p><code>participants &lt;- c(&quot;participant01&quot;, &quot;participant02&quot;)</code> if the files are located e.g. <code>/mypath/participant01.tac</code> and <code>/mypath/participant01_TAC.voistat</code>. In this case, the function call might look like:</p>
 <p><code>my_data &lt;- batch_load(participants, dir=&quot;/mypath/&quot;, tac_format=&quot;PMOD&quot;, roi_m=T, vol_file_suffix=&quot;_TAC.voistat&quot;, vol_format=&quot;voistat&quot;, ROI_def=roi_ham_stand(), merge=F)</code></p>

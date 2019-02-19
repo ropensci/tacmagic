@@ -101,7 +101,7 @@ AD06[1:5,1:5]
 
 ### Plotting
 
-Basic tac plotting is done with `plot_tac`, which accepts tac data from 2 participants (or group means). The ROIs to plot are specified as a vector of ROI names as they appear in the tac object. As the tac object contains time unit information, the plot can conver to desired units, which can be specified with the `time` argument.
+Basic tac plotting is done with `plot_tac`, which accepts tac data from 2 participants (or group means). The ROIs to plot are specified as a vector of ROI names as they appear in the tac object. As the tac object contains time unit information, the plot can convert to desired units, which can be specified with the `time` argument.
 
 ```{r, fig.show='hold', fig.height=4.5, fig.width=6.5, fig.align='center'}
 plot_tac(AD06,                                                    # tac data
@@ -203,7 +203,7 @@ All analyses can be run using 2 steps: a batch data loading step and a batch ana
 
 ### Batch loading
 
-Data loading is done by `batch_load()`. See `help(batch_load)` for the required arguements. 
+Data loading is done by `batch_load()`. See `help(batch_load)` for the required arguments. 
 
 The first argument is a vector of participant IDs that corresponds to file names, e.g.:
 

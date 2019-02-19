@@ -13,7 +13,7 @@
 #'@export 
 #'@param tac The time-activity curve data from tac_roi()
 #'@param SUVR_def a vector of start times for window to be used in SUVR
-#'@param ref a string, e.g. "cerbellum", to specify reference region
+#'@param ref a string, e.g. "cerebellum", to specify reference region
 #'@param params a list of paramters passed from the batch_tm function and is
 #'              not needed when calling for individual participants.
 #'@return A data.frame of SUVR values for the specified ROIs
@@ -66,7 +66,7 @@ suvr <- function(tac, SUVR_def=NULL, ref=NULL, params=NULL) {
 #'@export 
 #'@param tac The time-activity curve data from tac_roi()
 #'@param SUVR_def a vector of start times for window to be used in SUVR
-#'@param ref is a string, e.g. "cerbellum", to specify reference region
+#'@param ref is a string, e.g. "cerebellum", to specify reference region
 #'@param params a list of paramters passed from the batch_tm function and is
 #'              not needed when calling for individual participants.
 #'@family SUVR functions

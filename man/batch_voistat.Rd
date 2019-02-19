@@ -16,7 +16,7 @@ batch_voistat(participants, ROI_def, dir = "", filesuffix = ".voistat",
 
 \item{filesuffix}{Optional filename characters between ID and ".voistat"}
 
-\item{varname}{The name of the variable being exctracted, e.g. "SRTM"}
+\item{varname}{The name of the variable being extracted, e.g. "SRTM"}
 }
 \value{
 A table of values for the specified ROIs for all participants

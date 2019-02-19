@@ -6,7 +6,7 @@
 ##################################
 
 
-#' Cutoff value caluclation using method described in Aizenstein et al. 2008
+#' Cutoff value calculation using method described in Aizenstein et al. 2008
 #' 
 #' See the reference below and the tacmagic walkthrough vignette. Aizenstein et
 #' al. (2008) proposed a standardized method of calculating Pittsburg Compound

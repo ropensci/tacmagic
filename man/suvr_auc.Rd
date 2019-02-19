@@ -11,7 +11,7 @@ suvr_auc(tac, SUVR_def = NULL, ref = NULL, params = NULL)
 
 \item{SUVR_def}{a vector of start times for window to be used in SUVR}
 
-\item{ref}{is a string, e.g. "cerbellum", to specify reference region}
+\item{ref}{is a string, e.g. "cerebellum", to specify reference region}
 
 \item{params}{a list of paramters passed from the batch_tm function and is
 not needed when calling for individual participants.}

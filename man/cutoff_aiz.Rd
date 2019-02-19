@@ -2,7 +2,7 @@
 % Please edit documentation in R/cutoff.R
 \name{cutoff_aiz}
 \alias{cutoff_aiz}
-\title{Cutoff value caluclation using method described in Aizenstein et al. 2008}
+\title{Cutoff value calculation using method described in Aizenstein et al. 2008}
 \usage{
 cutoff_aiz(modelstats, ROIs)
 }

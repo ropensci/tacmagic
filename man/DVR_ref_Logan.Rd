@@ -20,7 +20,7 @@ DVR_ref_Logan(tac_data, target, ref, k2prime, t_star, error = 0.1,
 
 \item{error}{For find_t_star()}
 
-\item{method}{Method of inntegration, "trapz" or "integrate"}
+\item{method}{Method of integration, "trapz" or "integrate"}
 }
 \value{
 Data frame with calculate DVRs for all ROIs

@@ -18,7 +18,7 @@ DVR_all_ref_Logan(tac_data, ref = NULL, k2prime = NULL,
 
 \item{error}{For find_t_star()}
 
-\item{method}{Method of inntegration, "trapz" or "integrate"}
+\item{method}{Method of integration, "trapz" or "integrate"}
 
 \item{params}{Used by batch_tm (not for calling individually) to pass model
 parameters}
