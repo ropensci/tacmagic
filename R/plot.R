@@ -31,20 +31,23 @@
 #' AD06_tac_nc <- tac_roi(tac, vol, roi_ham_full(), merge=FALSE, PVC=FALSE)
 #' plot(AD06_tac_nc, ROIs=c("frontal", "cerebellum"), title="Example Plot")
 plot.tac <- function(x, tac2=NULL, ROIs, ymax=25, 
-                     time="minutes", title="", colors=NULL, ...) {
-  
+                     time="minutes", title="", colors=rainbow, ...) {
   tac1 <- x
 
   if (!all(ROIs %in% names(tac1))) stop("ROIs are not in TACtable1")
-
   if (!validate_tac(tac1)) stop("The 1st tac object did not validate.")
   if (!is.null(tac2)) {
     if (!validate_tac(tac2)) stop("The 2nd tac object did not validate.")
+    compare_tac_form(tac1, tac2)
+    if (!all(ROIs %in% names(tac2))) stop("ROIs are not in tac2")
+    col <- colors(length(ROIs) * 2)
+  } else {
+  	col <- colors(length(ROIs))
   }
   
   if (!(time %in% c("seconds", "minutes"))) stop("Time must be \"seconds\" or 
                                                  \"minutes\"")
-
+  
   if (time == "minutes") {
     if (attributes(tac1)$time_unit == "minutes") time_conversion <- 1
     if (attributes(tac1)$time_unit == "seconds") time_conversion <- 60
@@ -55,9 +58,6 @@ plot.tac <- function(x, tac2=NULL, ROIs, ymax=25,
     if (attributes(tac1)$time_unit == "minutes") time_conversion <- 1/60
   }
 
-  # Sets up the plot using the frame start from the TAC file for the x axis
-  # and converting to minutes if chosen. 
-   
   plot(1,type='n',
        xlim=c(tac1$start[1],
               tac1$start[length(tac1$start)]/time_conversion),
@@ -67,40 +67,28 @@ plot.tac <- function(x, tac2=NULL, ROIs, ymax=25,
                           attributes(tac1)$activity_unit, ")"),
               main=title)
   
-  # Separate colour ranges for each group of TACs
-  if (is.null(colors)) {
-    colour1 <- rainbow(length(ROIs), start=0, end=0.25)
-    colour2 <- rainbow(length(ROIs), start=0.5, end=0.8)	
-  } else {
-    colour1 <- colors(length(ROIs)*2)[1:length(ROIs)]
-    colour2 <- colors(length(ROIs)*2)[length(ROIs)+1:2*length(ROIs)]
-  }
-  
-  
   # Plots the ROIs as specified in the ROIs argument
   for (ROI in seq_along(ROIs)) {
 
     lines(x=tac1$start/time_conversion, 
           y=tac1[,ROIs[ROI]], 
           type='o', 
-          col=colour1[ROI], 
+          col=col[ROI], 
           lwd=2)
     
-    # Only if 2nd TAC table is provided, plots second on same plot
     if (is.tac(tac2)) {
-      if (!all(ROIs %in% names(tac2))) stop("ROIs are not in tac2")
-      compare_tac_form(tac1, tac2)
       lines(x=tac2$start/time_conversion, 
-            y=tac2[,ROIs[ROI]], 
+      	    y=tac2[,ROIs[ROI]], 
             type='o', 
-            col=colour2[ROI], 
+            col=col[ROI + length(ROIs)], 
             lwd=2)
-    }
+    } 
   }
-  
-  legend("topright", legend=ROIs, col=colour1, pch=1)
+
+  legend("topright", legend=ROIs, col=col[1:length(ROIs)], pch=1)
   if (is.tac(tac2)) {
-    legend("bottomright", legend=ROIs, col=colour2, pch=1)
+    legend("bottomright", legend=ROIs, 
+    	   col=col[(length(ROIs)+1):(2*length(ROIs))], pch=1)
   }
 } 
 
@@ -130,7 +118,7 @@ plot.tac <- function(x, tac2=NULL, ROIs, ymax=25,
 #'                k2prime=0.2, t_star=0)
 #' 
 plot_ref_Logan <- function(tac_data, target, ref, k2prime, t_star=0, error=0.1,
-                           method="trapz") {
+                           method="trapz", ...) {
     model <- ref_Logan_lm(tac_data=tac_data, target=target, ref=ref, 
                           k2prime=k2prime, t_star=t_star, error=error, 
                           method=method)
@@ -142,7 +130,7 @@ plot_ref_Logan <- function(tac_data, target, ref, k2prime, t_star=0, error=0.1,
     
     par(mfrow=c(1,2))
     
-    plot(tac_data, ROIs=c(target,ref))
+    plot(tac_data, ROIs=c(target,ref), title="Time-activity curves", ...)
     
     plot(y~x, main="Logan plot")
     abline(model)
