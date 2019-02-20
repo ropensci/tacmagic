@@ -5,7 +5,7 @@
 \title{Plots time activity curves from 1 or 2 participants or groups.}
 \usage{
 \method{plot}{tac}(x, tac2 = NULL, ROIs, ymax = 25, time = "minutes",
-  title = "", ...)
+  title = "", colors = NULL, ...)
 }
 \arguments{
 \item{x}{A tac object containing time-activity curves to plot, e.g. from 
@@ -20,6 +20,9 @@ tac_roi() or load_tac()}
 \item{time}{"seconds" or "minutes" depending on desired x-axis, converts tac}
 
 \item{title}{A title for the plot}
+
+\item{colors}{If null, rainbow palette is used, otherwise another palette can
+be specified (heat.colors, terrain.colors, topo.colors, cm.colors}
 
 \item{...}{Additional arguments}
 }

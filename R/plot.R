@@ -16,6 +16,8 @@
 #'@param ymax The maximum value on the y-axis
 #'@param time "seconds" or "minutes" depending on desired x-axis, converts tac
 #'@param title A title for the plot
+#'@param colors If null, rainbow palette is used, otherwise another palette can
+#' be specified (heat.colors, terrain.colors, topo.colors, cm.colors
 #'@param ... Additional arguments
 #'@return Creates a plot
 #'@family tac functions 
@@ -29,7 +31,7 @@
 #' AD06_tac_nc <- tac_roi(tac, vol, roi_ham_full(), merge=FALSE, PVC=FALSE)
 #' plot(AD06_tac_nc, ROIs=c("frontal", "cerebellum"), title="Example Plot")
 plot.tac <- function(x, tac2=NULL, ROIs, ymax=25, 
-                     time="minutes", title="", ...) {
+                     time="minutes", title="", colors=NULL, ...) {
   
   tac1 <- x
 
@@ -66,8 +68,14 @@ plot.tac <- function(x, tac2=NULL, ROIs, ymax=25,
               main=title)
   
   # Separate colour ranges for each group of TACs
-  colour1 <- rainbow(length(ROIs), start=0, end=0.25)
-  colour2 <- rainbow(length(ROIs), start=0.5, end=0.8)
+  if (is.null(colors)) {
+    colour1 <- rainbow(length(ROIs), start=0, end=0.25)
+    colour2 <- rainbow(length(ROIs), start=0.5, end=0.8)	
+  } else {
+    colour1 <- colors(length(ROIs)*2)[1:length(ROIs)]
+    colour2 <- colors(length(ROIs)*2)[length(ROIs)+1:2*length(ROIs)]
+  }
+  
   
   # Plots the ROIs as specified in the ROIs argument
   for (ROI in seq_along(ROIs)) {
