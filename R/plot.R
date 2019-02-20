@@ -85,7 +85,7 @@ plot.tac <- function(x, tac2=NULL, ROIs, ymax=25,
     } 
   }
 
-  legend("topright", legend=ROIs, col=col[1:length(ROIs)], pch=1)
+  legend("topright", legend=ROIs, col=col[seq_along(ROIs)], pch=1)
   if (is.tac(tac2)) {
     legend("bottomright", legend=ROIs, 
     	   col=col[(length(ROIs)+1):(2*length(ROIs))], pch=1)
@@ -98,13 +98,8 @@ plot.tac <- function(x, tac2=NULL, ROIs, ymax=25,
 #' This plots the non-invasive Logan plot.
 #'
 #'@export
-#'@param tac_data The time-activity curve data from tac_roi()
-#'@param target The name of the receptor-rich region, e.g. "frontal"
-#'@param ref The reference region, e.g. "cerebellum"
-#'@param k2prime A fixed value for k2' must be specified (e.g. 0.2)
-#'@param t_star If 0, t* will be calculated using find_t_star()
-#'@param error For find_t_star()
-#'@param method Method of integration, "trapz" or "integrate"
+#'@param x Reference Logan model data object from DVR_ref_Logan()
+#'@param ... Additional parameters than can be passed to plotting function
 #'@family Logan plot functions
 #'@return No return
 #' f <- system.file("extdata", "AD06.tac", package="tacmagic")
@@ -113,28 +108,26 @@ plot.tac <- function(x, tac2=NULL, ROIs, ymax=25,
 #' AD06_volume <- load_vol(fv, format="voistat")
 #' AD06 <- tac_roi(tac=AD06_tac, volumes=AD06_volume, ROI_def=roi_ham_pib(),  
 #'                 merge=FALSE, PVC=FALSE)  
-#' 
-#' plot_ref_Logan(AD06, target="frontal", ref="cerebellum", 
-#'                k2prime=0.2, t_star=0)
-#' 
-plot_ref_Logan <- function(tac_data, target, ref, k2prime, t_star=0, error=0.1,
-                           method="trapz", ...) {
-    model <- ref_Logan_lm(tac_data=tac_data, target=target, ref=ref, 
-                          k2prime=k2prime, t_star=t_star, error=error, 
-                          method=method)
-    xy <- ref_Logan_xy(tac=tac_data, target=target, ref=ref, 
-                       k2prime=k2prime, method=method)
+#' AD06_DVR_fr <- DVR_ref_Logan(AD06, target="frontal", ref="cerebellum",
+#'                              k2prime=0.2, t_star=0) 
+#' plot(AD06_DVR_fr)
+plot.ref_Logan <- function(x, ...) {
+	if (!is.ref_logan(x)) stop("x must be object from DVR_ref_Logan()")
+
+	ref_logan <- x
+    model <- ref_logan$model
+    xy <- ref_logan$xy
     x <- xy$x
     y <- xy$y
-    if (t_star == 0) t_star <- find_t_star(x, y, error=error)
     
     par(mfrow=c(1,2))
     
-    plot(tac_data, ROIs=c(target,ref), title="Time-activity curves", ...)
+    plot(ref_logan$tac, ROIs=names(ref_logan$tac)[-c(1,2)], 
+    	 title="Time-activity curves", ...)
     
     plot(y~x, main="Logan plot")
     abline(model)
-    abline(v=x[t_star])
+    abline(v=x[ref_logan$t_star])
 }
 
 

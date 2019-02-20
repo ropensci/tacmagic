@@ -50,6 +50,6 @@ https://doi.org/10.1097/00004647-199609000-00008
 }
 \seealso{
 Other Logan plot functions: \code{\link{DVR_ref_Logan}},
-  \code{\link{plot_ref_Logan}}
+  \code{\link{plot.ref_Logan}}
 }
 \concept{Logan plot functions}

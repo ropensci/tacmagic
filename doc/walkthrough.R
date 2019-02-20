@@ -74,17 +74,11 @@ AD06_DVR_fr <- DVR_ref_Logan(AD06,
                              t_star=0,        # 0 to find, or can specify frame
                              )
 
-
-AD06_DVR_fr
+AD06_DVR_fr$DVR
 
 
 ## ---- fig.show='hold', fig.height=4.5, fig.width=6.5, fig.align='center'----
-plot_ref_Logan(AD06, 
-               target="frontal",
-               ref="cerebellum", 
-               k2prime=0.2,     
-               t_star=0,        
-               )
+plot(AD06_DVR_fr)
 
 
 ## ------------------------------------------------------------------------

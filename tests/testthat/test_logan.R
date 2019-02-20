@@ -78,16 +78,14 @@ test_that("plot_ref_logan creates the plots without error", {
   AD06 <- tac_roi(tac=AD06_tac,          
                   volumes=AD06_volume, ROI_def=roi_ham_pib(), merge=F, PVC=F)
 
+  AD06_Logan <- DVR_ref_Logan(AD06, target="frontal", ref="cerebellum", 
+                              k2prime=0.2, t_star=0) 
+
   pdf(NULL)
   on.exit(dev.off())
   dev.control(displaylist="enable")
 
-  plot_ref_Logan(AD06, 
-                 target="frontal",
-                 ref="cerebellum", 
-                 k2prime=0.2,     
-                 t_star=0,        
-                 )
+  plot(AD06_Logan)
 
   p <- recordPlot()
 

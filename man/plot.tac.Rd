@@ -5,7 +5,7 @@
 \title{Plots time activity curves from 1 or 2 participants or groups.}
 \usage{
 \method{plot}{tac}(x, tac2 = NULL, ROIs, ymax = 25, time = "minutes",
-  title = "", colors = NULL, ...)
+  title = "", colors = rainbow, ...)
 }
 \arguments{
 \item{x}{A tac object containing time-activity curves to plot, e.g. from 
