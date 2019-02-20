@@ -120,7 +120,7 @@ test_that("custom functions can be passed to batch_tm()", {
   }
 
   # the "custom function"
-  maxi <- function(tac, SUVR_def=NULL, ref=NULL, params) {
+  maxi <- function(tac, ...) {
     table <- new_table_out(tac, "maxi")
 
     for (ROI in names(tac)[-(1:2)]) {

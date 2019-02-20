@@ -4,8 +4,8 @@
 \alias{DVR_all_ref_Logan}
 \title{Non-invasive reference Logan method for all ROIs in tac data}
 \usage{
-DVR_all_ref_Logan(tac_data, ref = NULL, k2prime = NULL,
-  t_star = NULL, error = 0.1, method = "trapz", params = NULL)
+DVR_all_ref_Logan(tac_data, ref, k2prime, t_star, error = 0.1,
+  method = "trapz", ...)
 }
 \arguments{
 \item{tac_data}{The time-activity curve data from tac_roi()}
@@ -20,8 +20,7 @@ DVR_all_ref_Logan(tac_data, ref = NULL, k2prime = NULL,
 
 \item{method}{Method of integration, "trapz" or "integrate"}
 
-\item{params}{Used by batch_tm (not for calling individually) to pass model
-parameters}
+\item{...}{When called from tm_batch, unused parameters may be supplied}
 }
 \value{
 Data frame with calculate DVRs for all ROIs

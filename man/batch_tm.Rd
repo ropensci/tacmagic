@@ -4,26 +4,17 @@
 \alias{batch_tm}
 \title{Calculate one or more models for a batch of participants}
 \usage{
-batch_tm(all_tacs, models = c("SUVR", "Logan"), ref, SUVR_def = NULL,
-  k2prime = NULL, t_star = NULL, custom_model = NULL,
-  custom_params = NULL)
+batch_tm(all_tacs, models, custom_model = NULL, ...)
 }
 \arguments{
 \item{all_tacs}{A list by participant, of tac data (load_batch())}
 
 \item{models}{A vector of names of the models to calculate}
 
-\item{ref}{The name of the reference region for DVR/SUVR calculation}
-
-\item{SUVR_def}{is a vector of the start times for window to be used in SUVR}
-
-\item{k2prime}{Fixed k2' for DVR calculation}
-
-\item{t_star}{Change from 0 to manually specify a t* for DVR calculation}
-
 \item{custom_model}{A function that can be run like other models (advanced)}
 
-\item{custom_params}{To pass to custom_model as params$custom_params}
+\item{...}{The arguments that get passed to the specified models/custom model,
+many are required; please check with model desired.}
 }
 \value{
 A table of SUVR values for the specified ROIs for all participants

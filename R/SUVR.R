@@ -14,8 +14,7 @@
 #'@param tac The time-activity curve data from tac_roi()
 #'@param SUVR_def a vector of start times for window to be used in SUVR
 #'@param ref a string, e.g. "cerebellum", to specify reference region
-#'@param params a list of paramters passed from the batch_tm function and is
-#'              not needed when calling for individual participants.
+#'@param ... When called from tm_batch, unused parameters may be supplied
 #'@return A data.frame of SUVR values for the specified ROIs
 #'@family SUVR functions
 #'@examples
@@ -28,19 +27,7 @@
 #' 
 #' AD06_SUVR <- suvr(AD06, SUVR_def=c(3000,3300,3600), ref="cerebellum")
 #' 
-suvr <- function(tac, SUVR_def=NULL, ref=NULL, params=NULL) {
-
-    if (!(is.null(params))) {
-      if(!is.null(c(SUVR_def, ref))) {
-        stop("Only provide either params argument or both SUVR_def and ref.")
-      } 
-      if ( is.null(params$SUVR_def) | is.null(params$ref) ) {
-        stop("Both SUVR_def and ref are needed to calculate SUVR.")
-      }
-      
-      ref <- params$ref
-      SUVR_def <- params$SUVR
-    }
+suvr <- function(tac, SUVR_def, ref, ...) {
 
     validate_suvr_params(tac, SUVR_def, ref)
 
@@ -67,8 +54,7 @@ suvr <- function(tac, SUVR_def=NULL, ref=NULL, params=NULL) {
 #'@param tac The time-activity curve data from tac_roi()
 #'@param SUVR_def a vector of start times for window to be used in SUVR
 #'@param ref is a string, e.g. "cerebellum", to specify reference region
-#'@param params a list of paramters passed from the batch_tm function and is
-#'              not needed when calling for individual participants.
+#'@param ... When called from tm_batch, unused parameters may be supplied
 #'@family SUVR functions
 #'@return A data.frame of SUVR values for the specified ROIs
 #' #' f <- system.file("extdata", "AD06.tac", package="tacmagic")
@@ -80,18 +66,7 @@ suvr <- function(tac, SUVR_def=NULL, ref=NULL, params=NULL) {
 #' 
 #' AD06_SUVR <- suvr_auc(AD06, SUVR_def=c(3000,3300,3600), ref="cerebellum")
 #' 
-suvr_auc <- function(tac, SUVR_def=NULL, ref=NULL, params=NULL) {
-
-  if (!(is.null(params))) {
-    if(!is.null(c(SUVR_def, ref))) {
-      stop("Only provide either params argument or both SUVR_def and ref.")
-    } 
-    if ( is.null(params$SUVR_def) | is.null(params$ref) ) {
-      stop("Both SUVR_def and ref are needed to calculate SUVR.")
-    }  
-    ref <- params$ref
-    SUVR_def <- params$SUVR
-  }
+suvr_auc <- function(tac, SUVR_def, ref, ...) {
 
   validate_suvr_params(tac, SUVR_def, ref)
 

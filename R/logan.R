@@ -70,8 +70,7 @@ DVR_ref_Logan <- function(tac_data, target, ref, k2prime, t_star, error=0.10,
 #'@param t_star Required -- If 0, t* will be calculated using find_t_star()
 #'@param error For find_t_star()
 #'@param method Method of integration, "trapz" or "integrate"
-#'@param params Used by batch_tm (not for calling individually) to pass model
-#'              parameters
+#'@param ... When called from tm_batch, unused parameters may be supplied
 #'@return Data frame with calculate DVRs for all ROIs
 #'@family Logan plot functions
 #'@references Logan, J., Fowler, J. S., Volkow, N. D., Wang, G.-J., 
@@ -89,23 +88,9 @@ DVR_ref_Logan <- function(tac_data, target, ref, k2prime, t_star, error=0.10,
 #' 
 #' AD06_DVR <- DVR_all_ref_Logan(AD06, ref="cerebellum", k2prime=0.2, t_star=23)
 #' 
-DVR_all_ref_Logan <- function(tac_data, 
-                              ref=NULL, k2prime=NULL, t_star=NULL, 
-                              error=0.10, method="trapz", params=NULL) {
+DVR_all_ref_Logan <- function(tac_data, ref, k2prime, t_star, 
+                              error=0.10, method="trapz", ...) {
     
-  if (!is.null(params)) {
-  if(!is.null(c(ref, k2prime, t_star))) {
-    stop("Provide EITHER params or ALL of ref, k2prime and t_star")
-  } 
-  if (any(is.null(params$ref), is.null(params$k2prime), 
-      is.null(params$t_star))) {
-        stop("Provide ALL of ref, k2prime and t_star")
-      }
-      ref <- params$ref
-      k2prime <- params$k2prime
-      t_star <- params$t_star
-    }
-
   DVRtable <- new_table(tac_data, "DVR")
     
   ROIs <- names(tac_data)[3:length(names(tac_data))]

@@ -19,12 +19,9 @@
 #'@export
 #'@param all_tacs A list by participant, of tac data (load_batch())
 #'@param models A vector of names of the models to calculate
-#'@param ref The name of the reference region for DVR/SUVR calculation
-#'@param SUVR_def is a vector of the start times for window to be used in SUVR
-#'@param k2prime Fixed k2' for DVR calculation
-#'@param t_star Change from 0 to manually specify a t* for DVR calculation
 #'@param custom_model A function that can be run like other models (advanced)
-#'@param custom_params To pass to custom_model as params$custom_params
+#'@param ... The arguments that get passed to the specified models/custom model,
+#' many are required; please check with model desired.
 #'@return A table of SUVR values for the specified ROIs for all participants
 #'@family Batch functions
 #'@examples
@@ -40,14 +37,9 @@
 #' batch <- batch_tm(tacs, models=c("SUVR", "Logan"), ref="Cerebellum_r",
 #'                   SUVR_def=c(3000,3300,3600), k2prime=0.2, t_star=23)
 #'
-batch_tm <- function(all_tacs, models=c("SUVR", "Logan"), ref, SUVR_def=NULL, 
-                     k2prime=NULL, t_star=NULL,
-                     custom_model=NULL, custom_params=NULL) {
+batch_tm <- function(all_tacs, models, custom_model=NULL, ...) {
 
   #----------------------------------------------------------------------------
-  params <- list(ref=ref, SUVR_def=SUVR_def, k2prime=k2prime, 
-                 t_star=t_star, custom_params=custom_params)
-
   all_models <- names(model_definitions())
   if (!(all(models %in% all_models))) stop("Invalid model name(s) supplied.")
   
@@ -55,14 +47,14 @@ batch_tm <- function(all_tacs, models=c("SUVR", "Logan"), ref, SUVR_def=NULL,
   
   # Run each model from available models --------------------------------------
   for (this_model in models) {
-    MOD <- model_batch(all_tacs, model=this_model, params=params)
+    MOD <- model_batch(all_tacs, model=this_model, ...)
     names(MOD) <- lapply(names(MOD), paste0, "_", this_model)  
     if (is.null(master)) master <- MOD else master <- data.frame(master, MOD)
   }
   
   # Run the custom model if one was specified ---------------------------------
   if(!is.null(custom_model)) {
-    MOD <- model_batch(all_tacs, params=params, model=custom_model)
+    MOD <- model_batch(all_tacs, model=custom_model, ...)
     names(MOD) <- lapply(names(MOD), paste0, "_custom")
     if (is.null(master)) master <- MOD else master <- data.frame(master, MOD)
   }
