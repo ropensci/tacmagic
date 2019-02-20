@@ -90,7 +90,8 @@ DVR_ref_Logan <- function(tac_data, target, ref, k2prime, t_star, error=0.10,
 #' 
 DVR_all_ref_Logan <- function(tac_data, ref, k2prime, t_star, 
                               error=0.10, method="trapz", ...) {
-    
+  
+  validate_ref_Logan_params(tac_data, ref, k2prime, t_star, error, method)  
   DVRtable <- new_table(tac_data, "DVR")
     
   ROIs <- names(tac_data)[3:length(names(tac_data))]

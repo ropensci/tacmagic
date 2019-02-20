@@ -110,6 +110,21 @@ wrap_auc <- function(frames,x,y) {
 
 ## Utilities ------------------------------------------------------------------
 
+#'@noRd
 is.ref_logan <- function(x) {
 		return (class(x) == "ref_Logan") 
+}
+
+#'@noRd
+validate_ref_Logan_params <- function(tac_data, ref, k2prime, t_star, 
+                                   error=0.10, method="trapz") {
+	if (!is.tac(tac_data)) stop("tac_data is not a tac object.")
+	if (!(ref %in% names(tac_data))) stop("ref is not in tac_data")
+	if (!(is.numeric(k2prime) | is.null(k2prime))) stop("k2prime not NULL or 
+		                                                numeric")
+	if (!is.numeric(t_star)) stop("t_star is not numeric")
+	if (t_star %% 1 != 0) stop("t_star is not an integer")
+	if (t_star > length(tac_data[,1])) stop("t_star is greater than frames")
+	if (error > 1 | error < 0) stop("error must be between 0 and 1")
+	if (!(method %in% c("trapz", "integrate"))) stop("invalid method name")
 }
