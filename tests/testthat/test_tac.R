@@ -15,11 +15,11 @@ test_that("tac_roi() accurately calculates weighted averages from PMOD .tac and
   ans_nc <- read.csv(f_ans_nc)
   attributes(ans_nc)$time_unit <- "seconds"
   attributes(ans_nc)$activity_unit <- "kBq/cc"
-  attributes(ans_nc)$tm_type <- "tac"
+  class(ans_nc) <- c("tac", "data.frame")
   ans_pvc <- read.csv(f_ans_pvc)
   attributes(ans_pvc)$time_unit <- "seconds"
   attributes(ans_pvc)$activity_unit <- "kBq/cc"
-  attributes(ans_pvc)$tm_type <- "tac"
+  class(ans_pvc) <- c("tac", "data.frame")
 
   tac <- load_tac(f_raw_tac)
   vol <- load_vol(f_raw_vol)
@@ -55,11 +55,11 @@ test_that("tac_roi() accurately calculates weighted averages from PMOD .voistat
   ans_nc <- read.csv(f_ans_nc)
   attributes(ans_nc)$time_unit <- "seconds"
   attributes(ans_nc)$activity_unit <- "kBq/cc"
-  attributes(ans_nc)$tm_type <- "tac"
+  class(ans_nc) <- c("tac", "data.frame")
   ans_pvc <- read.csv(f_ans_pvc)
   attributes(ans_pvc)$time_unit <- "seconds"
   attributes(ans_pvc)$activity_unit <- "kBq/cc"
-  attributes(ans_pvc)$tm_type <- "tac"
+  class(ans_pvc) <- c("tac", "data.frame")
 
   expect_equal(AD06_tac_nc_vs, ans_nc)
   expect_equal(AD06_tac_pvc_vs, ans_pvc)
@@ -75,7 +75,7 @@ test_that("tac_roi() rejects a bad tac", {
 
   tac_good <- load_tac(f_raw_tac)
   tac_bad <- tac_good
-  attributes(tac_bad)$tm_type <- "fail"  # ruin the tac object
+  class(tac_bad) <- "data.frame"  # not a tac class object
 
   vol <- load_vol(f_voistat)
 
@@ -95,7 +95,7 @@ test_that("tac_roi() can load magia matlab files to the proper format", {
   m <- load_tac_magia(f_magia)
   attributes(m)$time_unit <- "seconds"
   attributes(m)$activity_unit <- "kBq/cc"
-  attributes(m)$tm_type <- "tac"
+  class(m) <- c("tac", "data.frame")
   n <- load_tac(f_magia, format="magia", time_unit="seconds", 
   	            activity_unit="kBq/cc")
   expect_is(m, "data.frame")
@@ -105,7 +105,7 @@ test_that("tac_roi() can load magia matlab files to the proper format", {
 
 })	
 
-test_that("plot_tac runs without error and contains correct axis label", {
+test_that("plot.tac runs without error and contains correct axis label", {
 
 
   f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic") 
@@ -119,7 +119,7 @@ test_that("plot_tac runs without error and contains correct axis label", {
   on.exit(dev.off())
   dev.control(displaylist="enable")
 
-  plot_tac(AD06_tac_nc, ROIs=c("frontal", "cerebellum"), time="minutes", 
+  plot(AD06_tac_nc, ROIs=c("frontal", "cerebellum"), time="minutes", 
            title="Example Plot")
 
   p <- recordPlot()
@@ -131,7 +131,7 @@ test_that("plot_tac runs without error and contains correct axis label", {
   on.exit(dev.off())
   dev.control(displaylist="enable")
 
-  plot_tac(AD06_tac_nc, ROIs=c("frontal", "cerebellum"), time="seconds", 
+  plot(AD06_tac_nc, ROIs=c("frontal", "cerebellum"), time="seconds", 
            title="Example Plot")
 
   p <- recordPlot()
@@ -139,7 +139,7 @@ test_that("plot_tac runs without error and contains correct axis label", {
   expect_equal(unlist(p)[[123]], "Time (seconds)")
 })
 
-test_that("plot_tac with 2 tacs and conversion runs without error and 
+test_that("plot.tac with 2 tacs and conversion runs without error and 
            contains correct axis label", {
 
   f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic") 
@@ -159,7 +159,7 @@ test_that("plot_tac with 2 tacs and conversion runs without error and
   on.exit(dev.off())
   dev.control(displaylist="enable")
 
-  plot_tac(AD06_tac_nc, AD07_tac_nc, ROIs=c("frontal", "cerebellum"), 
+  plot(AD06_tac_nc, AD07_tac_nc, ROIs=c("frontal", "cerebellum"), 
            title="Example Plot", time="seconds")
 
   p <- recordPlot()

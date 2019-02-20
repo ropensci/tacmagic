@@ -13,7 +13,7 @@ filename <- system.file("extdata", "AD06.tac", package="tacmagic")
 
 AD06_tac <- load_tac(filename, format="PMOD")
 
-AD06_tac[1:5,1:5] # the first 5 frames of the first 3 ROIs
+as.data.frame(AD06_tac)[1:5,1:5] # the first 5 frames of the first 3 ROIs
 
 ## ------------------------------------------------------------------------
 filename_acq <- system.file("extdata", "AD06.acqtimes", package="tacmagic")
@@ -28,7 +28,7 @@ f_magia <- system.file("extdata", "AD06_tac_magia.mat", package="tacmagic")
 
 AD06_tac_magia <- load_tac(f_magia, format="magia", 
                            time_unit="seconds", activity_unit="kBq/cc")
-AD06_tac_magia[1:5,1:5]
+as.data.frame(AD06_tac_magia)[1:5,1:5]
 
 ## ------------------------------------------------------------------------
 AD06_volume <- load_vol(filename_voistat, format="voistat")
@@ -42,14 +42,14 @@ AD06 <- tac_roi(tac=AD06_tac,           # The tac file we loaded above.
                 PVC=F                   # to use _C ROIs (PMOD convention)            
                 )
 
-AD06[1:5,1:5]
+as.data.frame(AD06)[1:5,1:5]
 
 ## ---- fig.show='hold', fig.height=4.5, fig.width=6.5, fig.align='center'----
-plot_tac(AD06,                                                    # tac data
-         ROIs=c("frontal", "temporal", "parietal", "cerebellum"), # ROIs to plot
-         time="minutes",             # Convert x axis from seconds to minutes
-         title="PIB time activity curves for AD06"        # A title for the plot
-        )
+plot(AD06,                                                    # tac data
+     ROIs=c("frontal", "temporal", "parietal", "cerebellum"), # ROIs to plot
+     time="minutes",                   # Convert x axis from seconds to minutes
+     title="PIB time activity curves for AD06"        # A title for the plot
+     )
 
 ## ------------------------------------------------------------------------
 AD06_SUVR <- suvr(AD06,                       # tac data

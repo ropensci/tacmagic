@@ -10,10 +10,14 @@
 # General tac file validation
 #' @noRd
 validate_tac <- function(tac) {
-  # are first 2 variables "start" and "end"
+  
+  if(!is.tac(tac)) {
+    stop("An object of class c(\"tac\", \"data.frame\") was not provided.")
+  } 
 
   status <- TRUE
 
+  # are first 2 variables "start" and "end"
   if (FALSE == (startsWith(names(tac)[1], "start") && 
                 startsWith(names(tac)[2], "end"))) {
     message("The first two columns of the TAC file should be start and end 
@@ -21,16 +25,11 @@ validate_tac <- function(tac) {
     status <- FALSE
   }
 
-  if (!all(as.character(apply(tac, 2, class)) == "numeric")) {
+  if (!all(as.character(apply(as.data.frame(tac), 2, class)) == "numeric")) {
    message("All tac columns should be numeric. Check input data.")
   }
 
   # Are the correct attributes set
-  if (!(attributes(tac)$tm_type == "tac")) {
-    message("TAC data should have attribute tm_type=tac")
-    status <- FALSE
-  }
-
   if (!(attributes(tac)$time_unit %in% c("seconds", "minutes"))) {
     message("TAC data missing attribute time_unit")
     status <- FALSE

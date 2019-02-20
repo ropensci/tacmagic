@@ -47,9 +47,9 @@ tac_roi <- function(tac, volumes, ROI_def, merge, PVC) {
   }
     
   if (merge) {
-    calculated_TACs <- data.frame(tac, calculated_TACs)
+    calculated_TACs <- data.frame(as.data.frame(tac), calculated_TACs)
   } else {
-      calculated_TACs <- data.frame(tac[1:2], calculated_TACs)
+      calculated_TACs <- data.frame(as.data.frame(tac)[1:2], calculated_TACs)
   }
   
   attributes(calculated_TACs) <- copy_tac_attributes(tac, calculated_TACs)
@@ -83,6 +83,7 @@ tac_roi <- function(tac, volumes, ROI_def, merge, PVC) {
 split_pvc <- function(tac, PVC=TRUE) {
 
   validate_tac(tac)
+  class(tac) <- "data.frame"
   subset <- cbind(tac[1:2], tac[endsWith(names(tac), "_C") == PVC])
   attributes(subset) <- copy_tac_attributes(tac, subset)
   validate_tac(subset)

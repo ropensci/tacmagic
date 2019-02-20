@@ -20,7 +20,7 @@ saves it as a PMOD-formatted tac file. Using the .tac extension in the
 file name is recommended.
 }
 \seealso{
-Other tac functions: \code{\link{plot_tac}},
+Other tac functions: \code{\link{plot.tac}},
   \code{\link{split_pvc}}, \code{\link{tac_roi}}
 }
 \concept{tac functions}

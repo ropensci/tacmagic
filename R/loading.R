@@ -94,9 +94,10 @@ load_tac <- function(filename, format="PMOD", acqtimes=NULL, time_unit=NULL,
 
   } else stop("Specified format for tac not supported.")
 
-  attributes(tac)$tm_type <- "tac"
+  class(tac) <- c("tac", "data.frame")
   if (!is.null(time_unit)) attributes(tac)$time_unit <- time_unit
   if (!is.null(activity_unit)) attributes(tac)$activity_unit <- activity_unit
+  
   if (!(validate_tac(tac))) stop("TAC object created by load_tac was invalid.")
   return(tac)
 }
