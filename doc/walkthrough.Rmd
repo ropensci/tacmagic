@@ -19,15 +19,23 @@ knitr::opts_chunk$set(
 )
 ```
 
-There are two approaches to using the tacmagic package to analyze PET time-activity curve data: either by loading participant data individually and using the various functions to analyze it, or via the batch functions to list and analyze data from multiple participants. Here, we illustrate the main features of tacmagic, by walking through the analysis of a single participant. We provide an explanation of the batch mode at the end.
-
 ## Background
 
-[Positron emission tomography](https://en.wikipedia.org/wiki/Positron_emission_tomography) (PET) is a research and clinical imaging modality that uses radioactive tracers that bind to target molecules of interest. A PET scanner identifies the tracer location by virtue of the tracer's radioactive decay, providing information to determine the location of the target in the body. As the spatial resolution of PET is relatively poor, analysis is frequently combined with higher resolution imaging such as magnetic resonance imaging (MRI), which can be spatially co-registered to the PET image. Subsequently, radiotracer activity (over time) can be identified by spatial region of interest (ROI). The resulting analysis produces time-activity curves (**tac**) which can be further analyzed to answer important clinical and research questions (**magic**). 
+[Positron emission tomography](https://en.wikipedia.org/wiki/Positron_emission_tomography) (PET) is a research and clinical imaging modality that uses radioactive tracers that bind to target molecules of interest. A PET scanner identifies the tracer location by virtue of the tracer's radioactive decay, providing information to determine the location of the target in the body. As the spatial resolution of PET is relatively poor, analysis is frequently combined with higher resolution imaging such as magnetic resonance imaging (MRI), which can be spatially co-registered to the PET image. Subsequently, radiotracer activity (over time) can be identified by spatial region of interest (ROI).
 
-The sample data for this analysis uses an anonymized scans of a participant with Alzheimer's dementia, data from http://www.gaain.org which was generously made available for unrestricted use.^[Klunk, William E., Robert A. Koeppe, Julie C. Price, Tammie L. Benzinger, Michael D. Devous, William J. Jagust, Keith A. Johnson, et al. “The Centiloid Project: Standardizing Quantitative Amyloid Plaque Estimation by PET.” Alzheimer’s & Dementia 11, no. 1 (January 2015): 1-15.e4. https://doi.org/10.1016/j.jalz.2014.07.003.] The radiotracer used is Pittsburgh Compound B (PIB) which binds to beta-amyloid, a protein found in high concentration in the brains of individuals with Alzheimer's dementia.
+An image anaylsis pipeline is required to extract regional time activity curves (tacs) from a dynamic PET image. There are various pipelines available including widely-used commercial solutions (e.g. [PMOD](https://www.pmod.com/web/)) and newer open-source options (e.g. [magia](http://aivo.utu.fi/magia/)). Pipelines generally implement the following steps:
 
+* Dynamic PET pre-processing (e.g. motion correction, decay-correction)
+* PET image co-registration with structural MRI
+* MRI segmentation and normalization to atlas
 
+Various pipelines save tac, volume and related data in various formats. This package enables the loading and analysis of tac and ROI volume data from image analysis pipelines for further analysis in R. 
+
+## Vignette data
+
+The sample data for this vignette uses an anonymized scans of a participant with Alzheimer's dementia, data from http://www.gaain.org which was generously made available for unrestricted use.^[Klunk, William E., Robert A. Koeppe, Julie C. Price, Tammie L. Benzinger, Michael D. Devous, William J. Jagust, Keith A. Johnson, et al. “The Centiloid Project: Standardizing Quantitative Amyloid Plaque Estimation by PET.” Alzheimer’s & Dementia 11, no. 1 (January 2015): 1-15.e4. https://doi.org/10.1016/j.jalz.2014.07.003.] The radiotracer used is Pittsburgh Compound B (PIB) which binds to beta-amyloid, a protein found in high concentration in the brains of individuals with Alzheimer's dementia.
+
+There are two approaches to using the **tacmagic** package to analyze PET time-activity curve data: either by loading participant data individually and using the various functions to analyze it, or via the batch functions to list and analyze data from multiple participants. Here, we illustrate the main features of tacmagic, by walking through the analysis of a single participant. We provide an explanation of the batch mode at the end.
 
 ## Time-activity curve operations
 
@@ -48,6 +56,12 @@ filename <- system.file("extdata", "AD06.tac", package="tacmagic")
 # format that is not yet supported.
 
 AD06_tac <- load_tac(filename, format="PMOD")
+```
+
+A tac object is a data frame with extra attributes including time and activity units. A summary can be printed with the generic `print()` function.
+
+```{r}
+print(AD06_tac) 
 
 as.data.frame(AD06_tac)[1:5,1:5] # the first 5 frames of the first 3 ROIs
 ```
@@ -63,14 +77,14 @@ tac2 <- load_tac(filename_voistat, format="voistat", acqtimes=filename_acq)
 all.equal(AD06_tac, tac2)
 ```
 
-We also used Turku's [magia](http://aivo.utu.fi/magia/) pipeline to process the same data. It can be loaded similarly, though with units explicitly entered because the information 
-is not encoded in the .mat file:
+We also used Turku's [magia](http://aivo.utu.fi/magia/) pipeline to process the same data. It can be loaded similarly, though with units explicitly entered because the information is not encoded in the .mat file:
 
 ```{r}
 f_magia <- system.file("extdata", "AD06_tac_magia.mat", package="tacmagic")
 
 AD06_tac_magia <- load_tac(f_magia, format="magia", 
                            time_unit="seconds", activity_unit="kBq/cc")
+
 as.data.frame(AD06_tac_magia)[1:5,1:5]
 ```
 

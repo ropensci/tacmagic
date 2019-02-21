@@ -13,6 +13,9 @@ filename <- system.file("extdata", "AD06.tac", package="tacmagic")
 
 AD06_tac <- load_tac(filename, format="PMOD")
 
+## ------------------------------------------------------------------------
+print(AD06_tac) 
+
 as.data.frame(AD06_tac)[1:5,1:5] # the first 5 frames of the first 3 ROIs
 
 ## ------------------------------------------------------------------------
@@ -28,6 +31,7 @@ f_magia <- system.file("extdata", "AD06_tac_magia.mat", package="tacmagic")
 
 AD06_tac_magia <- load_tac(f_magia, format="magia", 
                            time_unit="seconds", activity_unit="kBq/cc")
+
 as.data.frame(AD06_tac_magia)[1:5,1:5]
 
 ## ------------------------------------------------------------------------
