@@ -84,7 +84,9 @@ split_pvc <- function(tac, PVC=TRUE) {
 
   validate_tac(tac)
   class(tac) <- "data.frame"
-  subset <- cbind(tac[1:2], tac[endsWith(names(tac), "_C") == PVC])
+  subset <- cbind(tac[1:2], 
+            tac[,3:length(tac)][endsWith(names(tac[,3:length(tac)]), 
+                                         "_C") == PVC])
   attributes(subset) <- copy_tac_attributes(tac, subset)
   validate_tac(subset)
 

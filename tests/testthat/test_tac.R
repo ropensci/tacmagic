@@ -179,12 +179,44 @@ test_that("plot.tac with 2 tacs and conversion runs without error and
 
 })
 
-test_that("load_tac_voistat procudes errors appropriately", {
+test_that("load_tac_voistat produces errors appropriately", {
 
   f_acq_bad <- system.file("extdata", "AD06_invalid.acqtimes", 
                            package="tacmagic")
   f_voistat <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
 
   expect_error(load_tac(f_voistat, format="voistat", acqtimes=f_acq_bad))
+
+})
+
+test_that("print.tac provides correct output for valid/invalid tac objects", {
+
+  f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic") 
+  f_raw_vol <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
+  tac <- load_tac(f_raw_tac)
+  vol <- load_vol(f_raw_vol)
+  AD06_tac_nc <- tac_roi(tac, vol, roi_ham_full(), merge=FALSE, PVC=FALSE)
+
+  expected_output <- paste0("tac object\n",
+                " Activity unit:           kBq/cc \n",
+                " Time unit:               seconds \n",
+                " Number of ROIs:          22 \n",
+                " Number of frames:        34 \n",
+                " Time span:               0 - 5400 seconds \n",
+                " Unique frame durations:  15 30 60 180 300 600 seconds ")
+
+  expect_equal(capture_output(print(AD06_tac_nc)), expected_output)
+
+  names(AD06_tac_nc)[1] <- "stttttart"
+  expect_error(print(AD06_tac_nc))
+})
+
+test_that("split_pvc produces expected tac objects", {
+
+  f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic") 
+  tac <- load_tac(f_raw_tac)
+
+  expect_equal(names(tac)[1:88], names(split_pvc(tac, PVC=FALSE)))
+  expect_equal(names(tac)[c(1, 2, 89:174)], names(split_pvc(tac, PVC=TRUE)))
 
 })
