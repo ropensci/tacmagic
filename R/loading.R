@@ -36,7 +36,7 @@
 #'                 "minutes" if not in file or to override file
 #'@param activity_unit NULL if in file (e.g. PMOD .tac), or set to "kBq/cc", 
 #'                     "Bq/cc", "nCi/cc"
-#'@return data.frame with loaded TAC data
+#'@return tac object
 #'@family Loading functions 
 #'@examples
 #' f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic") 

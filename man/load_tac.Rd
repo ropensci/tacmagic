@@ -22,7 +22,7 @@ format="voistat"}
 "Bq/cc", "nCi/cc"}
 }
 \value{
-data.frame with loaded TAC data
+tac object
 }
 \description{
 This is the main function for loading an individual participant's TAC data.
@@ -44,7 +44,7 @@ tac <- load_tac(f_raw_tac)
 
 }
 \seealso{
-Other Loading functions: \code{\link{load_voistat}},
-  \code{\link{load_vol}}
+Other Loading functions: \code{\link{as.tac}},
+  \code{\link{load_voistat}}, \code{\link{load_vol}}
 }
 \concept{Loading functions}

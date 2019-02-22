@@ -189,7 +189,7 @@ test_that("load_tac_voistat produces errors appropriately", {
 
 })
 
-test_that("print.tac provides correct output for valid/invalid tac objects", {
+test_that("summary.tac provides correct output for valid/invalid tac objects", {
 
   f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic") 
   f_raw_vol <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
@@ -205,10 +205,10 @@ test_that("print.tac provides correct output for valid/invalid tac objects", {
                 " Time span:               0 - 5400 seconds \n",
                 " Unique frame durations:  15 30 60 180 300 600 seconds ")
 
-  expect_equal(capture_output(print(AD06_tac_nc)), expected_output)
+  expect_equal(capture_output(summary(AD06_tac_nc)), expected_output)
 
   names(AD06_tac_nc)[1] <- "stttttart"
-  expect_error(print(AD06_tac_nc))
+  expect_error(summary(AD06_tac_nc))
 })
 
 test_that("split_pvc produces expected tac objects", {
@@ -218,5 +218,28 @@ test_that("split_pvc produces expected tac objects", {
 
   expect_equal(names(tac)[1:88], names(split_pvc(tac, PVC=FALSE)))
   expect_equal(names(tac)[c(1, 2, 89:174)], names(split_pvc(tac, PVC=TRUE)))
+
+})
+
+test_that("as.tac creates valid tac objects and fails appropriately", {
+
+  manual <- data.frame(start=c(0:4), end=c(2:6), 
+                       ROI1=c(10.1:14.2), ROI2=c(11:15))
+  manual_tac <- as.tac(manual, time_unit="minutes", activity_unit="kBq/cc")
+
+  expect_equal(validate_tac(manual_tac), TRUE)
+
+  expect_equal(validate_tac(as.tac(manual, time_unit="seconds", 
+                                          activity_unit="Bq/cc")), TRUE)
+
+  expect_equal(validate_tac(as.tac(manual, time_unit="wrong", 
+                                          activity_unit="Bq/cc")), FALSE)
+
+  expect_equal(validate_tac(as.tac(manual, time_unit="seconds", 
+                                          activity_unit="wrong")), FALSE)
+  
+  expect_error(as.tac(manual, activity_unit="kBq/cc"))
+  expect_error(as.tac(manual, time_unit="seconds"))
+  expect_error(as.tac(manual))
 
 })

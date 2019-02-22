@@ -25,7 +25,7 @@ validate_tac <- function(tac) {
     status <- FALSE
   }
 
-  if (!all(as.character(apply(as.data.frame(tac), 2, class)) == "numeric")) {
+  if (!all(apply(as.data.frame(tac), 2, is.numeric))) {
    message("All tac columns should be numeric. Check input data.")
   }
 

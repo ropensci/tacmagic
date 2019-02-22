@@ -61,9 +61,9 @@ AD06_tac <- load_tac(filename, format="PMOD")
 A tac object is a data frame with extra attributes including time and activity units. A summary can be printed with the generic `print()` function.
 
 ```{r}
-print(AD06_tac) 
+summary(AD06_tac) 
 
-as.data.frame(AD06_tac)[1:5,1:5] # the first 5 frames of the first 3 ROIs
+AD06_tac[1:5,1:5] # the first 5 frames of the first 3 ROIs
 ```
 
 PMOD's suite also produces `.voistat` and `.acqtimes` formats, than can be used to produce the same data if you do not have `.tac` files:
@@ -85,7 +85,18 @@ f_magia <- system.file("extdata", "AD06_tac_magia.mat", package="tacmagic")
 AD06_tac_magia <- load_tac(f_magia, format="magia", 
                            time_unit="seconds", activity_unit="kBq/cc")
 
-as.data.frame(AD06_tac_magia)[1:5,1:5]
+AD06_tac_magia[1:5,1:5]
+```
+
+#### Manually-created tac objects
+
+For other data sources, **tacmagic** tac objects can be created from data.frame objects with `as.tac()`. The time and activity units must be specified as arguments if not already set as attributes in the data.frame. The columns of the data frame are the regional time activity curves, with the column names the names of the ROIs. 
+
+```{r}
+manual <- data.frame(start=c(0:4), end=c(2:6), ROI1=c(10.1:14.2), ROI2=c(11:15))
+manual_tac <- as.tac(manual, time_unit="minutes", activity_unit="kBq/cc")
+
+summary(manual_tac)
 ```
 
 ### ROI merging
@@ -110,7 +121,7 @@ AD06 <- tac_roi(tac=AD06_tac,           # The tac file we loaded above.
                 PVC=F                   # to use _C ROIs (PMOD convention)            
                 )
 
-as.data.frame(AD06)[1:5,1:5]
+AD06[1:5,1:5]
 ```
 
 ### Plotting
