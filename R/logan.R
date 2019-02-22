@@ -71,7 +71,7 @@ DVR_ref_Logan <- function(tac_data, target, ref, k2prime, t_star, error=0.10,
 #'@param error For find_t_star()
 #'@param method Method of integration, "trapz" or "integrate"
 #'@param ... When called from tm_batch, unused parameters may be supplied
-#'@return Data frame with calculate DVRs for all ROIs
+#'@return Data frame with calculated DVRs for all ROIs
 #'@family Logan plot functions
 #'@references Logan, J., Fowler, J. S., Volkow, N. D., Wang, G.-J., 
 #' Ding, Y.-S., & Alexoff, D. L. (1996). Distribution Volume Ratios without 

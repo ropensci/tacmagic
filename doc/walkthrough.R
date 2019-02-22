@@ -98,6 +98,11 @@ AD06_DVR
 
 
 ## ------------------------------------------------------------------------
+ADO6_frontal_DVR <- dvr(AD06, target="frontal", ref="cerebellum", k2prime=0.2, 
+                        t_star=23)
+
+
+## ------------------------------------------------------------------------
 
 participants <- c(system.file("extdata", "AD06.tac", package="tacmagic"),
                    system.file("extdata", "AD07.tac", package="tacmagic"),

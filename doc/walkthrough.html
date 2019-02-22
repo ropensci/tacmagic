@@ -395,7 +395,7 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co">#&gt; 5    60  90 18.9857118 19.57800502 22.009607171</span></a></code></pre></div>
 <div id="manually-created-tac-objects" class="section level4">
 <h4>Manually-created tac objects</h4>
-<p>For other data sources, <strong>tacmagic</strong> tac objects can be created from data.frame objects with <code>as.tac()</code>. The time and activity units must be specified as arguments if not already set as attributes in the data.frame. The columns of the data frame are the regional time activity curves, with the column names the names of the ROIs.</p>
+<p>For other data sources, <strong>tacmagic</strong> tac objects can be created from data.frame objects with <code>as.tac()</code>. The time and activity units must be specified as arguments if not already set as attributes in the data.frame. The columns of the data.frame are the regional tacs, with the column names the names of the ROIs.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">manual &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">start=</span><span class="kw">c</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">4</span>), <span class="dt">end=</span><span class="kw">c</span>(<span class="dv">2</span><span class="op">:</span><span class="dv">6</span>), <span class="dt">ROI1=</span><span class="kw">c</span>(<span class="fl">10.1</span><span class="op">:</span><span class="fl">14.2</span>), <span class="dt">ROI2=</span><span class="kw">c</span>(<span class="dv">11</span><span class="op">:</span><span class="dv">15</span>))</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2">manual_tac &lt;-<span class="st"> </span><span class="kw">as.tac</span>(manual, <span class="dt">time_unit=</span><span class="st">&quot;minutes&quot;</span>, <span class="dt">activity_unit=</span><span class="st">&quot;kBq/cc&quot;</span>)</a>
 <a class="sourceLine" id="cb5-3" data-line-number="3"></a>
@@ -575,6 +575,9 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <a class="sourceLine" id="cb12-49" data-line-number="49"><span class="co">#&gt; whitematter    1.6615718</span></a>
 <a class="sourceLine" id="cb12-50" data-line-number="50"><span class="co">#&gt; amyloidcomp    1.8487819</span></a></code></pre></div>
 <p>For this data, the DVR calculation has been shown to produce equivalent results as an existing tool.<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a></p>
+<p>A wrapper function <code>dvr()</code> is available to conveniently calculate DVR for a target ROI or all ROIs, and currently defaults to using the Logan reference method:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">ADO6_frontal_DVR &lt;-<span class="st"> </span><span class="kw">dvr</span>(AD06, <span class="dt">target=</span><span class="st">&quot;frontal&quot;</span>, <span class="dt">ref=</span><span class="st">&quot;cerebellum&quot;</span>, <span class="dt">k2prime=</span><span class="fl">0.2</span>, </a>
+<a class="sourceLine" id="cb13-2" data-line-number="2">                        <span class="dt">t_star=</span><span class="dv">23</span>)</a></code></pre></div>
 </div>
 </div>
 </div>
@@ -598,21 +601,21 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <h3>Batch example</h3>
 <p>For the purpose of the vignette, the list of participants will be a list of the full tac filenames (hence tac_file_suffix=&quot;&quot;). In real-world data, the participants parameter can be a list of participant IDs that correspond to the actual filenames, i.e. the filename is made up of dir + participant + tac_file_suffix.</p>
 <p>We will also choose not to use the roi_m option in batch_load(), which could be used to combine ROIs as outlined above.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"></a>
-<a class="sourceLine" id="cb13-2" data-line-number="2">participants &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;AD06.tac&quot;</span>, <span class="dt">package=</span><span class="st">&quot;tacmagic&quot;</span>),</a>
-<a class="sourceLine" id="cb13-3" data-line-number="3">                   <span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;AD07.tac&quot;</span>, <span class="dt">package=</span><span class="st">&quot;tacmagic&quot;</span>),</a>
-<a class="sourceLine" id="cb13-4" data-line-number="4">                   <span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;AD08.tac&quot;</span>, <span class="dt">package=</span><span class="st">&quot;tacmagic&quot;</span>))</a>
-<a class="sourceLine" id="cb13-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb13-6" data-line-number="6">tacs &lt;-<span class="st"> </span><span class="kw">batch_load</span>(participants, <span class="dt">dir=</span><span class="st">&quot;&quot;</span>, <span class="dt">tac_file_suffix=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb13-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb13-8" data-line-number="8"><span class="co"># Since the PMOD tac files used here have 2 copies of ROIs, with and without </span></a>
-<a class="sourceLine" id="cb13-9" data-line-number="9"><span class="co"># PVC, we can use split_pvc to keep the PVC-corrected verions. If we had used </span></a>
-<a class="sourceLine" id="cb13-10" data-line-number="10"><span class="co"># roi_m here to combine ROIs, we could have specified to use the PVC versions </span></a>
-<a class="sourceLine" id="cb13-11" data-line-number="11"><span class="co"># in batch_load() with PVC = TRUE.</span></a>
-<a class="sourceLine" id="cb13-12" data-line-number="12">tacs &lt;-<span class="st"> </span><span class="kw">lapply</span>(tacs, split_pvc, <span class="dt">PVC=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb13-13" data-line-number="13"> </a>
-<a class="sourceLine" id="cb13-14" data-line-number="14">batch &lt;-<span class="st"> </span><span class="kw">batch_tm</span>(tacs, <span class="dt">models=</span><span class="kw">c</span>(<span class="st">&quot;SUVR&quot;</span>, <span class="st">&quot;Logan&quot;</span>), <span class="dt">ref=</span><span class="st">&quot;Cerebellum_r_C&quot;</span>,</a>
-<a class="sourceLine" id="cb13-15" data-line-number="15">                  <span class="dt">SUVR_def=</span><span class="kw">c</span>(<span class="dv">3000</span>,<span class="dv">3300</span>,<span class="dv">3600</span>), <span class="dt">k2prime=</span><span class="fl">0.2</span>, <span class="dt">t_star=</span><span class="dv">23</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"></a>
+<a class="sourceLine" id="cb14-2" data-line-number="2">participants &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;AD06.tac&quot;</span>, <span class="dt">package=</span><span class="st">&quot;tacmagic&quot;</span>),</a>
+<a class="sourceLine" id="cb14-3" data-line-number="3">                   <span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;AD07.tac&quot;</span>, <span class="dt">package=</span><span class="st">&quot;tacmagic&quot;</span>),</a>
+<a class="sourceLine" id="cb14-4" data-line-number="4">                   <span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;AD08.tac&quot;</span>, <span class="dt">package=</span><span class="st">&quot;tacmagic&quot;</span>))</a>
+<a class="sourceLine" id="cb14-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb14-6" data-line-number="6">tacs &lt;-<span class="st"> </span><span class="kw">batch_load</span>(participants, <span class="dt">dir=</span><span class="st">&quot;&quot;</span>, <span class="dt">tac_file_suffix=</span><span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb14-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="co"># Since the PMOD tac files used here have 2 copies of ROIs, with and without </span></a>
+<a class="sourceLine" id="cb14-9" data-line-number="9"><span class="co"># PVC, we can use split_pvc to keep the PVC-corrected verions. If we had used </span></a>
+<a class="sourceLine" id="cb14-10" data-line-number="10"><span class="co"># roi_m here to combine ROIs, we could have specified to use the PVC versions </span></a>
+<a class="sourceLine" id="cb14-11" data-line-number="11"><span class="co"># in batch_load() with PVC = TRUE.</span></a>
+<a class="sourceLine" id="cb14-12" data-line-number="12">tacs &lt;-<span class="st"> </span><span class="kw">lapply</span>(tacs, split_pvc, <span class="dt">PVC=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb14-13" data-line-number="13"> </a>
+<a class="sourceLine" id="cb14-14" data-line-number="14">batch &lt;-<span class="st"> </span><span class="kw">batch_tm</span>(tacs, <span class="dt">models=</span><span class="kw">c</span>(<span class="st">&quot;SUVR&quot;</span>, <span class="st">&quot;Logan&quot;</span>), <span class="dt">ref=</span><span class="st">&quot;Cerebellum_r_C&quot;</span>,</a>
+<a class="sourceLine" id="cb14-15" data-line-number="15">                  <span class="dt">SUVR_def=</span><span class="kw">c</span>(<span class="dv">3000</span>,<span class="dv">3300</span>,<span class="dv">3600</span>), <span class="dt">k2prime=</span><span class="fl">0.2</span>, <span class="dt">t_star=</span><span class="dv">23</span>)</a></code></pre></div>
 </div>
 </div>
 <div id="cut-off-calculations" class="section level2">
@@ -621,36 +624,36 @@ code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61
 <p>There are a number of approaches to this depending on the available data. We have implemented a method described by Aizenstein et al.<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a> which uses a group of participants with normal cognition to establish a cutoff value above which participants are unlikely to have minimal amyloid pathology.</p>
 <p>The method identifies a group of participants out of the normal cognition group with higher-PIB outliers removed. An outlier is a participant with any ROI with a DVR higher than the upper inner fence, from a set of ROIs known to be associated with amyloid deposition. Such participants are removed from the group, and this process is done iteratively until no more outliers are removed. Then, cutoff values are determined from this new group for each ROI, set again as the upper inner fence. Then these cutoff values are applied to all participants, and a participant is deemed PIB+ if they have at least 1 ROI above its cutoff.</p>
 <p>To demonstrate, a fake dataset of DVR values for 50 fake participants was generated and is available as <code>fake_DVR</code>. This would be equivalent to using <code>batch_tm()</code> on a group of participants with the <code>&quot;Logan&quot;</code> model specified.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">fake_DVR[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>,]</a>
-<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="co">#&gt;    ROI1_DVR ROI2_DVR  ROI3_DVR  ROI4_DVR</span></a>
-<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="co">#&gt; p1 2.235058 3.026140 1.1420583 4.0557974</span></a>
-<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="co">#&gt; p2 1.677543 2.834710 1.2529424 3.3368371</span></a>
-<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="co">#&gt; p3 1.466090 2.856528 0.2837647 2.5383574</span></a>
-<a class="sourceLine" id="cb14-6" data-line-number="6"><span class="co">#&gt; p4 1.046542 1.818056 1.2176133 2.5827267</span></a>
-<a class="sourceLine" id="cb14-7" data-line-number="7"><span class="co">#&gt; p5 2.934105 1.971775 1.7611040 0.8371429</span></a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">fake_DVR[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>,]</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="co">#&gt;    ROI1_DVR ROI2_DVR  ROI3_DVR  ROI4_DVR</span></a>
+<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="co">#&gt; p1 2.235058 3.026140 1.1420583 4.0557974</span></a>
+<a class="sourceLine" id="cb15-4" data-line-number="4"><span class="co">#&gt; p2 1.677543 2.834710 1.2529424 3.3368371</span></a>
+<a class="sourceLine" id="cb15-5" data-line-number="5"><span class="co">#&gt; p3 1.466090 2.856528 0.2837647 2.5383574</span></a>
+<a class="sourceLine" id="cb15-6" data-line-number="6"><span class="co">#&gt; p4 1.046542 1.818056 1.2176133 2.5827267</span></a>
+<a class="sourceLine" id="cb15-7" data-line-number="7"><span class="co">#&gt; p5 2.934105 1.971775 1.7611040 0.8371429</span></a></code></pre></div>
 <p>To calculate the cutoff values using this iterative method, <code>cutoff_aiz()</code> takes 2 arguments: the DVR data, and the names of the variables of the ROI DVRs to use (and there must be at least 2 for this method).</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">cutoffs &lt;-<span class="st"> </span><span class="kw">cutoff_aiz</span>(fake_DVR, <span class="kw">c</span>(<span class="st">&quot;ROI1_DVR&quot;</span>, <span class="st">&quot;ROI2_DVR&quot;</span>, <span class="st">&quot;ROI3_DVR&quot;</span>, <span class="st">&quot;ROI4_DVR&quot;</span>))</a>
-<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="co">#&gt; Iteration: 1 Removed: 10</span></a>
-<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="co">#&gt; Iteration: 2 Removed: 1</span></a>
-<a class="sourceLine" id="cb15-4" data-line-number="4"><span class="co">#&gt; Iteration: 3 Removed: 0</span></a>
-<a class="sourceLine" id="cb15-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb15-6" data-line-number="6">cutoffs</a>
-<a class="sourceLine" id="cb15-7" data-line-number="7"><span class="co">#&gt; ROI1_DVR ROI2_DVR ROI3_DVR ROI4_DVR </span></a>
-<a class="sourceLine" id="cb15-8" data-line-number="8"><span class="co">#&gt; 1.370899 1.332725 1.330504 1.273470</span></a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">cutoffs &lt;-<span class="st"> </span><span class="kw">cutoff_aiz</span>(fake_DVR, <span class="kw">c</span>(<span class="st">&quot;ROI1_DVR&quot;</span>, <span class="st">&quot;ROI2_DVR&quot;</span>, <span class="st">&quot;ROI3_DVR&quot;</span>, <span class="st">&quot;ROI4_DVR&quot;</span>))</a>
+<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="co">#&gt; Iteration: 1 Removed: 10</span></a>
+<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="co">#&gt; Iteration: 2 Removed: 1</span></a>
+<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="co">#&gt; Iteration: 3 Removed: 0</span></a>
+<a class="sourceLine" id="cb16-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb16-6" data-line-number="6">cutoffs</a>
+<a class="sourceLine" id="cb16-7" data-line-number="7"><span class="co">#&gt; ROI1_DVR ROI2_DVR ROI3_DVR ROI4_DVR </span></a>
+<a class="sourceLine" id="cb16-8" data-line-number="8"><span class="co">#&gt; 1.370899 1.332725 1.330504 1.273470</span></a></code></pre></div>
 <p>The final step is to apply the cutoffs to the full set of participants. We will use the same sample data:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">positivity_table &lt;-<span class="st"> </span><span class="kw">pos_anyroi</span>(fake_DVR, cutoffs)</a>
-<a class="sourceLine" id="cb16-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb16-3" data-line-number="3">positivity_table</a>
-<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="co">#&gt;    p1    p2    p3    p4    p5    p6    p7    p8    p9   p10   p11   p12 </span></a>
-<a class="sourceLine" id="cb16-5" data-line-number="5"><span class="co">#&gt;  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE </span></a>
-<a class="sourceLine" id="cb16-6" data-line-number="6"><span class="co">#&gt;   p13   p14   p15   p16   p17   p18   p19   p20   p21   p22   p23   p24 </span></a>
-<a class="sourceLine" id="cb16-7" data-line-number="7"><span class="co">#&gt; FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE </span></a>
-<a class="sourceLine" id="cb16-8" data-line-number="8"><span class="co">#&gt;   p25   p26   p27   p28   p29   p30   p31   p32   p33   p34   p35   p36 </span></a>
-<a class="sourceLine" id="cb16-9" data-line-number="9"><span class="co">#&gt; FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE </span></a>
-<a class="sourceLine" id="cb16-10" data-line-number="10"><span class="co">#&gt;   p37   p38   p39   p40   p41   p42   p43   p44   p45   p46   p47   p48 </span></a>
-<a class="sourceLine" id="cb16-11" data-line-number="11"><span class="co">#&gt; FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE </span></a>
-<a class="sourceLine" id="cb16-12" data-line-number="12"><span class="co">#&gt;   p49   p50 </span></a>
-<a class="sourceLine" id="cb16-13" data-line-number="13"><span class="co">#&gt; FALSE FALSE</span></a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">positivity_table &lt;-<span class="st"> </span><span class="kw">pos_anyroi</span>(fake_DVR, cutoffs)</a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb17-3" data-line-number="3">positivity_table</a>
+<a class="sourceLine" id="cb17-4" data-line-number="4"><span class="co">#&gt;    p1    p2    p3    p4    p5    p6    p7    p8    p9   p10   p11   p12 </span></a>
+<a class="sourceLine" id="cb17-5" data-line-number="5"><span class="co">#&gt;  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE </span></a>
+<a class="sourceLine" id="cb17-6" data-line-number="6"><span class="co">#&gt;   p13   p14   p15   p16   p17   p18   p19   p20   p21   p22   p23   p24 </span></a>
+<a class="sourceLine" id="cb17-7" data-line-number="7"><span class="co">#&gt; FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE </span></a>
+<a class="sourceLine" id="cb17-8" data-line-number="8"><span class="co">#&gt;   p25   p26   p27   p28   p29   p30   p31   p32   p33   p34   p35   p36 </span></a>
+<a class="sourceLine" id="cb17-9" data-line-number="9"><span class="co">#&gt; FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE </span></a>
+<a class="sourceLine" id="cb17-10" data-line-number="10"><span class="co">#&gt;   p37   p38   p39   p40   p41   p42   p43   p44   p45   p46   p47   p48 </span></a>
+<a class="sourceLine" id="cb17-11" data-line-number="11"><span class="co">#&gt; FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE </span></a>
+<a class="sourceLine" id="cb17-12" data-line-number="12"><span class="co">#&gt;   p49   p50 </span></a>
+<a class="sourceLine" id="cb17-13" data-line-number="13"><span class="co">#&gt; FALSE FALSE</span></a></code></pre></div>
 <p>The algorithm identified 11 PIB+ participants. In the generation of the sample data, the DVRs from the first 10 participants were drawn from a normal distribution with mean 1.9, sd 0.6 and for the latter 40 participants, from mean 1.3, sd 0.3; thus this pattern is in line with what we would expect: all 10 of the first participants are PIB+, and just 1 of the latter 40 was (by chance).</p>
 </div>
 <div class="footnotes">

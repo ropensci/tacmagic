@@ -213,6 +213,14 @@ AD06_DVR
 
 For this data, the DVR calculation has been shown to produce equivalent results as an existing tool.^[https://gitlab.utu.fi/vesoik/tpcclib] 
 
+A wrapper function `dvr()` is available to conveniently calculate DVR for a target ROI or all ROIs, and currently defaults to using the Logan reference method:
+
+```{r}
+ADO6_frontal_DVR <- dvr(AD06, target="frontal", ref="cerebellum", k2prime=0.2, 
+                        t_star=23)
+
+```
+
 ## Batch analysis
 
 In most cases, a project will involve the analysis of multiple participants. The above workflow can be used to test and visualize an analysis, but a batch workflow will likely be preferred to analyze multiple participants.

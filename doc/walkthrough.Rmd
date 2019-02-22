@@ -90,7 +90,7 @@ AD06_tac_magia[1:5,1:5]
 
 #### Manually-created tac objects
 
-For other data sources, **tacmagic** tac objects can be created from data.frame objects with `as.tac()`. The time and activity units must be specified as arguments if not already set as attributes in the data.frame. The columns of the data frame are the regional time activity curves, with the column names the names of the ROIs. 
+For other data sources, **tacmagic** tac objects can be created from data.frame objects with `as.tac()`. The time and activity units must be specified as arguments if not already set as attributes in the data.frame. The columns of the data.frame are the regional tacs, with the column names the names of the ROIs. 
 
 ```{r}
 manual <- data.frame(start=c(0:4), end=c(2:6), ROI1=c(10.1:14.2), ROI2=c(11:15))
@@ -212,6 +212,14 @@ AD06_DVR
 ```
 
 For this data, the DVR calculation has been shown to produce equivalent results as an existing tool.^[https://gitlab.utu.fi/vesoik/tpcclib] 
+
+A wrapper function `dvr()` is available to conveniently calculate DVR for a target ROI or all ROIs, and currently defaults to using the Logan reference method:
+
+```{r}
+ADO6_frontal_DVR <- dvr(AD06, target="frontal", ref="cerebellum", k2prime=0.2, 
+                        t_star=23)
+
+```
 
 ## Batch analysis
 
