@@ -1,6 +1,6 @@
 # test_save.R
 
-context("SUVR calculation")
+context("tac saving")
 
 test_that("save_tac() gives error if outfile is bad format", {
 
