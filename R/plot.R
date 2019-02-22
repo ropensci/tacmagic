@@ -1,10 +1,9 @@
 ##################################
 ## tacmagic - PET Analysis in R ##
-## tac.R                        ##
+## plot.R                       ##
 ## (C) Eric E. Brown  2018      ##
 ## Beta version--check all work ##
 ##################################
-
 
 #' Plots time activity curves from 1 or 2 participants or groups.
 #'

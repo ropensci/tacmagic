@@ -5,7 +5,6 @@
 ## Beta version--check all work ##
 ##################################
 
-
 #' Save a tac object as a .tac file
 #'
 #' Saves a tac object, created by load_tac(), tac_roi() or manually, and 

@@ -7,7 +7,6 @@
 
 # ROI definitions file.
 
-
 #' Return a list of merged ROIs made up of the atomic ROIs in the Hammer's 
 #' atlas.
 #'

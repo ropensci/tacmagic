@@ -5,8 +5,6 @@
 ## Beta version--check all work ##
 ##################################
 
-
-
 # General tac file validation
 #' @noRd
 validate_tac <- function(tac) {

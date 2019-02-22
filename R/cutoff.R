@@ -5,7 +5,6 @@
 ## Beta version--check all work ##
 ##################################
 
-
 #' Cutoff value calculation using method described in Aizenstein et al. 2008
 #' 
 #' See the reference below and the tacmagic walkthrough vignette. Aizenstein et

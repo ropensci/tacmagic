@@ -5,7 +5,6 @@
 ## Beta version--check all work ##
 ##################################
 
-
 # On testing, produces results equivalent to using Turku PET Centre's
 # logan 0.6.17 with the settings -C -mid=y (traditional regression model and 
 # mid-frame times)

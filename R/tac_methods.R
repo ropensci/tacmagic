@@ -5,7 +5,6 @@
 ## Beta version--check all work ##
 ##################################
 
-
 #'@export
 #'@noRd
 summary.tac <- function(object, ...) {
