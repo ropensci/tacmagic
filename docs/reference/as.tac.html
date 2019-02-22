@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Calculate weighted SUVRs for specified regions of interest — suvr • tacmagic</title>
+<title>Creates a tac object from a data.frame — as.tac • tacmagic</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,10 +30,12 @@
 
 
 
-<meta property="og:title" content="Calculate weighted SUVRs for specified regions of interest — suvr" />
+<meta property="og:title" content="Creates a tac object from a data.frame — as.tac" />
 
-<meta property="og:description" content="Calculate the standardized uptake value ratio (SUVR) for all ROIs in the
-provided tac data, using the specified reference region." />
+<meta property="og:description" content="tac objects can be created from data.frame objects with `as.tac()`. The time 
+and activity units must be specified as arguments if not already set as 
+attributes in the data.frame. The columns of the data frame are the regional
+time activity curves, with the column names the names of the ROIs." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -112,59 +114,60 @@ provided tac data, using the specified reference region." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Calculate weighted SUVRs for specified regions of interest</h1>
-    <small class="dont-index">Source: <a href='https://github.com/eebrown/PET/blob/master/R/SUVR.R'><code>R/SUVR.R</code></a></small>
-    <div class="hidden name"><code>suvr.Rd</code></div>
+    <h1>Creates a tac object from a data.frame</h1>
+    <small class="dont-index">Source: <a href='https://github.com/eebrown/PET/blob/master/R/tac_methods.R'><code>R/tac_methods.R</code></a></small>
+    <div class="hidden name"><code>as.tac.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Calculate the standardized uptake value ratio (SUVR) for all ROIs in the
-provided tac data, using the specified reference region.</p>
+    <p>tac objects can be created from data.frame objects with `as.tac()`. The time 
+and activity units must be specified as arguments if not already set as 
+attributes in the data.frame. The columns of the data frame are the regional
+time activity curves, with the column names the names of the ROIs.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>suvr</span>(<span class='no'>tac</span>, <span class='no'>SUVR_def</span>, <span class='no'>ref</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>as.tac</span>(<span class='no'>x</span>, <span class='kw'>time_unit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>activity_unit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>tac</th>
-      <td><p>The time-activity curve data from tac_roi()</p></td>
+      <th>x</th>
+      <td><p>data.frame with start, end time and tac data</p></td>
     </tr>
     <tr>
-      <th>SUVR_def</th>
-      <td><p>a vector of start times for window to be used in SUVR</p></td>
+      <th>time_unit</th>
+      <td><p>NULL if in data.frame or set to "seconds" or "minutes"</p></td>
     </tr>
     <tr>
-      <th>ref</th>
-      <td><p>a string, e.g. "cerebellum", to specify reference region</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>When called from tm_batch, unused parameters may be supplied</p></td>
+      <th>activity_unit</th>
+      <td><p>NULL if in data.frame or set to "kBq/cc", "Bq/cc", 
+"nCi/cc"</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data.frame of SUVR values for the specified ROIs</p>
+    <p>tac object</p>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>If the time_unit and activity_unit attributes are already in the data.frame,
+they do not need to be set again, but otherwise they will need to be
+specified in the input parameters.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other SUVR functions: <code><a href='suvr_auc.html'>suvr_auc</a></code></p></div>
+    <div class='dont-index'><p>Other Loading functions: <code><a href='load_tac.html'>load_tac</a></code>,
+  <code><a href='load_voistat.html'>load_voistat</a></code>, <code><a href='load_vol.html'>load_vol</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>f</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"AD06.tac"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"tacmagic"</span>)
-<span class='no'>fv</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"AD06_TAC.voistat"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"tacmagic"</span>)
-<span class='no'>AD06_tac</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='load_tac.html'>load_tac</a></span>(<span class='no'>f</span>, <span class='kw'>format</span><span class='kw'>=</span><span class='st'>"PMOD"</span>)
-<span class='no'>AD06_volume</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='load_vol.html'>load_vol</a></span>(<span class='no'>fv</span>, <span class='kw'>format</span><span class='kw'>=</span><span class='st'>"voistat"</span>)
-<span class='no'>AD06</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='tac_roi.html'>tac_roi</a></span>(<span class='kw'>tac</span><span class='kw'>=</span><span class='no'>AD06_tac</span>, <span class='kw'>volumes</span><span class='kw'>=</span><span class='no'>AD06_volume</span>, <span class='kw'>ROI_def</span><span class='kw'>=</span><span class='fu'><a href='roi_ham_pib.html'>roi_ham_pib</a></span>(),
-                <span class='kw'>merge</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>PVC</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
-
-<span class='no'>AD06_SUVR</span> <span class='kw'>&lt;-</span> <span class='fu'>suvr</span>(<span class='no'>AD06</span>, <span class='kw'>SUVR_def</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>3000</span>,<span class='fl'>3300</span>,<span class='fl'>3600</span>), <span class='kw'>ref</span><span class='kw'>=</span><span class='st'>"cerebellum"</span>)</div></pre>
+    <pre class="examples"><div class='input'><span class='no'>manual</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>start</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>0</span>:<span class='fl'>4</span>), <span class='kw'>end</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>2</span>:<span class='fl'>6</span>),
+                     <span class='kw'>ROI1</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>10.1</span>:<span class='fl'>14.2</span>), <span class='kw'>ROI2</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>11</span>:<span class='fl'>15</span>))
+<span class='no'>manual_tac</span> <span class='kw'>&lt;-</span> <span class='fu'>as.tac</span>(<span class='no'>manual</span>, <span class='kw'>time_unit</span><span class='kw'>=</span><span class='st'>"minutes"</span>, <span class='kw'>activity_unit</span><span class='kw'>=</span><span class='st'>"kBq/cc"</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -172,6 +175,8 @@ provided tac data, using the specified reference region.</p>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
 
       <li><a href="#see-also">See also</a></li>
       

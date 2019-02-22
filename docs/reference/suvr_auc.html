@@ -126,7 +126,7 @@ alternate to suvr() which should provide very similar values.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>suvr_auc</span>(<span class='no'>tac</span>, <span class='kw'>SUVR_def</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ref</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>params</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>suvr_auc</span>(<span class='no'>tac</span>, <span class='no'>SUVR_def</span>, <span class='no'>ref</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -141,12 +141,11 @@ alternate to suvr() which should provide very similar values.</p>
     </tr>
     <tr>
       <th>ref</th>
-      <td><p>is a string, e.g. "cerbellum", to specify reference region</p></td>
+      <td><p>is a string, e.g. "cerebellum", to specify reference region</p></td>
     </tr>
     <tr>
-      <th>params</th>
-      <td><p>a list of paramters passed from the batch_tm function and is
-not needed when calling for individual participants.</p></td>
+      <th>...</th>
+      <td><p>When called from tm_batch, unused parameters may be supplied</p></td>
     </tr>
     </table>
     

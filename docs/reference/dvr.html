@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Calculate weighted SUVRs for specified regions of interest — suvr • tacmagic</title>
+<title>Distribution volume ratio (DVR) for one or more ROIs — dvr • tacmagic</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,10 +30,11 @@
 
 
 
-<meta property="og:title" content="Calculate weighted SUVRs for specified regions of interest — suvr" />
+<meta property="og:title" content="Distribution volume ratio (DVR) for one or more ROIs — dvr" />
 
-<meta property="og:description" content="Calculate the standardized uptake value ratio (SUVR) for all ROIs in the
-provided tac data, using the specified reference region." />
+<meta property="og:description" content="This calculates the DVR using the non-invasive reference Logan method for
+all TACs in a supplied tac file. It uses DVR_ref_Logan if a target ROI is 
+specified, otherwise will calculate DVR for all ROIs with DVR_ref_all_Logan()" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -112,48 +113,79 @@ provided tac data, using the specified reference region." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Calculate weighted SUVRs for specified regions of interest</h1>
-    <small class="dont-index">Source: <a href='https://github.com/eebrown/PET/blob/master/R/SUVR.R'><code>R/SUVR.R</code></a></small>
-    <div class="hidden name"><code>suvr.Rd</code></div>
+    <h1>Distribution volume ratio (DVR) for one or more ROIs</h1>
+    <small class="dont-index">Source: <a href='https://github.com/eebrown/PET/blob/master/R/dvr.R'><code>R/dvr.R</code></a></small>
+    <div class="hidden name"><code>dvr.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Calculate the standardized uptake value ratio (SUVR) for all ROIs in the
-provided tac data, using the specified reference region.</p>
+    <p>This calculates the DVR using the non-invasive reference Logan method for
+all TACs in a supplied tac file. It uses DVR_ref_Logan if a target ROI is 
+specified, otherwise will calculate DVR for all ROIs with DVR_ref_all_Logan()</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>suvr</span>(<span class='no'>tac</span>, <span class='no'>SUVR_def</span>, <span class='no'>ref</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>dvr</span>(<span class='no'>tac</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"logan"</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>ref</span>, <span class='no'>k2prime</span>, <span class='no'>t_star</span>,
+  <span class='kw'>error</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"trapz"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>tac</th>
-      <td><p>The time-activity curve data from tac_roi()</p></td>
+      <td><p>The time-activity curve data from load_tac() or tac_roi()</p></td>
     </tr>
     <tr>
-      <th>SUVR_def</th>
-      <td><p>a vector of start times for window to be used in SUVR</p></td>
+      <th>model</th>
+      <td><p>Only model currently available is "logan"</p></td>
+    </tr>
+    <tr>
+      <th>target</th>
+      <td><p>Optional - otherwise will calculate DVR for all regions</p></td>
     </tr>
     <tr>
       <th>ref</th>
-      <td><p>a string, e.g. "cerebellum", to specify reference region</p></td>
+      <td><p>Required -- The reference region, e.g. "cerebellum"</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>When called from tm_batch, unused parameters may be supplied</p></td>
+      <th>k2prime</th>
+      <td><p>Required -- A fixed value for k2' must be specified (e.g. 0.2)</p></td>
+    </tr>
+    <tr>
+      <th>t_star</th>
+      <td><p>Required -- If 0, t* will be calculated using find_t_star()</p></td>
+    </tr>
+    <tr>
+      <th>error</th>
+      <td><p>For find_t_star()</p></td>
+    </tr>
+    <tr>
+      <th>method</th>
+      <td><p>Method of integration, "trapz" or "integrate"</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data.frame of SUVR values for the specified ROIs</p>
+    <p>Data frame with calculated DVRs</p>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>For other model paramters, directly call DVR_ref_Logan().</p>
+    
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>Logan, J., Fowler, J. S., Volkow, N. D., Wang, G.-J., 
+Ding, Y.-S., &amp; Alexoff, D. L. (1996). Distribution Volume Ratios without 
+Blood Sampling from Graphical Analysis of PET Data. Journal of Cerebral 
+Blood Flow &amp; Metabolism, 16(5), 834-840. 
+https://doi.org/10.1097/00004647-199609000-00008</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other SUVR functions: <code><a href='suvr_auc.html'>suvr_auc</a></code></p></div>
+    <div class='dont-index'><p>Other Logan plot functions: <code><a href='DVR_all_ref_Logan.html'>DVR_all_ref_Logan</a></code>,
+  <code><a href='DVR_ref_Logan.html'>DVR_ref_Logan</a></code>, <code><a href='plot.ref_Logan.html'>plot.ref_Logan</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -164,7 +196,9 @@ provided tac data, using the specified reference region.</p>
 <span class='no'>AD06</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='tac_roi.html'>tac_roi</a></span>(<span class='kw'>tac</span><span class='kw'>=</span><span class='no'>AD06_tac</span>, <span class='kw'>volumes</span><span class='kw'>=</span><span class='no'>AD06_volume</span>, <span class='kw'>ROI_def</span><span class='kw'>=</span><span class='fu'><a href='roi_ham_pib.html'>roi_ham_pib</a></span>(),
                 <span class='kw'>merge</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>PVC</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
 
-<span class='no'>AD06_SUVR</span> <span class='kw'>&lt;-</span> <span class='fu'>suvr</span>(<span class='no'>AD06</span>, <span class='kw'>SUVR_def</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>3000</span>,<span class='fl'>3300</span>,<span class='fl'>3600</span>), <span class='kw'>ref</span><span class='kw'>=</span><span class='st'>"cerebellum"</span>)</div></pre>
+<span class='no'>AD06_DVRs</span> <span class='kw'>&lt;-</span> <span class='fu'>dvr</span>(<span class='no'>AD06</span>, <span class='kw'>ref</span><span class='kw'>=</span><span class='st'>"cerebellum"</span>, <span class='kw'>k2prime</span><span class='kw'>=</span><span class='fl'>0.2</span>, <span class='kw'>t_star</span><span class='kw'>=</span><span class='fl'>23</span>)</div><div class='output co'>#&gt; <span class='message'>Trying leftfrontal</span></div><div class='output co'>#&gt; <span class='message'>Trying rightfrontal</span></div><div class='output co'>#&gt; <span class='message'>Trying lefttemporal</span></div><div class='output co'>#&gt; <span class='message'>Trying righttemporal</span></div><div class='output co'>#&gt; <span class='message'>Trying leftparietal</span></div><div class='output co'>#&gt; <span class='message'>Trying rightparietal</span></div><div class='output co'>#&gt; <span class='message'>Trying leftoccipital</span></div><div class='output co'>#&gt; <span class='message'>Trying rightoccipital</span></div><div class='output co'>#&gt; <span class='message'>Trying leftcingulate</span></div><div class='output co'>#&gt; <span class='message'>Trying rightcingulate</span></div><div class='output co'>#&gt; <span class='message'>Trying frontal</span></div><div class='output co'>#&gt; <span class='message'>Trying temporal</span></div><div class='output co'>#&gt; <span class='message'>Trying parietal</span></div><div class='output co'>#&gt; <span class='message'>Trying occipital</span></div><div class='output co'>#&gt; <span class='message'>Trying cingulate</span></div><div class='output co'>#&gt; <span class='message'>Trying cerebellum</span></div><div class='output co'>#&gt; <span class='message'>Trying totalcortical</span></div><div class='output co'>#&gt; <span class='message'>Trying leftdeep</span></div><div class='output co'>#&gt; <span class='message'>Trying rightdeep</span></div><div class='output co'>#&gt; <span class='message'>Trying deep</span></div><div class='output co'>#&gt; <span class='message'>Trying ventricles</span></div><div class='output co'>#&gt; <span class='message'>Trying whitematter</span></div><div class='output co'>#&gt; <span class='message'>Trying amyloidcomp</span></div><div class='input'>
+<span class='no'>AD06_DVR</span> <span class='kw'>&lt;-</span> <span class='fu'>dvr</span>(<span class='no'>AD06</span>, <span class='kw'>target</span><span class='kw'>=</span><span class='st'>"frontal"</span>, <span class='kw'>ref</span><span class='kw'>=</span><span class='st'>"cerebellum"</span>,
+             <span class='kw'>k2prime</span><span class='kw'>=</span><span class='fl'>0.2</span>, <span class='kw'>t_star</span><span class='kw'>=</span><span class='fl'>23</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -172,6 +206,10 @@ provided tac data, using the specified reference region.</p>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
+
+      <li><a href="#references">References</a></li>
 
       <li><a href="#see-also">See also</a></li>
       

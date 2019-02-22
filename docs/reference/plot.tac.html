@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Calculate weighted SUVRs for specified regions of interest — suvr • tacmagic</title>
+<title>Plots time activity curves from 1 or 2 participants or groups. — plot.tac • tacmagic</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,10 +30,9 @@
 
 
 
-<meta property="og:title" content="Calculate weighted SUVRs for specified regions of interest — suvr" />
+<meta property="og:title" content="Plots time activity curves from 1 or 2 participants or groups. — plot.tac" />
 
-<meta property="og:description" content="Calculate the standardized uptake value ratio (SUVR) for all ROIs in the
-provided tac data, using the specified reference region." />
+<meta property="og:description" content="Plots time activity curves from 1 or 2 participants or groups." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -112,59 +111,79 @@ provided tac data, using the specified reference region." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Calculate weighted SUVRs for specified regions of interest</h1>
-    <small class="dont-index">Source: <a href='https://github.com/eebrown/PET/blob/master/R/SUVR.R'><code>R/SUVR.R</code></a></small>
-    <div class="hidden name"><code>suvr.Rd</code></div>
+    <h1>Plots time activity curves from 1 or 2 participants or groups.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/eebrown/PET/blob/master/R/plot.R'><code>R/plot.R</code></a></small>
+    <div class="hidden name"><code>plot.tac.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Calculate the standardized uptake value ratio (SUVR) for all ROIs in the
-provided tac data, using the specified reference region.</p>
+    <p>Plots time activity curves from 1 or 2 participants or groups.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>suvr</span>(<span class='no'>tac</span>, <span class='no'>SUVR_def</span>, <span class='no'>ref</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='co'># S3 method for tac</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>x</span>, <span class='kw'>tac2</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>ROIs</span>, <span class='kw'>ymax</span> <span class='kw'>=</span> <span class='fl'>25</span>, <span class='kw'>time</span> <span class='kw'>=</span> <span class='st'>"minutes"</span>,
+  <span class='kw'>title</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>colors</span> <span class='kw'>=</span> <span class='no'>rainbow</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>tac</th>
-      <td><p>The time-activity curve data from tac_roi()</p></td>
+      <th>x</th>
+      <td><p>A tac object containing time-activity curves to plot, e.g. from 
+tac_roi() or load_tac()</p></td>
     </tr>
     <tr>
-      <th>SUVR_def</th>
-      <td><p>a vector of start times for window to be used in SUVR</p></td>
+      <th>tac2</th>
+      <td><p>An optional, second TAC, to plot for comparison</p></td>
     </tr>
     <tr>
-      <th>ref</th>
-      <td><p>a string, e.g. "cerebellum", to specify reference region</p></td>
+      <th>ROIs</th>
+      <td><p>A vector of ROIs to plot, names matching the TAC headers</p></td>
+    </tr>
+    <tr>
+      <th>ymax</th>
+      <td><p>The maximum value on the y-axis</p></td>
+    </tr>
+    <tr>
+      <th>time</th>
+      <td><p>"seconds" or "minutes" depending on desired x-axis, converts tac</p></td>
+    </tr>
+    <tr>
+      <th>title</th>
+      <td><p>A title for the plot</p></td>
+    </tr>
+    <tr>
+      <th>colors</th>
+      <td><p>If null, rainbow palette is used, otherwise another palette can
+be specified (heat.colors, terrain.colors, topo.colors, cm.colors</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>When called from tm_batch, unused parameters may be supplied</p></td>
+      <td><p>Additional arguments</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data.frame of SUVR values for the specified ROIs</p>
+    <p>Creates a plot</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other SUVR functions: <code><a href='suvr_auc.html'>suvr_auc</a></code></p></div>
+    <div class='dont-index'><p>Other tac functions: <code><a href='save_tac.html'>save_tac</a></code>,
+  <code><a href='split_pvc.html'>split_pvc</a></code>, <code><a href='tac_roi.html'>tac_roi</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>f</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"AD06.tac"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"tacmagic"</span>)
-<span class='no'>fv</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"AD06_TAC.voistat"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"tacmagic"</span>)
-<span class='no'>AD06_tac</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='load_tac.html'>load_tac</a></span>(<span class='no'>f</span>, <span class='kw'>format</span><span class='kw'>=</span><span class='st'>"PMOD"</span>)
-<span class='no'>AD06_volume</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='load_vol.html'>load_vol</a></span>(<span class='no'>fv</span>, <span class='kw'>format</span><span class='kw'>=</span><span class='st'>"voistat"</span>)
-<span class='no'>AD06</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='tac_roi.html'>tac_roi</a></span>(<span class='kw'>tac</span><span class='kw'>=</span><span class='no'>AD06_tac</span>, <span class='kw'>volumes</span><span class='kw'>=</span><span class='no'>AD06_volume</span>, <span class='kw'>ROI_def</span><span class='kw'>=</span><span class='fu'><a href='roi_ham_pib.html'>roi_ham_pib</a></span>(),
-                <span class='kw'>merge</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>PVC</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
+    <pre class="examples"><div class='input'><span class='co'># f_raw_tac and f_raw_vol are the filenames of PMOD-generated files</span>
+<span class='no'>f_raw_tac</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"AD06.tac"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"tacmagic"</span>)
+<span class='no'>f_raw_vol</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"AD06_TAC.voistat"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"tacmagic"</span>)
 
-<span class='no'>AD06_SUVR</span> <span class='kw'>&lt;-</span> <span class='fu'>suvr</span>(<span class='no'>AD06</span>, <span class='kw'>SUVR_def</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>3000</span>,<span class='fl'>3300</span>,<span class='fl'>3600</span>), <span class='kw'>ref</span><span class='kw'>=</span><span class='st'>"cerebellum"</span>)</div></pre>
+<span class='no'>tac</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='load_tac.html'>load_tac</a></span>(<span class='no'>f_raw_tac</span>)
+<span class='no'>vol</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='load_vol.html'>load_vol</a></span>(<span class='no'>f_raw_vol</span>)
+<span class='no'>AD06_tac_nc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='tac_roi.html'>tac_roi</a></span>(<span class='no'>tac</span>, <span class='no'>vol</span>, <span class='fu'><a href='roi_ham_full.html'>roi_ham_full</a></span>(), <span class='kw'>merge</span><span class='kw'>=</span><span class='fl'>FALSE</span>, <span class='kw'>PVC</span><span class='kw'>=</span><span class='fl'>FALSE</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>AD06_tac_nc</span>, <span class='kw'>ROIs</span><span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"frontal"</span>, <span class='st'>"cerebellum"</span>), <span class='kw'>title</span><span class='kw'>=</span><span class='st'>"Example Plot"</span>)</div><div class='img'><img src='plot.tac-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
