@@ -1,6 +1,6 @@
 ##################################
 ## tacmagic - PET Analysis in R ##
-## loading.R                    ##
+## tac_methods.R                ##
 ## (C) Eric E. Brown  2018      ##
 ## Beta version--check all work ##
 ##################################
