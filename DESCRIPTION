@@ -7,7 +7,11 @@ Authors@R: c(person("Eric", "Brown",
                     email = "eb@ericebrown.com",
                     comment = c(ORCID = "0000-0002-1575-2606")),
              person("Ariel", "Graff-Guerrero",
-                    role = c("dgs")))
+                    role = "dgs"),
+             person("Jon", "Clayden",
+                    role = c("rev"),
+                    comment = c(ORCID = "0000-0002-6608-0619", 
+                    "Jon Clayden reviewed the package for ropensci, see <https://github.com/ropensci/software-review/issues/280>")))
 Description: To faciliate analysis of positron emission tomography (PET) time
     activity curve (TAC) data, and to encourage open science and replicability,
     this package supports data loading and analysis of multiple TAC file 
