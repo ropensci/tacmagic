@@ -4,26 +4,17 @@
 \alias{batch_tm}
 \title{Calculate one or more models for a batch of participants}
 \usage{
-batch_tm(all_tacs, models = c("SUVR", "Logan"), ref, SUVR_def = NULL,
-  k2prime = NULL, t_star = NULL, custom_model = NULL,
-  custom_params = NULL)
+batch_tm(all_tacs, models, custom_model = NULL, ...)
 }
 \arguments{
 \item{all_tacs}{A list by participant, of tac data (load_batch())}
 
 \item{models}{A vector of names of the models to calculate}
 
-\item{ref}{The name of the reference region for DVR/SUVR calculation}
-
-\item{SUVR_def}{is a vector of the start times for window to be used in SUVR}
-
-\item{k2prime}{Fixed k2' for DVR calculation}
-
-\item{t_star}{Change from 0 to manually specify a t* for DVR calculation}
-
 \item{custom_model}{A function that can be run like other models (advanced)}
 
-\item{custom_params}{To pass to custom_model as params$custom_params}
+\item{...}{The arguments that get passed to the specified models/custom model,
+many are required; please check with model desired.}
 }
 \value{
 A table of SUVR values for the specified ROIs for all participants
@@ -43,7 +34,9 @@ participants <- c(system.file("extdata", "AD06.tac", package="tacmagic"),
                   system.file("extdata", "AD08.tac", package="tacmagic"))
 
 tacs <- batch_load(participants, tac_file_suffix="")
-for (i in 1:3) tacs[[i]][,1:80] # to remove the PVC values for this example
+
+# Keeps only the ROIs without partial-volume correction (PMOD convention)
+tacs <- lapply(tacs, split_pvc, FALSE)
 
 batch <- batch_tm(tacs, models=c("SUVR", "Logan"), ref="Cerebellum_r",
                   SUVR_def=c(3000,3300,3600), k2prime=0.2, t_star=23)

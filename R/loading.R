@@ -24,7 +24,7 @@
 #'   \item "voistat": PMOD TAC .voistat files used in combination with PMOD 
 #'          .acqtimes file for start/stop times.
 #'   \item "magia": magia pipeline .mat tac file
-#'   \item "DFF": Turku PET Centre's DFT format
+#'   \item "DFT": Turku PET Centre's DFT format
 #' }
 #' 
 #'@export
@@ -36,7 +36,7 @@
 #'                 "minutes" if not in file or to override file
 #'@param activity_unit NULL if in file (e.g. PMOD .tac), or set to "kBq/cc", 
 #'                     "Bq/cc", "nCi/cc"
-#'@return data.frame with loaded TAC data
+#'@return tac object
 #'@family Loading functions 
 #'@examples
 #' f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic") 
@@ -47,13 +47,23 @@ load_tac <- function(filename, format="PMOD", acqtimes=NULL, time_unit=NULL,
   
   if (format == "PMOD") {
       
-      if (!(is.null(time_unit) & is.null(activity_unit))) {
-        warning("Your specified units will override any data in the files.")
+    if (tools::file_ext(filename) != "tac") {
+      warning("PMOD format was specified,
+               but filename did not end in .tac")
       }
-      
-      tac <- load_tac_PMOD(filename)
 
-  } else if (format == "voistat") {  
+    if (!(is.null(time_unit) & is.null(activity_unit))) {
+      warning("Your specified units will override any data in the files.")
+    }
+      
+    tac <- load_tac_PMOD(filename)
+
+  } else if (format == "voistat") { 
+
+      if (tools::file_ext(filename) != "voistat") {
+        warning("PMOD voistat format was specified, 
+                 but filename did not end in .voistat")
+      } 
       
       if (!(is.null(time_unit) & is.null(activity_unit))) {
         warning("Your specified units will override any data in the files.")
@@ -67,17 +77,27 @@ load_tac <- function(filename, format="PMOD", acqtimes=NULL, time_unit=NULL,
         stop("You must specify both time and activity units.")
       }
     
+      if (tools::file_ext(filename) != "mat") {
+        warning("magia format was specified, but filename did not end in .mat")
+      } 
+
       tac <- load_tac_magia(filename)
     
   } else if (format == "DFT") {
+
+      if (tools::file_ext(filename) != "dft") {
+        warning("DFT format was specified, 
+                 but filename did not end in .dft")
+      } 
 
       tac <- load_tac_DFT(filename)
 
   } else stop("Specified format for tac not supported.")
 
-  attributes(tac)$tm_type <- "tac"
+  class(tac) <- c("tac", "data.frame")
   if (!is.null(time_unit)) attributes(tac)$time_unit <- time_unit
   if (!is.null(activity_unit)) attributes(tac)$activity_unit <- activity_unit
+  
   if (!(validate_tac(tac))) stop("TAC object created by load_tac was invalid.")
   return(tac)
 }
@@ -100,10 +120,18 @@ load_tac <- function(filename, format="PMOD", acqtimes=NULL, time_unit=NULL,
 #'@family Loading functions
 load_vol <- function(filename, format="voistat") {
   if (format == "voistat") {
-      volumes <- volumesFromVoistatTAC(filename)
+      if (tools::file_ext(filename) != "voistat") {
+        warning("voistat format was specified, 
+                 but filename did not end in .voistat")
+      } 
+      volumes <- load_vol_vstac(filename)
   } else if (format == "BPndPaste") {
-      volumes <- volumesFromBPndPaste(filename)
+      volumes <- load_vol_bpndpaste(filename)
   } else if (format == "DFT") {
+      if (tools::file_ext(filename) != "dft") {
+        warning("DFT format was specified, 
+                 but filename did not end in .dft")
+      } 
       volumes <- load_vol_DFT(filename)
   } else stop("Specified format for volume data not supported.")
     
@@ -133,6 +161,11 @@ load_vol <- function(filename, format="voistat") {
 #' vs <- load_voistat(f, ROI_def=roi_ham_pib(), model="Logan")
 load_voistat <- function(filename, ROI_def=NULL, model="VALUE") {
     
+
+  if (tools::file_ext(filename) != "voistat") {
+        warning(".voistat filename extension was expected.")
+  } 
+
   voistat <- read.csv(filename, sep="\t", skip=6, header=TRUE, 
                       stringsAsFactors=FALSE)
 

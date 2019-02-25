@@ -7,14 +7,18 @@
 
 # ROI definitions file.
 
-
 #' Return a list of merged ROIs made up of the atomic ROIs in the Hammer's 
-#' atlas (see references()$Hammers_2003).
+#' atlas.
 #'
 #'@export
 #'@return A list of lists, where each list is an ROI (e.g.) frontal lobe that 
 #' specifies the atomic ROIs from the atlas that make it up.
 #'@family ROI definitions
+#'@references Hammers, Alexander, Richard Allom, Matthias J. Koepp, Samantha L. Free, 
+#' Ralph Myers, Louis Lemieux, Tejal N. Mitchell, David J. Brooks, and John S. 
+#' Duncan. 2003. Three-dimensional Maximum Probability Atlas of the Human 
+#' Brain, with Particular Reference to the Temporal Lobe. Human Brain Mapping 
+#' 19 (4): 224-247. doi:10.1002/hbm.10123
 #'@examples 
 #' roi_ham_stand()
 roi_ham_stand <- function() {
@@ -77,6 +81,11 @@ roi_ham_stand <- function() {
 #'@return A list of lists, where each list is an ROI (e.g.) frontal lobe that 
 #' specifies the atomic ROIs from the atlas that make it up.
 #'@family ROI definitions
+#'@references Hammers, Alexander, Richard Allom, Matthias J. Koepp, Samantha L. Free, 
+#' Ralph Myers, Louis Lemieux, Tejal N. Mitchell, David J. Brooks, and John S. 
+#' Duncan. 2003. Three-dimensional Maximum Probability Atlas of the Human 
+#' Brain, with Particular Reference to the Temporal Lobe. Human Brain Mapping 
+#' 19 (4): 224-247. doi:10.1002/hbm.10123
 #'@examples roi_ham_full()
 roi_ham_full <- function() {
 
@@ -107,6 +116,11 @@ roi_ham_full <- function() {
 #'@return A list of lists, where each list is an ROI (e.g.) frontal lobe that 
 #' specifies the atomic ROIs from the atlas that make it up.
 #'@family ROI definitions
+#'@references Hammers, Alexander, Richard Allom, Matthias J. Koepp, Samantha L. Free, 
+#' Ralph Myers, Louis Lemieux, Tejal N. Mitchell, David J. Brooks, and John S. 
+#' Duncan. 2003. Three-dimensional Maximum Probability Atlas of the Human 
+#' Brain, with Particular Reference to the Temporal Lobe. Human Brain Mapping 
+#' 19 (4): 224-247. doi:10.1002/hbm.10123
 #'@examples 
 #' roi_ham_pib()
 roi_ham_pib <- function() {

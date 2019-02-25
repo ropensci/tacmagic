@@ -78,16 +78,14 @@ test_that("plot_ref_logan creates the plots without error", {
   AD06 <- tac_roi(tac=AD06_tac,          
                   volumes=AD06_volume, ROI_def=roi_ham_pib(), merge=F, PVC=F)
 
+  AD06_Logan <- DVR_ref_Logan(AD06, target="frontal", ref="cerebellum", 
+                              k2prime=0.2, t_star=0) 
+
   pdf(NULL)
   on.exit(dev.off())
   dev.control(displaylist="enable")
 
-  plot_ref_Logan(AD06, 
-                 target="frontal",
-                 ref="cerebellum", 
-                 k2prime=0.2,     
-                 t_star=0,        
-                 )
+  plot(AD06_Logan)
 
   p <- recordPlot()
 
@@ -98,7 +96,6 @@ test_that("plot_ref_logan creates the plots without error", {
   expect_identical(sample, expected)
 
 })
-
 
 
 test_that("find_t_star gets right answer for reasonable parameters", {
@@ -131,5 +128,33 @@ test_that("find_t_star gets right answer for reasonable parameters", {
 
   expect_equal(find_t_star(x,y), 2)
   expect_equal(find_t_star(x,y, error=0.15), 1)
+
+})
+
+
+test_that("dvr() wrapper produces same results as functions it calls", {
+
+  f <- system.file("extdata", "AD06.tac", package="tacmagic")
+  fv <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
+  AD06_tac <- load_tac(f, format="PMOD")
+  AD06_volume <- load_vol(fv, format="voistat")
+
+  AD06 <- tac_roi(tac=AD06_tac,          
+                  volumes=AD06_volume, ROI_def=roi_ham_pib(), merge=F, PVC=F)
+
+  a_AD06_Logan <- DVR_ref_Logan(AD06, target="frontal", ref="cerebellum", 
+                              k2prime=0.2, t_star=0) 
+
+  b_AD06_Logan <- dvr(AD06, target="frontal", ref="cerebellum", 
+                              k2prime=0.2, t_star=0) 
+
+  c_AD06_Logan <- DVR_all_ref_Logan(AD06, ref="cerebellum", 
+                              k2prime=0.2, t_star=0) 
+
+  d_AD06_Logan <- dvr(AD06, ref="cerebellum", k2prime=0.2, t_star=0) 
+
+  expect_equal(a_AD06_Logan$DVR, b_AD06_Logan)
+
+  expect_equal(c_AD06_Logan, d_AD06_Logan)
 
 })

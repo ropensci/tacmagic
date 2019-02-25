@@ -3,7 +3,7 @@
 \name{roi_ham_stand}
 \alias{roi_ham_stand}
 \title{Return a list of merged ROIs made up of the atomic ROIs in the Hammer's 
-atlas (see references()$Hammers_2003).}
+atlas.}
 \usage{
 roi_ham_stand()
 }
@@ -13,10 +13,17 @@ specifies the atomic ROIs from the atlas that make it up.
 }
 \description{
 Return a list of merged ROIs made up of the atomic ROIs in the Hammer's 
-atlas (see references()$Hammers_2003).
+atlas.
 }
 \examples{
 roi_ham_stand()
+}
+\references{
+Hammers, Alexander, Richard Allom, Matthias J. Koepp, Samantha L. Free, 
+Ralph Myers, Louis Lemieux, Tejal N. Mitchell, David J. Brooks, and John S. 
+Duncan. 2003. Three-dimensional Maximum Probability Atlas of the Human 
+Brain, with Particular Reference to the Temporal Lobe. Human Brain Mapping 
+19 (4): 224-247. doi:10.1002/hbm.10123
 }
 \seealso{
 Other ROI definitions: \code{\link{roi_ham_full}},

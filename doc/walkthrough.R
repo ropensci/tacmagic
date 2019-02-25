@@ -13,6 +13,9 @@ filename <- system.file("extdata", "AD06.tac", package="tacmagic")
 
 AD06_tac <- load_tac(filename, format="PMOD")
 
+## ------------------------------------------------------------------------
+summary(AD06_tac) 
+
 AD06_tac[1:5,1:5] # the first 5 frames of the first 3 ROIs
 
 ## ------------------------------------------------------------------------
@@ -28,7 +31,14 @@ f_magia <- system.file("extdata", "AD06_tac_magia.mat", package="tacmagic")
 
 AD06_tac_magia <- load_tac(f_magia, format="magia", 
                            time_unit="seconds", activity_unit="kBq/cc")
+
 AD06_tac_magia[1:5,1:5]
+
+## ------------------------------------------------------------------------
+manual <- data.frame(start=c(0:4), end=c(2:6), ROI1=c(10.1:14.2), ROI2=c(11:15))
+manual_tac <- as.tac(manual, time_unit="minutes", activity_unit="kBq/cc")
+
+summary(manual_tac)
 
 ## ------------------------------------------------------------------------
 AD06_volume <- load_vol(filename_voistat, format="voistat")
@@ -45,11 +55,11 @@ AD06 <- tac_roi(tac=AD06_tac,           # The tac file we loaded above.
 AD06[1:5,1:5]
 
 ## ---- fig.show='hold', fig.height=4.5, fig.width=6.5, fig.align='center'----
-plot_tac(AD06,                                                    # tac data
-         ROIs=c("frontal", "temporal", "parietal", "cerebellum"), # ROIs to plot
-         time="minutes",             # Convert x axis from seconds to minutes
-         title="PIB time activity curves for AD06"        # A title for the plot
-        )
+plot(AD06,                                                    # tac data
+     ROIs=c("frontal", "temporal", "parietal", "cerebellum"), # ROIs to plot
+     time="minutes",                   # Convert x axis from seconds to minutes
+     title="PIB time activity curves for AD06"        # A title for the plot
+     )
 
 ## ------------------------------------------------------------------------
 AD06_SUVR <- suvr(AD06,                       # tac data
@@ -74,23 +84,40 @@ AD06_DVR_fr <- DVR_ref_Logan(AD06,
                              t_star=0,        # 0 to find, or can specify frame
                              )
 
-
-AD06_DVR_fr
+AD06_DVR_fr$DVR
 
 
 ## ---- fig.show='hold', fig.height=4.5, fig.width=6.5, fig.align='center'----
-plot_ref_Logan(AD06, 
-               target="frontal",
-               ref="cerebellum", 
-               k2prime=0.2,     
-               t_star=0,        
-               )
+plot(AD06_DVR_fr)
 
 
 ## ------------------------------------------------------------------------
 AD06_DVR <- DVR_all_ref_Logan(AD06, ref="cerebellum", k2prime=0.2, t_star=23)
 
 AD06_DVR
+
+
+## ------------------------------------------------------------------------
+ADO6_frontal_DVR <- dvr(AD06, target="frontal", ref="cerebellum", k2prime=0.2, 
+                        t_star=23)
+
+
+## ------------------------------------------------------------------------
+
+participants <- c(system.file("extdata", "AD06.tac", package="tacmagic"),
+                   system.file("extdata", "AD07.tac", package="tacmagic"),
+                   system.file("extdata", "AD08.tac", package="tacmagic"))
+
+tacs <- batch_load(participants, dir="", tac_file_suffix="")
+
+# Since the PMOD tac files used here have 2 copies of ROIs, with and without 
+# PVC, we can use split_pvc to keep the PVC-corrected verions. If we had used 
+# roi_m here to combine ROIs, we could have specified to use the PVC versions 
+# in batch_load() with PVC = TRUE.
+tacs <- lapply(tacs, split_pvc, PVC=TRUE)
+ 
+batch <- batch_tm(tacs, models=c("SUVR", "Logan"), ref="Cerebellum_r_C",
+                  SUVR_def=c(3000,3300,3600), k2prime=0.2, t_star=23)
 
 
 ## ------------------------------------------------------------------------

@@ -24,7 +24,7 @@ f_raw_vol <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
 vol <- load_vol(f_raw_vol)
 }
 \seealso{
-Other Loading functions: \code{\link{load_tac}},
-  \code{\link{load_voistat}}
+Other Loading functions: \code{\link{as.tac}},
+  \code{\link{load_tac}}, \code{\link{load_voistat}}
 }
 \concept{Loading functions}

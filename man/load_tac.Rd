@@ -22,7 +22,7 @@ format="voistat"}
 "Bq/cc", "nCi/cc"}
 }
 \value{
-data.frame with loaded TAC data
+tac object
 }
 \description{
 This is the main function for loading an individual participant's TAC data.
@@ -35,7 +35,7 @@ supported formats (with the corresponding format argument), include:
   \item "voistat": PMOD TAC .voistat files used in combination with PMOD 
          .acqtimes file for start/stop times.
   \item "magia": magia pipeline .mat tac file
-  \item "DFF": Turku PET Centre's DFT format
+  \item "DFT": Turku PET Centre's DFT format
 }
 }
 \examples{
@@ -44,7 +44,7 @@ tac <- load_tac(f_raw_tac)
 
 }
 \seealso{
-Other Loading functions: \code{\link{load_voistat}},
-  \code{\link{load_vol}}
+Other Loading functions: \code{\link{as.tac}},
+  \code{\link{load_voistat}}, \code{\link{load_vol}}
 }
 \concept{Loading functions}

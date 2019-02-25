@@ -4,22 +4,24 @@
 \alias{batch_load}
 \title{Load (+/- merge) ROIs for batch of participants}
 \usage{
-batch_load(participants, PVC = FALSE, dir = "", tac_format = "PMOD",
-  tac_file_suffix = ".tac", roi_m = FALSE, vol_file_suffix = NULL,
-  vol_format = NULL, merge = NULL, ROI_def = NULL)
+batch_load(participants, dir = "", tac_file_suffix = ".tac",
+  tac_format = "PMOD", roi_m = FALSE, PVC = NULL,
+  vol_file_suffix = NULL, vol_format = NULL, merge = NULL,
+  ROI_def = NULL)
 }
 \arguments{
 \item{participants}{A vector of participant IDs}
 
-\item{PVC}{For PVC, true where the data is stored as _C in same tac file}
-
 \item{dir}{A directory and/or file name prefix for the tac/volume files}
-
-\item{tac_format}{Format of tac files provided: See load_tac()}
 
 \item{tac_file_suffix}{How participant IDs corresponds to the TAC files}
 
-\item{roi_m}{T if you want to merge atomic ROIs into larger ROIs}
+\item{tac_format}{Format of tac files provided: See load_tac()}
+
+\item{roi_m}{TRUE if you want to merge atomic ROIs into larger ROIs (and if 
+not, the following parameters are not used)}
+
+\item{PVC}{For PVC, true where the data is stored as _C in same tac file}
 
 \item{vol_file_suffix}{How participant IDs correspond to volume files}
 

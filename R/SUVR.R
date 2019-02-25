@@ -13,9 +13,8 @@
 #'@export 
 #'@param tac The time-activity curve data from tac_roi()
 #'@param SUVR_def a vector of start times for window to be used in SUVR
-#'@param ref a string, e.g. "cerbellum", to specify reference region
-#'@param params a list of paramters passed from the batch_tm function and is
-#'              not needed when calling for individual participants.
+#'@param ref a string, e.g. "cerebellum", to specify reference region
+#'@param ... When called from tm_batch, unused parameters may be supplied
 #'@return A data.frame of SUVR values for the specified ROIs
 #'@family SUVR functions
 #'@examples
@@ -28,25 +27,12 @@
 #' 
 #' AD06_SUVR <- suvr(AD06, SUVR_def=c(3000,3300,3600), ref="cerebellum")
 #' 
-suvr <- function(tac, SUVR_def=NULL, ref=NULL, params=NULL) {
+suvr <- function(tac, SUVR_def, ref, ...) {
 
-    if (!(is.null(params))) {
-      if(!is.null(c(SUVR_def, ref))) {
-        stop("Only provide either params argument or both SUVR_def and ref.")
-      } 
-      if ( is.null(params$SUVR_def) | is.null(params$ref) ) {
-        stop("Both SUVR_def and ref are needed to calculate SUVR.")
-      }
-      
-      ref <- params$ref
-      SUVR_def <- params$SUVR
-    }
-
-    #TODO: validate that SUVR_def is suitable
+    validate_suvr_params(tac, SUVR_def, ref)
 
     SUVRtable <- new_table(tac, "SUVR")
     
-    # TODO validate that t1$start and t2$end are numeric
     frames <- match(SUVR_def, tac$start)
     frame_weights <- tac$end[frames] - tac$start[frames]
     
@@ -67,7 +53,8 @@ suvr <- function(tac, SUVR_def=NULL, ref=NULL, params=NULL) {
 #'@export 
 #'@param tac The time-activity curve data from tac_roi()
 #'@param SUVR_def a vector of start times for window to be used in SUVR
-#'@param ref is a string, e.g. "cerbellum", to specify reference region
+#'@param ref is a string, e.g. "cerebellum", to specify reference region
+#'@param ... When called from tm_batch, unused parameters may be supplied
 #'@family SUVR functions
 #'@return A data.frame of SUVR values for the specified ROIs
 #' #' f <- system.file("extdata", "AD06.tac", package="tacmagic")
@@ -79,19 +66,37 @@ suvr <- function(tac, SUVR_def=NULL, ref=NULL, params=NULL) {
 #' 
 #' AD06_SUVR <- suvr_auc(AD06, SUVR_def=c(3000,3300,3600), ref="cerebellum")
 #' 
-suvr_auc <- function(tac, SUVR_def, ref) {
+suvr_auc <- function(tac, SUVR_def, ref, ...) {
 
-    SUVRtable <- new_table(tac, "SUVR")
+  validate_suvr_params(tac, SUVR_def, ref)
+
+  SUVRtable <- new_table(tac, "SUVR")
     
-    tac$mid <- (tac$start + tac$end) / 2
+  tac$mid <- (tac$start + tac$end) / 2
 
-    for (ROI in names(tac)[-c(1:2, length(tac))]) {    
-        rich <- pracma::trapz(tac[(tac$start %in% SUVR_def),][,"mid"], 
-                              tac[(tac$start %in% SUVR_def),][,ROI])
-        poor <- pracma::trapz(tac[(tac$start %in% SUVR_def),][,"mid"], 
-                              tac[(tac$start %in% SUVR_def),][,ref])
-        SUVRtable[ROI, "SUVR"] <-  rich/poor
-    }    
+  for (ROI in names(tac)[-c(1:2, length(tac))]) {    
+    rich <- pracma::trapz(tac[(tac$start %in% SUVR_def),][,"mid"], 
+                          tac[(tac$start %in% SUVR_def),][,ROI])
+    poor <- pracma::trapz(tac[(tac$start %in% SUVR_def),][,"mid"], 
+                          tac[(tac$start %in% SUVR_def),][,ref])
+    SUVRtable[ROI, "SUVR"] <-  rich/poor
+  }    
 
     return(SUVRtable)
+}
+
+
+# Checks to ensure SUVR parameters are appropriate and throws error if not.
+#' @noRd
+validate_suvr_params <- function(tac, SUVR_def, ref) {
+
+  if(!validate_tac(tac)) stop("Supplied tac file did not validate.")
+
+  if (!all(SUVR_def %in% tac$start)) {
+    stop("The SUVR definition must refer to valid start times in the tac")
+  }
+
+  if(!(ref %in% names(tac))) {
+    stop("The reference region (ref) must be in the supplied tac.")
+  }  
 }

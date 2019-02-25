@@ -17,6 +17,13 @@ It can be modified to suit the user's needs.
 \examples{
 roi_ham_full()
 }
+\references{
+Hammers, Alexander, Richard Allom, Matthias J. Koepp, Samantha L. Free, 
+Ralph Myers, Louis Lemieux, Tejal N. Mitchell, David J. Brooks, and John S. 
+Duncan. 2003. Three-dimensional Maximum Probability Atlas of the Human 
+Brain, with Particular Reference to the Temporal Lobe. Human Brain Mapping 
+19 (4): 224-247. doi:10.1002/hbm.10123
+}
 \seealso{
 Other ROI definitions: \code{\link{roi_ham_pib}},
   \code{\link{roi_ham_stand}}

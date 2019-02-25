@@ -26,9 +26,8 @@ test_that("validate_tac() properly rejects malformed tac objects", {
   f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic") 
   
   tac <- load_tac(f_raw_tac)
-  attributes(tac)$tm_type <- "fail"
-  expect_message(validate_tac(tac))
-  expect_equal(FALSE, validate_tac(tac))
+  class(tac) <- "data.frame"
+  expect_error(validate_tac(tac))
 
   tac <- load_tac(f_raw_tac)
   attributes(tac)$time_unit <- "sec"
@@ -80,7 +79,7 @@ test_that("load_tac() properly loads example DFT file", {
   putam_sin <- c(-0.00918,1.11,4.71,11.5,19.7,25.6,28.7,26.7,29.2,NA,28)
   cereb_. <- c(0.000298,1.43,5.22,9.87,1.03,9.36,8.69,8.57,6.99,7.05,6.54)
   ans <- data.frame(start, end, putam_dx, putam_sin, cereb_.)
-  attributes(ans)$tm_type <- "tac"
+  class(ans) <- c("tac", "data.frame")
   attributes(ans)$time_unit <- "minutes"
   attributes(ans)$activity_unit <- "kBq/cc"
 
@@ -115,7 +114,7 @@ test_that("load_tac_PMOD() can deal with seconds and minutes", {
   a <- read.csv(f_raw_tac, sep="\t")
   expect_equal(names(a)[1], "start.seconds.")
   names(a)[1] <- "start.minutes."
-  tmp <- tempfile()
+  tmp <- tempfile(fileext = ".tac")
   write.table(a, tmp, row.names=FALSE, sep="\t")
   
   fake_minutes <- load_tac(tmp)

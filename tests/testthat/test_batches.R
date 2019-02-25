@@ -97,7 +97,7 @@ test_that("batch_load() with merging loads 3 particpants with same result as
 
   batchtest2 <- batch_load(participants, tac_file_suffix=".tac", roi_m=TRUE,
                            vol_file_suffix="_TAC.voistat", 
-                           vol_format="voistat", merge=TRUE, 
+                           vol_format="voistat", merge=TRUE, PVC=FALSE,
                            ROI_def=roi_ham_stand())
   
   AD07 <- load_tac(system.file("extdata", "AD07.tac", package="tacmagic"))
@@ -120,7 +120,7 @@ test_that("custom functions can be passed to batch_tm()", {
   }
 
   # the "custom function"
-  maxi <- function(tac, SUVR_def=NULL, ref=NULL, params) {
+  maxi <- function(tac, ...) {
     table <- new_table_out(tac, "maxi")
 
     for (ROI in names(tac)[-(1:2)]) {

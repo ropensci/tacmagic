@@ -12,4 +12,5 @@
 #' @importFrom utils head read.csv read.delim read.table write.csv write.table
 #' @importFrom grDevices rainbow
 #' @importFrom R.matlab readMat
+#' @importFrom tools file_ext
 NULL

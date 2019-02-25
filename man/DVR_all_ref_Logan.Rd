@@ -4,8 +4,8 @@
 \alias{DVR_all_ref_Logan}
 \title{Non-invasive reference Logan method for all ROIs in tac data}
 \usage{
-DVR_all_ref_Logan(tac_data, ref = NULL, k2prime = NULL,
-  t_star = NULL, error = 0.1, method = "trapz", params = NULL)
+DVR_all_ref_Logan(tac_data, ref, k2prime, t_star, error = 0.1,
+  method = "trapz", ...)
 }
 \arguments{
 \item{tac_data}{The time-activity curve data from tac_roi()}
@@ -18,13 +18,12 @@ DVR_all_ref_Logan(tac_data, ref = NULL, k2prime = NULL,
 
 \item{error}{For find_t_star()}
 
-\item{method}{Method of inntegration, "trapz" or "integrate"}
+\item{method}{Method of integration, "trapz" or "integrate"}
 
-\item{params}{Used by batch_tm (not for calling individually) to pass model
-parameters}
+\item{...}{When called from tm_batch, unused parameters may be supplied}
 }
 \value{
-Data frame with calculate DVRs for all ROIs
+Data frame with calculated DVRs for all ROIs
 }
 \description{
 This calculates the DVR using the non-invasive reference Logan method for
@@ -41,8 +40,15 @@ AD06 <- tac_roi(tac=AD06_tac, volumes=AD06_volume, ROI_def=roi_ham_pib(),
 AD06_DVR <- DVR_all_ref_Logan(AD06, ref="cerebellum", k2prime=0.2, t_star=23)
 
 }
+\references{
+Logan, J., Fowler, J. S., Volkow, N. D., Wang, G.-J., 
+Ding, Y.-S., & Alexoff, D. L. (1996). Distribution Volume Ratios without 
+Blood Sampling from Graphical Analysis of PET Data. Journal of Cerebral 
+Blood Flow & Metabolism, 16(5), 834-840. 
+https://doi.org/10.1097/00004647-199609000-00008
+}
 \seealso{
 Other Logan plot functions: \code{\link{DVR_ref_Logan}},
-  \code{\link{plot_ref_Logan}}
+  \code{\link{dvr}}, \code{\link{plot.ref_Logan}}
 }
 \concept{Logan plot functions}

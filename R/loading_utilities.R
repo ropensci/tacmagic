@@ -5,15 +5,17 @@
 ## Beta version--check all work ##
 ##################################
 
-
-
 # General tac file validation
 #' @noRd
 validate_tac <- function(tac) {
-  # are first 2 variables "start" and "end"
+  
+  if(!is.tac(tac)) {
+    stop("An object of class c(\"tac\", \"data.frame\") was not provided.")
+  } 
 
   status <- TRUE
 
+  # are first 2 variables "start" and "end"
   if (FALSE == (startsWith(names(tac)[1], "start") && 
                 startsWith(names(tac)[2], "end"))) {
     message("The first two columns of the TAC file should be start and end 
@@ -21,12 +23,11 @@ validate_tac <- function(tac) {
     status <- FALSE
   }
 
-  # Are the correct attributes set
-  if (!(attributes(tac)$tm_type == "tac")) {
-    message("TAC data should have attribute tm_type=tac")
-    status <- FALSE
+  if (!all(apply(as.data.frame(tac), 2, is.numeric))) {
+   message("All tac columns should be numeric. Check input data.")
   }
 
+  # Are the correct attributes set
   if (!(attributes(tac)$time_unit %in% c("seconds", "minutes"))) {
     message("TAC data missing attribute time_unit")
     status <- FALSE
@@ -48,7 +49,7 @@ validate_tac <- function(tac) {
 #' @noRd
 load_tac_PMOD <- function(tac_file) {
 
-  tac <- read.csv(tac_file, sep="")
+  tac <- read.csv(tac_file, sep="", comment.char="#")
 
   if (names(tac)[1] == "start.seconds.") {
     attributes(tac)$time_unit <- "seconds"
@@ -75,7 +76,7 @@ load_tac_voistat <- function(voistat_file, acqtimes) {
   voistat <- read.csv(voistat_file, sep="\t", skip=6, header=TRUE,
                       stringsAsFactors=FALSE)
 
-  voistat_type <- validateTACvoistat(voistat)
+  voistat_type <- validate_tac_vs(voistat)
   
   if (voistat_type == "invalid") stop("Invalid voistat TAC file.")
 
@@ -103,7 +104,7 @@ load_tac_voistat <- function(voistat_file, acqtimes) {
   }
 
   startend <- load_acq(acqtimes)
-  if (checkACQtimes(startend$start, startend$end, tac$time)) {
+  if (check_times(startend$start, startend$end, tac$time)) {
   tac <- data.frame(startend, tac) 
   } else stop("Supplied acqtimes do not match midframe time data.")
 
@@ -130,7 +131,7 @@ load_acq <- function(acqtimes_file) {
 
 # TAC .voistat files contain volume information for each ROI. This extracts it
 #' @noRd
-volumesFromVoistatTAC <- function(voistat_file) {
+load_vol_vstac <- function(voistat_file) {
     voistat <- read.csv(voistat_file, sep="\t", skip=6, header=TRUE,
                         stringsAsFactors=FALSE)
     # create a list of each unique ROI name
@@ -146,7 +147,8 @@ volumesFromVoistatTAC <- function(voistat_file) {
 # BPnd data can be copied from PNEURO and saved as a CSV. It contains ROI
 # volume information. This extracts that. Not needed unless volume information
 # is otherwise unavailable.
-volumesFromBPndPaste <- function(BPnd_file) {
+#' @noRd
+load_vol_bpndpaste <- function(BPnd_file) {
     BPnd <- read.csv(BPnd_file, header=TRUE, row.names=1)
     return(BPnd["Volume..ccm."])
 }
@@ -157,7 +159,7 @@ volumesFromBPndPaste <- function(BPnd_file) {
 
 # Ensures consistency between start/end and mid-frame times.
 #' @noRd
-checkACQtimes <- function(start, end, mid) {
+check_times <- function(start, end, mid) {
   return(all(mid == ((start + end) / 2)))
 }
 
@@ -165,7 +167,7 @@ checkACQtimes <- function(start, end, mid) {
 # and returns C if there is a PVC value, NC if not, and invalid if headers
 # are not as expected.
 #' @noRd
-validateTACvoistat <- function(voistat) {
+validate_tac_vs <- function(voistat) {
 
   PVC <- c("X...Component..string.", "File..string.", "PatientName..string.", 
            "PatientID..string.", "PatientInfo..string.", 
@@ -186,7 +188,7 @@ validateTACvoistat <- function(voistat) {
 #### Magia file types ---------------------------------------------------------
 
 # Loads tac data from a .mat file, the output of the magia pipelines
-# magia information is found at references()$magia
+# magia information is found at http://aivo.utu.fi/magia/
 #' @noRd
 load_tac_magia <- function(filename) {
   matlab <- R.matlab::readMat(filename)
@@ -197,8 +199,6 @@ load_tac_magia <- function(filename) {
   tac <- data.frame(frames, tacs)
   return(tac)
 }
-
-
 
 
 #### Turku PET Centre DFT file type
@@ -212,10 +212,13 @@ load_tac_DFT <- function(f) {
   header <- load_header_DFT(f) 
   ROIs <- load_ROIs_DFT(header)
 
-  if (header[3,1] == "kBq/ml") {
+  if (header[3,1] %in% c("kBq/ml", "kBq/mL", "kBq/cc")) {
     activity_unit <- "kBq/cc"
+  } else if (header[3,1] %in% c("Bq/ml", "Bq/mL", "Bq/cc")) {
+    activity_unit <- "Bq/cc"
   } else {
-    stop(paste("Was expecting activity units kBq/ml but got", header[3,1]))
+    stop(paste("Was expecting activity units kBq or Bq / ml or cc but got", 
+               header[3,1]))
   }
 
   if (header[4,2] %in% c("(min)")) {
@@ -248,7 +251,7 @@ load_header_DFT <- function(f) {
   
   header <- read.delim(f, nrows=4, header=FALSE, sep="", stringsAsFactors=FALSE)
 
-  if (header[1,1] != "DFT") stop("Bad DFT file: no \"DFT\" string")
+  if (!startsWith(header[1,1], "DFT")) stop("Bad DFT file: no \"DFT\" string")
 
   # This is expected format when there are start and stop times
   if (header[4,1] != "Times") stop("Bad DFT file: expected \"Times\" at 4,1")
@@ -276,18 +279,4 @@ load_ROIs_DFT <- function(header) {
   secvars <- as.character(header[2, head(seq_along(header)[-1], -1)])
 
   return(paste(vars, secvars, sep="_"))
-}
-
-
-# Used by the plot, or any function that needs 2 tacs, to ensure their overall
-# form and attributes are equal (except the ROIs)
-compare_tac_form <- function(tac, tac2) {
-  if (!all.equal(tac$start, tac2$start)) stop("tac start times not equal")
-  if (!all.equal(tac$end, tac2$end)) stop("tac end times not equal")
-  a1 <- attributes(tac)
-  a2 <- attributes(tac2)
-  if (!all.equal(a1$time_unit, a2$time_unit)) stop("tac time units not equal")
-  if (!all.equal(a1$activity_unit, a2$activity_unit)) stop("tac start times 
-                                                            not equal")
-  return(TRUE) 
 }

@@ -31,7 +31,7 @@ model_definitions <- function() {
 #'@param params Parameters passed from batch_tm()
 #'@return A data.frame of SUVR values for the ROIs for all participants
 #'@noRd
-model_batch <- function(all_tacs, model=NULL, params) {
+model_batch <- function(all_tacs, model=NULL, ...) {
 
   # Specify function to use (except Logan, which needs different params) ------
   if (class(model) == "function") {
@@ -55,7 +55,7 @@ model_batch <- function(all_tacs, model=NULL, params) {
     #message(paste("Working on...", participants[i]))
         
     tac_data <- all_tacs[[i]]    
-    VALUE <- suppressMessages(model_fn(tac_data, params=params))
+    VALUE <- suppressMessages(model_fn(tac_data, ...))
     master[participants[i], ] <- t(VALUE)
   }
 
