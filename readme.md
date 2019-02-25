@@ -1,6 +1,6 @@
 # tacmagic: PET Analysis in R
 
-[![Build Status](https://travis-ci.org/eebrown/PET.svg?branch=master)](https://travis-ci.org/eebrown/PET) [![Coverage status](https://codecov.io/gh/eebrown/PET/branch/master/graph/badge.svg)](https://codecov.io/github/eebrown/PET?branch=master)
+[![Build Status](https://travis-ci.org/ropensci/tacmagic.svg?branch=master)](https://travis-ci.org/ropensci/tacmagic) [![Coverage status](https://codecov.io/gh/ropensci/tacmagic/branch/master/graph/badge.svg)](https://codecov.io/github/ropensci/tacmagic?branch=master)
 
 To foster openness, replicability, and efficiency, ```tacmagic``` facilitates loading and analysis of positron emission tomography data in R.
 
