@@ -11,7 +11,7 @@ As a ```tacmagic``` is a new package, we strongly recommend checking all work ag
 Currently, the package can be installed within R from the github repository. The devtools package is required for installation:
 
 ```r
-devtools::install_github("eebrown/PET")
+devtools::install_github("ropensci/tacmagic")
 ```
 
 ## Features
