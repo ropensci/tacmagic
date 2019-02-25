@@ -1,5 +1,8 @@
 {
-  "@context": ["https://doi.org/10.5063/schema/codemeta-2.0", "http://schema.org"],
+  "@context": [
+    "https://doi.org/10.5063/schema/codemeta-2.0",
+    "http://schema.org"
+  ],
   "@type": "SoftwareSourceCode",
   "identifier": "tacmagic",
   "description": "To faciliate analysis of positron emission tomography (PET) time\n    activity curve (TAC) data, and to encourage open science and replicability,\n    this package supports data loading and analysis of multiple TAC file \n    formats. Functions are available to analyze loaded tac data for individual \n    participants or in batches. Major functionality includes weighted TAC \n    merging by region of interest (ROI), calculating models including SUVR and\n    DVR, basic plotting functions and calculation of cut-off values. Please see\n    the walkthrough vignette for a detailed overview of tacmagic functions.",
@@ -7,7 +10,7 @@
   "codeRepository": "https://github.com/eebrown/PET",
   "issueTracker": "https://github.com/eebrown/PET/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.1.9.9000",
+  "version": "0.2.0",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -131,6 +134,20 @@
     }
   ],
   "readme": "https://github.com/ropensci/tacmagic/blob/master/readme.md",
-  "contIntegration": ["https://travis-ci.org/ropensci/tacmagic", "https://codecov.io/github/ropensci/tacmagic?branch=master"],
-  "keywords": ["positron-emission-tomography", "pet", "pet-mr", "neuroimaging", "r", "statistics", "positron", "mri", "neuroscience", "neuroscience-methods"]
+  "contIntegration": [
+    "https://travis-ci.org/ropensci/tacmagic",
+    "https://codecov.io/github/ropensci/tacmagic?branch=master"
+  ],
+  "keywords": [
+    "positron-emission-tomography",
+    "pet",
+    "pet-mr",
+    "neuroimaging",
+    "r",
+    "statistics",
+    "positron",
+    "mri",
+    "neuroscience",
+    "neuroscience-methods"
+  ]
 }

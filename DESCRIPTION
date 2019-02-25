@@ -1,7 +1,7 @@
 Package: tacmagic
 Type: Package
 Title: tacmagic: PET Analysis in R
-Version: 0.1.9.9000
+Version: 0.2.0
 Authors@R: c(person("Eric", "Brown", 
                     role = c("aut", "cre"),
                     email = "eb@ericebrown.com",
