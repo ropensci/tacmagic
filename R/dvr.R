@@ -11,7 +11,7 @@
 #' all TACs in a supplied tac file. It uses DVR_ref_Logan if a target ROI is 
 #' specified, otherwise will calculate DVR for all ROIs with DVR_ref_all_Logan()
 #' 
-#' For other model paramters, directly call DVR_ref_Logan().
+#' For other model parameters, directly call DVR_ref_Logan().
 #'
 #'@export
 #'@param tac The time-activity curve data from load_tac() or tac_roi()

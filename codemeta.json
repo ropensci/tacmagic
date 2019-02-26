@@ -5,7 +5,7 @@
   ],
   "@type": "SoftwareSourceCode",
   "identifier": "tacmagic",
-  "description": "To faciliate analysis of positron emission tomography (PET) time\n    activity curve (TAC) data, and to encourage open science and replicability,\n    this package supports data loading and analysis of multiple TAC file \n    formats. Functions are available to analyze loaded tac data for individual \n    participants or in batches. Major functionality includes weighted TAC \n    merging by region of interest (ROI), calculating models including SUVR and\n    DVR, basic plotting functions and calculation of cut-off values. Please see\n    the walkthrough vignette for a detailed overview of tacmagic functions.",
+  "description": "To facilitate analysis of positron emission tomography (PET) time\n    activity curve (TAC) data, and to encourage open science and replicability,\n    this package supports data loading and analysis of multiple TAC file \n    formats. Functions are available to analyze loaded tac data for individual \n    participants or in batches. Major functionality includes weighted TAC \n    merging by region of interest (ROI), calculating models including SUVR and\n    DVR, basic plotting functions and calculation of cut-off values. Please see\n    the walkthrough vignette for a detailed overview of tacmagic functions.",
   "name": "tacmagic: tacmagic: PET Analysis in R",
   "codeRepository": "https://github.com/eebrown/PET",
   "issueTracker": "https://github.com/eebrown/PET/issues",
