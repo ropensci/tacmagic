@@ -23,13 +23,13 @@ knitr::opts_chunk$set(
 
 [Positron emission tomography](https://en.wikipedia.org/wiki/Positron_emission_tomography) (PET) is a research and clinical imaging modality that uses radioactive tracers that bind to target molecules of interest. A PET scanner identifies the tracer location by virtue of the tracer's radioactive decay, providing information to determine the location of the target in the body. As the spatial resolution of PET is relatively poor, analysis is frequently combined with higher resolution imaging such as magnetic resonance imaging (MRI), which can be spatially co-registered to the PET image. Subsequently, radiotracer activity (over time) can be identified by spatial region of interest (ROI).
 
-An image anaylsis pipeline is required to extract regional time activity curves (tacs) from a dynamic PET image. There are various pipelines available including widely-used commercial solutions (e.g. [PMOD](https://www.pmod.com/web/)) and newer open-source options (e.g. [magia](http://aivo.utu.fi/magia/)). Pipelines generally implement the following steps:
+An image analysis pipeline is required to extract regional time activity curves (TACs) from a dynamic PET image. There are various pipelines available including widely-used commercial solutions (e.g. [PMOD](https://www.pmod.com/web/)) and newer open-source options (e.g. [magia](http://aivo.utu.fi/magia/)). Pipelines generally implement the following steps:
 
 * Dynamic PET pre-processing (e.g. motion correction, decay-correction)
 * PET image co-registration with structural MRI
 * MRI segmentation and normalization to atlas
 
-Various pipelines save tac, volume and related data in various formats. This package enables the loading and analysis of tac and ROI volume data from image analysis pipelines for further analysis in R. 
+Various pipelines save TAC, volume and related data in various formats. This package enables the loading and analysis of TAC and ROI volume data from image analysis pipelines for further analysis in R. 
 
 ## Vignette data
 
@@ -41,24 +41,24 @@ There are two approaches to using the **tacmagic** package to analyze PET time-a
 
 ### Data loading
 
-Time-activity curve (TAC) data is loaded via `load_tac()`, which is a wrapper for format-specific functions. To specify which file format the tac data is stored as, use the `format` parameter. Supported formats can be viewed in `help(load_tac)`.
+Time-activity curve (TAC) data is loaded via `load_tac()`, which is a wrapper for format-specific functions. To specify which file format the TAC data is stored as, use the `format` parameter. Supported formats can be viewed in `help(load_tac)`.
 
 The minimal amount of information required is the TAC data for one or more ROI, including the start and stop times of each frame, the time units and the activity units. This information may be in 1 or more files depending on the format and software that created it. 
 
 For example, PMOD's `.tac` files contain all of the information, but the TAC .voistat files do not contain start and stop times, but this information could be specified using a `.acqtimes` file. Support is also available for DFT format, which contains both TAC and volume data.
 
-We processed the PIB PET and T1 MRI data with the [PMOD](https://www.pmod.com/) PNEURO software suite to produce a `.tac` file with tacs for all ROIs in the Hammer's atlas. The `.tac` file can be loaded with `load_tac()`:
+We processed the PIB PET and T1 MRI data with the [PMOD](https://www.pmod.com/) PNEURO software suite to produce a `.tac` file with TACs for all ROIs in the Hammer's atlas. The `.tac` file can be loaded with `load_tac()`:
 
 ```{r}
 # Filename is a character string of the file's path on your computer.
 filename <- system.file("extdata", "AD06.tac", package="tacmagic")
-# Note: This file can also serve as a template if the tac data is in some other 
+# Note: This file can also serve as a template if the TAC data is in some other 
 # format that is not yet supported.
 
 AD06_tac <- load_tac(filename, format="PMOD")
 ```
 
-A tac object is a data frame with extra attributes including time and activity units. A summary can be printed with the generic `print()` function.
+A TAC object is a data frame with extra attributes including time and activity units. A summary can be printed with the generic `print()` function.
 
 ```{r}
 summary(AD06_tac) 
@@ -88,9 +88,9 @@ AD06_tac_magia <- load_tac(f_magia, format="magia",
 AD06_tac_magia[1:5,1:5]
 ```
 
-#### Manually-created tac objects
+#### Manually-created TAC objects
 
-For other data sources, **tacmagic** tac objects can be created from data.frame objects with `as.tac()`. The time and activity units must be specified as arguments if not already set as attributes in the data.frame. The columns of the data.frame are the regional tacs, with the column names the names of the ROIs. 
+For other data sources, **tacmagic** TAC objects can be created from data.frame objects with `as.tac()`. The time and activity units must be specified as arguments if not already set as attributes in the data.frame. The columns of the data.frame are the regional TACs, with the column names the names of the ROIs. 
 
 ```{r}
 manual <- data.frame(start=c(0:4), end=c(2:6), ROI1=c(10.1:14.2), ROI2=c(11:15))
@@ -101,20 +101,20 @@ summary(manual_tac)
 
 ### ROI merging
 
-Often it is desirable to combine tac ROIs into larger ROIs. For example, if the PET analysis pipeline created tacs for each atlas ROI, your analysis may call for merging these atomic ROIs into larger regions, such as merging all of the atlas ROIs that make up the frontal lobe into a single frontal lobe ROI.
+Often it is desirable to combine TAC ROIs into larger ROIs. For example, if the PET analysis pipeline created TACs for each atlas ROI, your analysis may call for merging these atomic ROIs into larger regions, such as merging all of the atlas ROIs that make up the frontal lobe into a single frontal lobe ROI.
 
 If this is done, the means should be weighted for the relative volumes of the atomic ROIs. If volume information is available, `tac_roi()` provides this functionality.
 
 In PMOD's software, volume information is available in `.voistat` files. Units do not matter because it is the relative volume information that is needed.
 
-In addition to tac and volume information, we must specify which atomic ROIs make up the merged ROI. This is done by providing a named list, where the names are the merged ROIs and the list items are themselves lists of the atomic ROIs that make up each merged ROI. For the Hammer's atlas, and as an example, typical data is provided in `roi_ham_stand()`, `roi_ham_full()`, or `roi_ham_pib()`. 
+In addition to TAC and volume information, we must specify which atomic ROIs make up the merged ROI. This is done by providing a named list, where the names are the merged ROIs and the list items are themselves lists of the atomic ROIs that make up each merged ROI. For the Hammer's atlas, and as an example, typical data is provided in `roi_ham_stand()`, `roi_ham_full()`, or `roi_ham_pib()`. 
 
 ```{r}
 AD06_volume <- load_vol(filename_voistat, format="voistat")
 
 roi_ham_pib()[1:2] # The first 2 definitions of merged ROIs, as an example.
 
-AD06 <- tac_roi(tac=AD06_tac,           # The tac file we loaded above.
+AD06 <- tac_roi(tac=AD06_tac,           # The TAC file we loaded above.
                 volumes=AD06_volume,    # Volume information loaded.
                 ROI_def=roi_ham_pib(),  # ROI definitions for the Hammers atlas
                 merge=F,                # T to also return atomic ROIs
@@ -126,10 +126,10 @@ AD06[1:5,1:5]
 
 ### Plotting
 
-Basic tac plotting can be done by calling `plot`, which accepts two tac objects, e.g. from 2 participants or group means. The ROIs to plot are specified as a vector of ROI names as they appear in the tac object. As the tac object contains time unit information, the plot can convert to desired units, which can be specified with the `time` argument.
+Basic TAC plotting can be done by calling `plot`, which accepts two TAC objects, e.g. from 2 participants or group means. The ROIs to plot are specified as a vector of ROI names as they appear in the TAC object. As the TAC object contains time unit information, the plot can convert to desired units, which can be specified with the `time` argument.
 
 ```{r, fig.show='hold', fig.height=4.5, fig.width=6.5, fig.align='center'}
-plot(AD06,                                                    # tac data
+plot(AD06,                                                    # TAC data
      ROIs=c("frontal", "temporal", "parietal", "cerebellum"), # ROIs to plot
      time="minutes",                   # Convert x axis from seconds to minutes
      title="PIB time activity curves for AD06"        # A title for the plot
@@ -141,18 +141,18 @@ plot(AD06,                                                    # tac data
 
 ### SUVR
 
-The standardized uptake value ratio ($SUVR$) is a simple quantification of PET activity that is commonly used from many tracers including PIB. It is the ratio of the tracer activity over a specified time period ($Ct$) in a target ROI to a reference region. Using a ratio allows factors that are normally required to calculate an $SUV$ to cancel out, namely tracer dose and patient body weight, and therefore $SUVR$ can be calculated from tac data alone: 
+The standardized uptake value ratio ($SUVR$) is a simple quantification of PET activity that is commonly used from many tracers including PIB. It is the ratio of the tracer activity over a specified time period ($Ct$) in a target ROI to a reference region. Using a ratio allows factors that are normally required to calculate an $SUV$ to cancel out, namely tracer dose and patient body weight, and therefore $SUVR$ can be calculated from TAC data alone: 
 
 $$SUVR = \frac{SUV_{TARGET}}{SUV_{REF}} = \frac{Ct_{TARGET}}{Ct_{REF}}$$
 
 In the literature, SUVR is variably described and calculated using the mean of activity for the frames of the specified time period, or the area under the curve. For PIB, the mean/summed activity has been used, and the time windows have varied from starting at 40-50 minutes and ending at 60-90 minutes.^[Lopresti, B. J., W. E. Klunk, C. A. Mathis, J. A. Hoge, S. K. Ziolko, X. Lu, C. C. Meltzer, et al. “Simplified Quantification of Pittsburgh Compound B Amyloid Imaging PET Studies: A Comparative Analysis.” J Nucl Med 46 (2005): 1959–72.]
 
-The `suvr()` function calculates SUVR for all regions in a tac file based on the provided time information (as a vector of frame start times) and the specified reference region (a string). If the frames used are of different durations, the weighted mean is used.
+The `suvr()` function calculates SUVR for all regions in a TAC file based on the provided time information (as a vector of frame start times) and the specified reference region (a string). If the frames used are of different durations, the weighted mean is used.
 
 ```{r}
-AD06_SUVR <- suvr(AD06,                       # tac data
+AD06_SUVR <- suvr(AD06,                       # TAC data
                   SUVR_def=c(3000,3300,3600), # = 50-70 minute window
-                  ref="cerebellum"            # reference region in tac data
+                  ref="cerebellum"            # reference region in TAC data
                   )
 
 AD06_SUVR
@@ -169,9 +169,9 @@ all.equal(AD06_SUVR, AD06_altSUVR) # Should be similar but not exact
 
 ### DVR
 
-The Distribution Volume Ratio (DVR) is a method of quantifying tracer uptake that is used as an alternative to the SUVR in PIB studies, for example. Like SUVR, it can be calculated from tac data without the need for arterial blood sampling, by making use of a reference region. In this case, it is called the _non-invasive_ Logan plot method. It is calculated with a graphical analysis technique described by Logan et al.^[Logan, J., Fowler, J. S., Volkow, N. D., Wang, G.-J., Ding, Y.-S., & Alexoff, D. L. (1996). Distribution Volume Ratios without Blood Sampling from Graphical Analysis of PET Data. Journal of Cerebral Blood Flow & Metabolism, 16(5), 834-840. https://doi.org/10.1097/00004647-199609000-00008] 
+The Distribution Volume Ratio (DVR) is a method of quantifying tracer uptake that is used as an alternative to the SUVR in PIB studies, for example. Like SUVR, it can be calculated from TAC data without the need for arterial blood sampling, by making use of a reference region. In this case, it is called the _non-invasive_ Logan plot method. It is calculated with a graphical analysis technique described by Logan et al.^[Logan, J., Fowler, J. S., Volkow, N. D., Wang, G.-J., Ding, Y.-S., & Alexoff, D. L. (1996). Distribution Volume Ratios without Blood Sampling from Graphical Analysis of PET Data. Journal of Cerebral Blood Flow & Metabolism, 16(5), 834-840. https://doi.org/10.1097/00004647-199609000-00008] 
 
-In addition to the tac data, depending on the tracer, a value for k' may need to be specified. For PIB, this has limited effect on the result, but can be specified, and a value of 0.2 has been recommended.^[http://www.turkupetcentre.net/petanalysis/analysis_11c-pib.html]
+In addition to the TAC data, depending on the tracer, a value for k' may need to be specified. For PIB, this has limited effect on the result, but can be specified, and a value of 0.2 has been recommended.^[http://www.turkupetcentre.net/petanalysis/analysis_11c-pib.html]
 
 The non-invasive Logan plot works by finding the slope of the line of the following equation after time $t*$ where linearity has been reached:
 
@@ -237,15 +237,15 @@ The first argument is a vector of participant IDs that corresponds to file names
 
 `my_data <- batch_load(participants, dir="/mypath/", tac_format="PMOD", roi_m=T, vol_file_suffix="_TAC.voistat", vol_format="voistat", ROI_def=roi_ham_stand(), merge=F)`
 
-The above would load the appropriate tac and voistat files, perform the ROI merging specified by `ROI_def`, because `roi_m = TRUE`, and would return a list where each element represents a participants, e.g. the first participant would be `my_data$participant1`.
+The above would load the appropriate TAC and voistat files, perform the ROI merging specified by `ROI_def`, because `roi_m = TRUE`, and would return a list where each element represents a participants, e.g. the first participant would be `my_data$participant1`.
 
 ### Batch analysis
 
-Once the tac data is loaded, all analyses can be run using `batch_tm()`. The output from `batch_load()` is the first argument for `batch_tm()`. The models implemented in tacmagic can be specified using the `models` argument, e.g. `models = c("SUVR", "Logan")` to calculate both SUVR and Logan DVR. The relevant model parameters will also need to be specified, so see `help(batch_tm)` for all possible arguments.
+Once the TAC data is loaded, all analyses can be run using `batch_tm()`. The output from `batch_load()` is the first argument for `batch_tm()`. The models implemented in tacmagic can be specified using the `models` argument, e.g. `models = c("SUVR", "Logan")` to calculate both SUVR and Logan DVR. The relevant model parameters will also need to be specified, so see `help(batch_tm)` for all possible arguments.
 
 ### Batch example
 
-For the purpose of the vignette, the list of participants will be a list of the full tac filenames (hence tac_file_suffix=""). In real-world data, the participants parameter can be a list of participant IDs that correspond to the actual filenames, i.e. the filename is made up of dir + participant + tac_file_suffix.
+For the purpose of the vignette, the list of participants will be a list of the full TAC filenames (hence tac_file_suffix=""). In real-world data, the participants parameter can be a list of participant IDs that correspond to the actual filenames, i.e. the filename is made up of dir + participant + tac_file_suffix.
 
 We will also choose not to use the roi_m option in batch_load(), which could be used to combine ROIs as outlined above.
 
@@ -257,7 +257,7 @@ participants <- c(system.file("extdata", "AD06.tac", package="tacmagic"),
 
 tacs <- batch_load(participants, dir="", tac_file_suffix="")
 
-# Since the PMOD tac files used here have 2 copies of ROIs, with and without 
+# Since the PMOD TAC files used here have 2 copies of ROIs, with and without 
 # PVC, we can use split_pvc to keep the PVC-corrected verions. If we had used 
 # roi_m here to combine ROIs, we could have specified to use the PVC versions 
 # in batch_load() with PVC = TRUE.

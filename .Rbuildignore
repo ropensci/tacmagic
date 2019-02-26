@@ -1,3 +1,4 @@
+^CRAN-RELEASE$
 ^codemeta\.json$
 ^codecov\.yml$
 ^\.travis\.yml$
