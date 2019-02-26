@@ -149,5 +149,6 @@
     "mri",
     "neuroscience",
     "neuroscience-methods"
-  ]
+  ],
+  "releaseNotes": "https://github.com/ropensci/tacmagic/blob/master/NEWS.md"
 }
