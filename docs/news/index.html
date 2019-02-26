@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Reads PMOD .voistat files and optionally merges volume-weighted ROIs — load_voistat • tacmagic</title>
+<title>Changelog • tacmagic</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,14 +30,7 @@
 
 
 
-<meta property="og:title" content="Reads PMOD .voistat files and optionally merges volume-weighted ROIs — load_voistat" />
-
-<meta property="og:description" content="PMOD can produce .voistat files with the average model values by ROI for 
-its voxelwise binding potential (BPnd) models, such as Logan, SRTM, etc.
-This function reads the .voistat file and returns a data.frame with the
-ROI as rows and the model value as the column. Optionally, the ROIs can be
-combined into larger ROIs if ROI_def is specified, just as with TAC loading." />
-<meta name="twitter:card" content="summary" />
+<meta property="og:title" content="Changelog" />
 
 
 
@@ -54,7 +47,7 @@ combined into larger ROIs if ROI_def is specified, just as with TAC loading." />
   </head>
 
   <body>
-    <div class="container template-reference-topic">
+    <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -118,68 +111,30 @@ combined into larger ROIs if ROI_def is specified, just as with TAC loading." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Reads PMOD .voistat files and optionally merges volume-weighted ROIs</h1>
-    <small class="dont-index">Source: <a href='https://github.com/eebrown/PET/blob/master/R/loading.R'><code>R/loading.R</code></a></small>
-    <div class="hidden name"><code>load_voistat.Rd</code></div>
+      <h1>Changelog <small></small></h1>
+      <small>Source: <a href='https://github.com/eebrown/PET/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div class="ref-description">
-    
-    <p>PMOD can produce .voistat files with the average model values by ROI for 
-its voxelwise binding potential (BPnd) models, such as Logan, SRTM, etc.
-This function reads the .voistat file and returns a data.frame with the
-ROI as rows and the model value as the column. Optionally, the ROIs can be
-combined into larger ROIs if ROI_def is specified, just as with TAC loading.</p>
-    
-    </div>
-
-    <pre class="usage"><span class='fu'>load_voistat</span>(<span class='no'>filename</span>, <span class='kw'>ROI_def</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>model</span> <span class='kw'>=</span> <span class='st'>"VALUE"</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>filename</th>
-      <td><p>(e.g. participant_logan.voistat)</p></td>
-    </tr>
-    <tr>
-      <th>ROI_def</th>
-      <td><p>Optional ROI definitions to combine ROIs (e.g. roi_ham_pib())</p></td>
-    </tr>
-    <tr>
-      <th>model</th>
-      <td><p>A string to name the variable being extracted, e.g. "Logan_DVR"</p></td>
-    </tr>
-    </table>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>data.frame with loaded model data in specified combined weighted ROIs</p>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>Other Loading functions: <code><a href='as.tac.html'>as.tac</a></code>,
-  <code><a href='load_tac.html'>load_tac</a></code>, <code><a href='load_vol.html'>load_vol</a></code></p></div>
-    
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>f</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/system.file'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"AD06_BPnd_BPnd_Logan.voistat"</span>,
-                 <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"tacmagic"</span>)
-<span class='no'>vs</span> <span class='kw'>&lt;-</span> <span class='fu'>load_voistat</span>(<span class='no'>f</span>, <span class='kw'>ROI_def</span><span class='kw'>=</span><span class='fu'><a href='roi_ham_pib.html'>roi_ham_pib</a></span>(), <span class='kw'>model</span><span class='kw'>=</span><span class='st'>"Logan"</span>)</div></pre>
+    <div id="tacmagic-0-2-0" class="section level1">
+<h1 class="page-header">
+<a href="#tacmagic-0-2-0" class="anchor"></a>tacmagic 0.2.0</h1>
+<div id="major-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#major-changes" class="anchor"></a>Major changes</h2>
+<p>This is the first release as a complete R package, and the version that has undergone open review with rOpenSci. The main features of tacmagic 0.2.0 are implemented and tested: loading PET time activity curve (tac) data from multiple formats, merging ROIs weighted for volume, calculating binding potential models including SUVR and DVR, basic plotting, and calculation of cut-off values. As tacmagic is still a new package and testing to date is based on few example files, it is essential to verify that all functions are behaving as expected when applied to your own data.</p>
+</div>
+</div>
   </div>
+
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#see-also">See also</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+    <div id="tocnav">
+      <h2>Contents</h2>
+      <ul class="nav nav-pills nav-stacked">
+        <li><a href="#tacmagic-0-2-0">0.2.0</a></li>
+      </ul>
+    </div>
   </div>
+
 </div>
 
       <footer>
