@@ -12,7 +12,7 @@
 #' For a list of tac data (from load_batch) this calculates specified models
 #' and saves in a tidy data.frame. Current model options are "SUVR", "Logan". 
 #'
-#' For further details about how the models are calculated, see the indiviudal
+#' For further details about how the models are calculated, see the individual
 #' functions that they rely on. "SUVR" uses suvr(), "Logan" uses
 #' DVR_all_ref_Logan().
 #'
