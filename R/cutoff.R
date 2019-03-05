@@ -8,7 +8,7 @@
 #' Cutoff value calculation using method described in Aizenstein et al. 2008
 #' 
 #' See the reference below and the tacmagic walkthrough vignette. Aizenstein et
-#' al. (2008) proposed a standardized method of calculating Pittsburg Compound
+#' al. (2008) proposed a standardized method of calculating Pittsburgh Compound
 #' B (PIB) cutoff values to classify participants as PIB+ or PIB-. They used the
 #' distribution volume ratio (DVR) from several ROIs associated with amyloid 
 #' deposition. The steps are summarized below. cutoff_aiz() implements 1-3,

@@ -4,6 +4,7 @@ context("tac saving")
 
 test_that("save_tac() gives error if outfile is bad format", {
 
+  skip_on_cran() # CRAN tests should only try to save to tmp dirs
   f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic") 
   tac <- load_tac(f_raw_tac)
   expect_error(save_tac(tac, c("hi", "bye")))

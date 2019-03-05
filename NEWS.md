@@ -1,3 +1,9 @@
+# tacmagic 0.2.1
+
+## Minor changes
+
+This version has no changes to features but addresses minor, mostly stylistic, issues for the initial CRAN release.
+
 # tacmagic 0.2.0
 
 ## Major changes

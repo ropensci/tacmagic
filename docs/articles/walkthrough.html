@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tacmagic</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -83,7 +83,7 @@
       <h1>Analysis with tacmagic</h1>
                         <h4 class="author">Eric Brown</h4>
             
-            <h4 class="date">2019-02-26</h4>
+            <h4 class="date">2019-03-05</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/tacmagic/blob/master/vignettes/walkthrough.Rmd"><code>vignettes/walkthrough.Rmd</code></a></small>
       <div class="hidden name"><code>walkthrough.Rmd</code></div>
@@ -96,13 +96,13 @@
 <h2 class="hasAnchor">
 <a href="#background" class="anchor"></a>Background</h2>
 <p><a href="https://en.wikipedia.org/wiki/Positron_emission_tomography">Positron emission tomography</a> (PET) is a research and clinical imaging modality that uses radioactive tracers that bind to target molecules of interest. A PET scanner identifies the tracer location by virtue of the tracer’s radioactive decay, providing information to determine the location of the target in the body. As the spatial resolution of PET is relatively poor, analysis is frequently combined with higher resolution imaging such as magnetic resonance imaging (MRI), which can be spatially co-registered to the PET image. Subsequently, radiotracer activity (over time) can be identified by spatial region of interest (ROI).</p>
-<p>An image anaylsis pipeline is required to extract regional time activity curves (tacs) from a dynamic PET image. There are various pipelines available including widely-used commercial solutions (e.g. <a href="https://www.pmod.com/web/">PMOD</a>) and newer open-source options (e.g. <a href="http://aivo.utu.fi/magia/">magia</a>). Pipelines generally implement the following steps:</p>
+<p>An image analysis pipeline is required to extract regional time activity curves (TACs) from a dynamic PET image. There are various pipelines available including widely-used commercial solutions (e.g. <a href="https://www.pmod.com/web/">PMOD</a>) and newer open-source options (e.g. <a href="http://aivo.utu.fi/magia/">magia</a>). Pipelines generally implement the following steps:</p>
 <ul>
 <li>Dynamic PET pre-processing (e.g. motion correction, decay-correction)</li>
 <li>PET image co-registration with structural MRI</li>
 <li>MRI segmentation and normalization to atlas</li>
 </ul>
-<p>Various pipelines save tac, volume and related data in various formats. This package enables the loading and analysis of tac and ROI volume data from image analysis pipelines for further analysis in R.</p>
+<p>Various pipelines save TAC, volume and related data in various formats. This package enables the loading and analysis of TAC and ROI volume data from image analysis pipelines for further analysis in R.</p>
 </div>
 <div id="vignette-data" class="section level2">
 <h2 class="hasAnchor">
@@ -116,17 +116,17 @@
 <div id="data-loading" class="section level3">
 <h3 class="hasAnchor">
 <a href="#data-loading" class="anchor"></a>Data loading</h3>
-<p>Time-activity curve (TAC) data is loaded via <code><a href="../reference/load_tac.html">load_tac()</a></code>, which is a wrapper for format-specific functions. To specify which file format the tac data is stored as, use the <code>format</code> parameter. Supported formats can be viewed in <code><a href="https://www.rdocumentation.org/packages/utils/topics/help">help(load_tac)</a></code>.</p>
+<p>Time-activity curve (TAC) data is loaded via <code><a href="../reference/load_tac.html">load_tac()</a></code>, which is a wrapper for format-specific functions. To specify which file format the TAC data is stored as, use the <code>format</code> parameter. Supported formats can be viewed in <code><a href="https://www.rdocumentation.org/packages/utils/topics/help">help(load_tac)</a></code>.</p>
 <p>The minimal amount of information required is the TAC data for one or more ROI, including the start and stop times of each frame, the time units and the activity units. This information may be in 1 or more files depending on the format and software that created it.</p>
 <p>For example, PMOD’s <code>.tac</code> files contain all of the information, but the TAC .voistat files do not contain start and stop times, but this information could be specified using a <code>.acqtimes</code> file. Support is also available for DFT format, which contains both TAC and volume data.</p>
-<p>We processed the PIB PET and T1 MRI data with the <a href="https://www.pmod.com/">PMOD</a> PNEURO software suite to produce a <code>.tac</code> file with tacs for all ROIs in the Hammer’s atlas. The <code>.tac</code> file can be loaded with <code><a href="../reference/load_tac.html">load_tac()</a></code>:</p>
+<p>We processed the PIB PET and T1 MRI data with the <a href="https://www.pmod.com/">PMOD</a> PNEURO software suite to produce a <code>.tac</code> file with TACs for all ROIs in the Hammer’s atlas. The <code>.tac</code> file can be loaded with <code><a href="../reference/load_tac.html">load_tac()</a></code>:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># Filename is a character string of the file's path on your computer.</span></a>
 <a class="sourceLine" id="cb1-2" data-line-number="2">filename &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"AD06.tac"</span>, <span class="dt">package=</span><span class="st">"tacmagic"</span>)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="co"># Note: This file can also serve as a template if the tac data is in some other </span></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="co"># Note: This file can also serve as a template if the TAC data is in some other </span></a>
 <a class="sourceLine" id="cb1-4" data-line-number="4"><span class="co"># format that is not yet supported.</span></a>
 <a class="sourceLine" id="cb1-5" data-line-number="5"></a>
 <a class="sourceLine" id="cb1-6" data-line-number="6">AD06_tac &lt;-<span class="st"> </span><span class="kw"><a href="../reference/load_tac.html">load_tac</a></span>(filename, <span class="dt">format=</span><span class="st">"PMOD"</span>)</a></code></pre></div>
-<p>A tac object is a data frame with extra attributes including time and activity units. A summary can be printed with the generic <code><a href="https://www.rdocumentation.org/packages/base/topics/print">print()</a></code> function.</p>
+<p>A TAC object is a data frame with extra attributes including time and activity units. A summary can be printed with the generic <code><a href="https://www.rdocumentation.org/packages/base/topics/print">print()</a></code> function.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(AD06_tac) </a>
 <a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co">#&gt; tac object</span></a>
 <a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt;  Activity unit:           kBq/cc </span></a>
@@ -166,8 +166,8 @@
 <a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co">#&gt; 5    60  90 18.9857118 19.57800502 22.009607171</span></a></code></pre></div>
 <div id="manually-created-tac-objects" class="section level4">
 <h4 class="hasAnchor">
-<a href="#manually-created-tac-objects" class="anchor"></a>Manually-created tac objects</h4>
-<p>For other data sources, <strong>tacmagic</strong> tac objects can be created from data.frame objects with <code><a href="../reference/as.tac.html">as.tac()</a></code>. The time and activity units must be specified as arguments if not already set as attributes in the data.frame. The columns of the data.frame are the regional tacs, with the column names the names of the ROIs.</p>
+<a href="#manually-created-tac-objects" class="anchor"></a>Manually-created TAC objects</h4>
+<p>For other data sources, <strong>tacmagic</strong> TAC objects can be created from data.frame objects with <code><a href="../reference/as.tac.html">as.tac()</a></code>. The time and activity units must be specified as arguments if not already set as attributes in the data.frame. The columns of the data.frame are the regional TACs, with the column names the names of the ROIs.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">manual &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="dt">start=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">0</span><span class="op">:</span><span class="dv">4</span>), <span class="dt">end=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">2</span><span class="op">:</span><span class="dv">6</span>), <span class="dt">ROI1=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="fl">10.1</span><span class="op">:</span><span class="fl">14.2</span>), <span class="dt">ROI2=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">11</span><span class="op">:</span><span class="dv">15</span>))</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2">manual_tac &lt;-<span class="st"> </span><span class="kw"><a href="../reference/as.tac.html">as.tac</a></span>(manual, <span class="dt">time_unit=</span><span class="st">"minutes"</span>, <span class="dt">activity_unit=</span><span class="st">"kBq/cc"</span>)</a>
 <a class="sourceLine" id="cb5-3" data-line-number="3"></a>
@@ -184,10 +184,10 @@
 <div id="roi-merging" class="section level3">
 <h3 class="hasAnchor">
 <a href="#roi-merging" class="anchor"></a>ROI merging</h3>
-<p>Often it is desirable to combine tac ROIs into larger ROIs. For example, if the PET analysis pipeline created tacs for each atlas ROI, your analysis may call for merging these atomic ROIs into larger regions, such as merging all of the atlas ROIs that make up the frontal lobe into a single frontal lobe ROI.</p>
+<p>Often it is desirable to combine TAC ROIs into larger ROIs. For example, if the PET analysis pipeline created TACs for each atlas ROI, your analysis may call for merging these atomic ROIs into larger regions, such as merging all of the atlas ROIs that make up the frontal lobe into a single frontal lobe ROI.</p>
 <p>If this is done, the means should be weighted for the relative volumes of the atomic ROIs. If volume information is available, <code><a href="../reference/tac_roi.html">tac_roi()</a></code> provides this functionality.</p>
 <p>In PMOD’s software, volume information is available in <code>.voistat</code> files. Units do not matter because it is the relative volume information that is needed.</p>
-<p>In addition to tac and volume information, we must specify which atomic ROIs make up the merged ROI. This is done by providing a named list, where the names are the merged ROIs and the list items are themselves lists of the atomic ROIs that make up each merged ROI. For the Hammer’s atlas, and as an example, typical data is provided in <code><a href="../reference/roi_ham_stand.html">roi_ham_stand()</a></code>, <code><a href="../reference/roi_ham_full.html">roi_ham_full()</a></code>, or <code><a href="../reference/roi_ham_pib.html">roi_ham_pib()</a></code>.</p>
+<p>In addition to TAC and volume information, we must specify which atomic ROIs make up the merged ROI. This is done by providing a named list, where the names are the merged ROIs and the list items are themselves lists of the atomic ROIs that make up each merged ROI. For the Hammer’s atlas, and as an example, typical data is provided in <code><a href="../reference/roi_ham_stand.html">roi_ham_stand()</a></code>, <code><a href="../reference/roi_ham_full.html">roi_ham_full()</a></code>, or <code><a href="../reference/roi_ham_pib.html">roi_ham_pib()</a></code>.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">AD06_volume &lt;-<span class="st"> </span><span class="kw"><a href="../reference/load_vol.html">load_vol</a></span>(filename_voistat, <span class="dt">format=</span><span class="st">"voistat"</span>)</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb6-3" data-line-number="3"><span class="kw"><a href="../reference/roi_ham_pib.html">roi_ham_pib</a></span>()[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>] <span class="co"># The first 2 definitions of merged ROIs, as an example.</span></a>
@@ -203,7 +203,7 @@
 <a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt;  [7] "FL_OFC_MOG_r"        "FL_OFC_LOG_r"        "FL_OFC_POG_r"       </span></a>
 <a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt; [10] "Subgen_antCing_r"    "Subcall_area_r"      "Presubgen_antCing_r"</span></a>
 <a class="sourceLine" id="cb6-15" data-line-number="15"></a>
-<a class="sourceLine" id="cb6-16" data-line-number="16">AD06 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/tac_roi.html">tac_roi</a></span>(<span class="dt">tac=</span>AD06_tac,           <span class="co"># The tac file we loaded above.</span></a>
+<a class="sourceLine" id="cb6-16" data-line-number="16">AD06 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/tac_roi.html">tac_roi</a></span>(<span class="dt">tac=</span>AD06_tac,           <span class="co"># The TAC file we loaded above.</span></a>
 <a class="sourceLine" id="cb6-17" data-line-number="17">                <span class="dt">volumes=</span>AD06_volume,    <span class="co"># Volume information loaded.</span></a>
 <a class="sourceLine" id="cb6-18" data-line-number="18">                <span class="dt">ROI_def=</span><span class="kw"><a href="../reference/roi_ham_pib.html">roi_ham_pib</a></span>(),  <span class="co"># ROI definitions for the Hammers atlas</span></a>
 <a class="sourceLine" id="cb6-19" data-line-number="19">                <span class="dt">merge=</span>F,                <span class="co"># T to also return atomic ROIs</span></a>
@@ -221,8 +221,8 @@
 <div id="plotting" class="section level3">
 <h3 class="hasAnchor">
 <a href="#plotting" class="anchor"></a>Plotting</h3>
-<p>Basic tac plotting can be done by calling <code>plot</code>, which accepts two tac objects, e.g. from 2 participants or group means. The ROIs to plot are specified as a vector of ROI names as they appear in the tac object. As the tac object contains time unit information, the plot can convert to desired units, which can be specified with the <code>time</code> argument.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(AD06,                                                    <span class="co"># tac data</span></a>
+<p>Basic TAC plotting can be done by calling <code>plot</code>, which accepts two TAC objects, e.g. from 2 participants or group means. The ROIs to plot are specified as a vector of ROI names as they appear in the TAC object. As the TAC object contains time unit information, the plot can convert to desired units, which can be specified with the <code>time</code> argument.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(AD06,                                                    <span class="co"># TAC data</span></a>
 <a class="sourceLine" id="cb7-2" data-line-number="2">     <span class="dt">ROIs=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"frontal"</span>, <span class="st">"temporal"</span>, <span class="st">"parietal"</span>, <span class="st">"cerebellum"</span>), <span class="co"># ROIs to plot</span></a>
 <a class="sourceLine" id="cb7-3" data-line-number="3">     <span class="dt">time=</span><span class="st">"minutes"</span>,                   <span class="co"># Convert x axis from seconds to minutes</span></a>
 <a class="sourceLine" id="cb7-4" data-line-number="4">     <span class="dt">title=</span><span class="st">"PIB time activity curves for AD06"</span>        <span class="co"># A title for the plot</span></a>
@@ -236,13 +236,13 @@
 <div id="suvr" class="section level3">
 <h3 class="hasAnchor">
 <a href="#suvr" class="anchor"></a>SUVR</h3>
-<p>The standardized uptake value ratio (<span class="math inline">\(SUVR\)</span>) is a simple quantification of PET activity that is commonly used from many tracers including PIB. It is the ratio of the tracer activity over a specified time period (<span class="math inline">\(Ct\)</span>) in a target ROI to a reference region. Using a ratio allows factors that are normally required to calculate an <span class="math inline">\(SUV\)</span> to cancel out, namely tracer dose and patient body weight, and therefore <span class="math inline">\(SUVR\)</span> can be calculated from tac data alone:</p>
+<p>The standardized uptake value ratio (<span class="math inline">\(SUVR\)</span>) is a simple quantification of PET activity that is commonly used from many tracers including PIB. It is the ratio of the tracer activity over a specified time period (<span class="math inline">\(Ct\)</span>) in a target ROI to a reference region. Using a ratio allows factors that are normally required to calculate an <span class="math inline">\(SUV\)</span> to cancel out, namely tracer dose and patient body weight, and therefore <span class="math inline">\(SUVR\)</span> can be calculated from TAC data alone:</p>
 <p><span class="math display">\[SUVR = \frac{SUV_{TARGET}}{SUV_{REF}} = \frac{Ct_{TARGET}}{Ct_{REF}}\]</span></p>
 <p>In the literature, SUVR is variably described and calculated using the mean of activity for the frames of the specified time period, or the area under the curve. For PIB, the mean/summed activity has been used, and the time windows have varied from starting at 40-50 minutes and ending at 60-90 minutes.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
-<p>The <code><a href="../reference/suvr.html">suvr()</a></code> function calculates SUVR for all regions in a tac file based on the provided time information (as a vector of frame start times) and the specified reference region (a string). If the frames used are of different durations, the weighted mean is used.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">AD06_SUVR &lt;-<span class="st"> </span><span class="kw"><a href="../reference/suvr.html">suvr</a></span>(AD06,                       <span class="co"># tac data</span></a>
+<p>The <code><a href="../reference/suvr.html">suvr()</a></code> function calculates SUVR for all regions in a TAC file based on the provided time information (as a vector of frame start times) and the specified reference region (a string). If the frames used are of different durations, the weighted mean is used.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">AD06_SUVR &lt;-<span class="st"> </span><span class="kw"><a href="../reference/suvr.html">suvr</a></span>(AD06,                       <span class="co"># TAC data</span></a>
 <a class="sourceLine" id="cb8-2" data-line-number="2">                  <span class="dt">SUVR_def=</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">3000</span>,<span class="dv">3300</span>,<span class="dv">3600</span>), <span class="co"># = 50-70 minute window</span></a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">                  <span class="dt">ref=</span><span class="st">"cerebellum"</span>            <span class="co"># reference region in tac data</span></a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">                  <span class="dt">ref=</span><span class="st">"cerebellum"</span>            <span class="co"># reference region in TAC data</span></a>
 <a class="sourceLine" id="cb8-4" data-line-number="4">                  )</a>
 <a class="sourceLine" id="cb8-5" data-line-number="5"></a>
 <a class="sourceLine" id="cb8-6" data-line-number="6">AD06_SUVR</a>
@@ -279,8 +279,8 @@
 <div id="dvr" class="section level3">
 <h3 class="hasAnchor">
 <a href="#dvr" class="anchor"></a>DVR</h3>
-<p>The Distribution Volume Ratio (DVR) is a method of quantifying tracer uptake that is used as an alternative to the SUVR in PIB studies, for example. Like SUVR, it can be calculated from tac data without the need for arterial blood sampling, by making use of a reference region. In this case, it is called the <em>non-invasive</em> Logan plot method. It is calculated with a graphical analysis technique described by Logan et al.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
-<p>In addition to the tac data, depending on the tracer, a value for k’ may need to be specified. For PIB, this has limited effect on the result, but can be specified, and a value of 0.2 has been recommended.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></p>
+<p>The Distribution Volume Ratio (DVR) is a method of quantifying tracer uptake that is used as an alternative to the SUVR in PIB studies, for example. Like SUVR, it can be calculated from TAC data without the need for arterial blood sampling, by making use of a reference region. In this case, it is called the <em>non-invasive</em> Logan plot method. It is calculated with a graphical analysis technique described by Logan et al.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
+<p>In addition to the TAC data, depending on the tracer, a value for k’ may need to be specified. For PIB, this has limited effect on the result, but can be specified, and a value of 0.2 has been recommended.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></p>
 <p>The non-invasive Logan plot works by finding the slope of the line of the following equation after time <span class="math inline">\(t*\)</span> where linearity has been reached:</p>
 <p><span class="math display">\[\frac{\int_0^{T}C_{roi}(t)dt}{C_{roi}(t)} = DVR[\frac{\int_0^{T}C_{cer}(t)dt + C_{cer}(t) / k2`}{C_{roi}(T)}] + int  \]</span></p>
 <div id="find-t" class="section level4">
@@ -371,17 +371,17 @@
 <p>The first argument is a vector of participant IDs that corresponds to file names, e.g.:</p>
 <p><code>participants &lt;- c("participant01", "participant02")</code> if the files are located e.g. <code>/mypath/participant01.tac</code> and <code>/mypath/participant01_TAC.voistat</code>. In this case, the function call might look like:</p>
 <p><code>my_data &lt;- batch_load(participants, dir="/mypath/", tac_format="PMOD", roi_m=T, vol_file_suffix="_TAC.voistat", vol_format="voistat", ROI_def=roi_ham_stand(), merge=F)</code></p>
-<p>The above would load the appropriate tac and voistat files, perform the ROI merging specified by <code>ROI_def</code>, because <code>roi_m = TRUE</code>, and would return a list where each element represents a participants, e.g. the first participant would be <code>my_data$participant1</code>.</p>
+<p>The above would load the appropriate TAC and voistat files, perform the ROI merging specified by <code>ROI_def</code>, because <code>roi_m = TRUE</code>, and would return a list where each element represents a participants, e.g. the first participant would be <code>my_data$participant1</code>.</p>
 </div>
 <div id="batch-analysis-1" class="section level3">
 <h3 class="hasAnchor">
 <a href="#batch-analysis-1" class="anchor"></a>Batch analysis</h3>
-<p>Once the tac data is loaded, all analyses can be run using <code><a href="../reference/batch_tm.html">batch_tm()</a></code>. The output from <code><a href="../reference/batch_load.html">batch_load()</a></code> is the first argument for <code><a href="../reference/batch_tm.html">batch_tm()</a></code>. The models implemented in tacmagic can be specified using the <code>models</code> argument, e.g. <code>models = c("SUVR", "Logan")</code> to calculate both SUVR and Logan DVR. The relevant model parameters will also need to be specified, so see <code><a href="https://www.rdocumentation.org/packages/utils/topics/help">help(batch_tm)</a></code> for all possible arguments.</p>
+<p>Once the TAC data is loaded, all analyses can be run using <code><a href="../reference/batch_tm.html">batch_tm()</a></code>. The output from <code><a href="../reference/batch_load.html">batch_load()</a></code> is the first argument for <code><a href="../reference/batch_tm.html">batch_tm()</a></code>. The models implemented in tacmagic can be specified using the <code>models</code> argument, e.g. <code>models = c("SUVR", "Logan")</code> to calculate both SUVR and Logan DVR. The relevant model parameters will also need to be specified, so see <code><a href="https://www.rdocumentation.org/packages/utils/topics/help">help(batch_tm)</a></code> for all possible arguments.</p>
 </div>
 <div id="batch-example" class="section level3">
 <h3 class="hasAnchor">
 <a href="#batch-example" class="anchor"></a>Batch example</h3>
-<p>For the purpose of the vignette, the list of participants will be a list of the full tac filenames (hence tac_file_suffix=""). In real-world data, the participants parameter can be a list of participant IDs that correspond to the actual filenames, i.e. the filename is made up of dir + participant + tac_file_suffix.</p>
+<p>For the purpose of the vignette, the list of participants will be a list of the full TAC filenames (hence tac_file_suffix=""). In real-world data, the participants parameter can be a list of participant IDs that correspond to the actual filenames, i.e. the filename is made up of dir + participant + tac_file_suffix.</p>
 <p>We will also choose not to use the roi_m option in batch_load(), which could be used to combine ROIs as outlined above.</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"></a>
 <a class="sourceLine" id="cb14-2" data-line-number="2">participants &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.file">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"AD06.tac"</span>, <span class="dt">package=</span><span class="st">"tacmagic"</span>),</a>
@@ -390,7 +390,7 @@
 <a class="sourceLine" id="cb14-5" data-line-number="5"></a>
 <a class="sourceLine" id="cb14-6" data-line-number="6">tacs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/batch_load.html">batch_load</a></span>(participants, <span class="dt">dir=</span><span class="st">""</span>, <span class="dt">tac_file_suffix=</span><span class="st">""</span>)</a>
 <a class="sourceLine" id="cb14-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="co"># Since the PMOD tac files used here have 2 copies of ROIs, with and without </span></a>
+<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="co"># Since the PMOD TAC files used here have 2 copies of ROIs, with and without </span></a>
 <a class="sourceLine" id="cb14-9" data-line-number="9"><span class="co"># PVC, we can use split_pvc to keep the PVC-corrected verions. If we had used </span></a>
 <a class="sourceLine" id="cb14-10" data-line-number="10"><span class="co"># roi_m here to combine ROIs, we could have specified to use the PVC versions </span></a>
 <a class="sourceLine" id="cb14-11" data-line-number="11"><span class="co"># in batch_load() with PVC = TRUE.</span></a>
