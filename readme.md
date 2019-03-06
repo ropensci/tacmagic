@@ -52,4 +52,10 @@ Loading and analysis functions can be run as a batch or by individual participan
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
+## Citation
+
+Please cite this software package if you use it in your analyses. 
+
+``Brown, E. E. (2019). tacmagic: PET Analysis in R. Journal of Open Source Software, 4(34), 1281. doi:10.21105/joss.01281.``
+
 [![ropensci_footer](https://ropensci.org/public_images/ropensci_footer.png)](https://ropensci.org)

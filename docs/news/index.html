@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Dichotomize participants based on ROI cutoff values — pos_anyroi • tacmagic</title>
+<title>Changelog • tacmagic</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,15 +30,7 @@
 
 
 
-<meta property="og:title" content="Dichotomize participants based on ROI cutoff values — pos_anyroi" />
-
-<meta property="og:description" content="Aizenstein et al. (2008) proposed a standardized method of calculating PIB+ 
-cutoff values to classify participants as PIB+ or PIB-. They used the DVR 
-from 7 ROIs associated with amyloid deposition. This function takes the 
-ROI-based cutoff values, e.g. from cutoff_aiz(), and returns a table 
-specifying which participants are positive, i.e. which have at least one ROI
-greater than the cutoff." />
-<meta name="twitter:card" content="summary" />
+<meta property="og:title" content="Changelog" />
 
 
 
@@ -55,7 +47,7 @@ greater than the cutoff." />
   </head>
 
   <body>
-    <div class="container template-reference-topic">
+    <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -119,66 +111,40 @@ greater than the cutoff." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Dichotomize participants based on ROI cutoff values</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ropensci/tacmagic/blob/master/R/cutoff.R'><code>R/cutoff.R</code></a></small>
-    <div class="hidden name"><code>pos_anyroi.Rd</code></div>
+      <h1>Changelog <small></small></h1>
+      <small>Source: <a href='https://github.com/ropensci/tacmagic/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div class="ref-description">
-    
-    <p>Aizenstein et al. (2008) proposed a standardized method of calculating PIB+ 
-cutoff values to classify participants as PIB+ or PIB-. They used the DVR 
-from 7 ROIs associated with amyloid deposition. This function takes the 
-ROI-based cutoff values, e.g. from cutoff_aiz(), and returns a table 
-specifying which participants are positive, i.e. which have at least one ROI
-greater than the cutoff.</p>
-    
-    </div>
-
-    <pre class="usage"><span class='fu'>pos_anyroi</span>(<span class='no'>modelstats</span>, <span class='no'>cutoff</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>modelstats</th>
-      <td><p>SUVR or DVR data for group of participants from batch_tm()</p></td>
-    </tr>
-    <tr>
-      <th>cutoff</th>
-      <td><p>cutoffs for ROIs as from cutoff_aiz()</p></td>
-    </tr>
-    </table>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>data.frame of participants and positive/negative status</p>
-    
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
-    <p>Aizenstein HJ, Nebes RD, Saxton JA, et al. 2008. Frequent amyloid 
-deposition without significant cognitive impairment among the elderly. 
-Arch Neurol 65: 1509-1517.</p>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>Other Cutoff functions: <code><a href='cutoff_aiz.html'>cutoff_aiz</a></code></p></div>
-    
-
+    <div id="tacmagic-0-2-1" class="section level1">
+<h1 class="page-header">
+<a href="#tacmagic-0-2-1" class="anchor"></a>tacmagic 0.2.1</h1>
+<div id="minor-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#minor-changes" class="anchor"></a>Minor changes</h2>
+<p>This version has no changes to features but addresses minor, mostly stylistic, issues for the initial CRAN release.</p>
+</div>
+</div>
+    <div id="tacmagic-0-2-0" class="section level1">
+<h1 class="page-header">
+<a href="#tacmagic-0-2-0" class="anchor"></a>tacmagic 0.2.0</h1>
+<div id="major-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#major-changes" class="anchor"></a>Major changes</h2>
+<p>This is the first release as a complete R package, and the version that has undergone open review with rOpenSci. The main features of tacmagic 0.2.0 are implemented and tested: loading PET time activity curve (tac) data from multiple formats, merging ROIs weighted for volume, calculating binding potential models including SUVR and DVR, basic plotting, and calculation of cut-off values. As tacmagic is still a new package and testing to date is based on few example files, it is essential to verify that all functions are behaving as expected when applied to your own data.</p>
+</div>
+</div>
   </div>
+
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#references">References</a></li>
-
-      <li><a href="#see-also">See also</a></li>
-          </ul>
-
+    <div id="tocnav">
+      <h2>Contents</h2>
+      <ul class="nav nav-pills nav-stacked">
+        <li><a href="#tacmagic-0-2-1">0.2.1</a></li>
+        <li><a href="#tacmagic-0-2-0">0.2.0</a></li>
+      </ul>
+    </div>
   </div>
+
 </div>
 
       <footer>

@@ -5,12 +5,12 @@
   ],
   "@type": "SoftwareSourceCode",
   "identifier": "tacmagic",
-  "description": "To facilitate analysis of positron emission tomography (PET) time\n    activity curve (TAC) data, and to encourage open science and replicability,\n    this package supports data loading and analysis of multiple TAC file \n    formats. Functions are available to analyze loaded tac data for individual \n    participants or in batches. Major functionality includes weighted TAC \n    merging by region of interest (ROI), calculating models including SUVR and\n    DVR, basic plotting functions and calculation of cut-off values. Please see\n    the walkthrough vignette for a detailed overview of tacmagic functions.",
-  "name": "tacmagic: tacmagic: PET Analysis in R",
-  "codeRepository": "https://github.com/eebrown/PET",
-  "issueTracker": "https://github.com/eebrown/PET/issues",
+  "description": "To facilitate the analysis of positron emission tomography (PET) \n    time activity curve (TAC) data, and to encourage open science and \n    replicability, this package supports data loading and analysis of multiple \n    TAC file formats. Functions are available to analyze loaded TAC data for \n    individual participants or in batches. Major functionality includes weighted\n    TAC merging by region of interest (ROI), calculating models including \n    standardized uptake value ratio (SUVR) and distribution volume ratio (DVR, \n    Logan et al. 1996 <doi:10.1097/00004647-199609000-00008>), basic plotting \n    functions and calculation of cut-off values (Aizenstein et al. 2008\n    <doi:10.1001/archneur.65.11.1509>). Please see the walkthrough vignette for\n    a detailed overview of 'tacmagic' functions.",
+  "name": "tacmagic: Positron Emission Tomography Time-Activity Curve Analysis",
+  "codeRepository": "https://github.com/ropensci/tacmagic",
+  "issueTracker": "https://github.com/ropensci/tacmagic",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -149,5 +149,6 @@
     "mri",
     "neuroscience",
     "neuroscience-methods"
-  ]
+  ],
+  "releaseNotes": "https://github.com/ropensci/tacmagic/blob/master/NEWS.md"
 }

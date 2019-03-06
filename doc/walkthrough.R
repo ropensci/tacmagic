@@ -8,7 +8,7 @@ knitr::opts_chunk$set(
 ## ------------------------------------------------------------------------
 # Filename is a character string of the file's path on your computer.
 filename <- system.file("extdata", "AD06.tac", package="tacmagic")
-# Note: This file can also serve as a template if the tac data is in some other 
+# Note: This file can also serve as a template if the TAC data is in some other 
 # format that is not yet supported.
 
 AD06_tac <- load_tac(filename, format="PMOD")
@@ -45,7 +45,7 @@ AD06_volume <- load_vol(filename_voistat, format="voistat")
 
 roi_ham_pib()[1:2] # The first 2 definitions of merged ROIs, as an example.
 
-AD06 <- tac_roi(tac=AD06_tac,           # The tac file we loaded above.
+AD06 <- tac_roi(tac=AD06_tac,           # The TAC file we loaded above.
                 volumes=AD06_volume,    # Volume information loaded.
                 ROI_def=roi_ham_pib(),  # ROI definitions for the Hammers atlas
                 merge=F,                # T to also return atomic ROIs
@@ -55,16 +55,16 @@ AD06 <- tac_roi(tac=AD06_tac,           # The tac file we loaded above.
 AD06[1:5,1:5]
 
 ## ---- fig.show='hold', fig.height=4.5, fig.width=6.5, fig.align='center'----
-plot(AD06,                                                    # tac data
+plot(AD06,                                                    # TAC data
      ROIs=c("frontal", "temporal", "parietal", "cerebellum"), # ROIs to plot
      time="minutes",                   # Convert x axis from seconds to minutes
      title="PIB time activity curves for AD06"        # A title for the plot
      )
 
 ## ------------------------------------------------------------------------
-AD06_SUVR <- suvr(AD06,                       # tac data
+AD06_SUVR <- suvr(AD06,                       # TAC data
                   SUVR_def=c(3000,3300,3600), # = 50-70 minute window
-                  ref="cerebellum"            # reference region in tac data
+                  ref="cerebellum"            # reference region in TAC data
                   )
 
 AD06_SUVR
@@ -110,7 +110,7 @@ participants <- c(system.file("extdata", "AD06.tac", package="tacmagic"),
 
 tacs <- batch_load(participants, dir="", tac_file_suffix="")
 
-# Since the PMOD tac files used here have 2 copies of ROIs, with and without 
+# Since the PMOD TAC files used here have 2 copies of ROIs, with and without 
 # PVC, we can use split_pvc to keep the PVC-corrected verions. If we had used 
 # roi_m here to combine ROIs, we could have specified to use the PVC versions 
 # in batch_load() with PVC = TRUE.

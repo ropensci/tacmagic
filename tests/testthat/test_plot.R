@@ -20,6 +20,7 @@ test_that("plot.tac runs without error and contains correct axis label", {
 
   p <- recordPlot()
   
+  skip_on_cran()
   expect_equal(unlist(p)[[123]], "Time (minutes)")
   expect_equal(unlist(p)[[37]], 80) # 80 mins last value on x-axis
 
@@ -59,7 +60,8 @@ test_that("plot.tac with 2 tacs and conversion runs without error and
            title="Example Plot", time="seconds")
 
   p <- recordPlot()
-  
+
+  skip_on_cran()
   expect_equal(unlist(p)[[123]], "Time (seconds)")
   expect_equal(unlist(p)[[37]], 4800) #4800 secs on last walk
 

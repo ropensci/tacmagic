@@ -1,3 +1,5 @@
+^cran-comments\.md$
+^CRAN-RELEASE$
 ^codemeta\.json$
 ^codecov\.yml$
 ^\.travis\.yml$
@@ -15,3 +17,4 @@ paper.bib
 contributing.md
 docs
 LICENSE
+cran-comments.md

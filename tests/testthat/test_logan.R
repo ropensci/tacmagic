@@ -93,6 +93,7 @@ test_that("plot_ref_logan creates the plots without error", {
   expected <- c("Time (minutes)", "Activity (kBq/cc)", "frontal", "cerebellum",
                 "frontal", "cerebellum", "Logan plot")
 
+  skip_on_cran()
   expect_identical(sample, expected)
 
 })
