@@ -10,10 +10,14 @@ As a ```tacmagic``` is a new package, we strongly recommend checking all work ag
 
 ## Installation
 
-Currently, the package can be installed within R from the github repository. The devtools package is required for installation:
+The stable version of the package can be installed from CRAN, and the more recent development version can be installed with the devtools package:
 
 ```r
-devtools::install_github("ropensci/tacmagic")
+# CRAN Version:
+install.packages("tacmagic")
+
+# Development Version:
+devtools::install_github("ropensci/tacmagic") 
 ```
 
 ## Features

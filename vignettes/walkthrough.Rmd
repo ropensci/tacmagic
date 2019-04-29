@@ -171,7 +171,7 @@ all.equal(AD06_SUVR, AD06_altSUVR) # Should be similar but not exact
 
 The Distribution Volume Ratio (DVR) is a method of quantifying tracer uptake that is used as an alternative to the SUVR in PIB studies, for example. Like SUVR, it can be calculated from TAC data without the need for arterial blood sampling, by making use of a reference region. In this case, it is called the _non-invasive_ Logan plot method. It is calculated with a graphical analysis technique described by Logan et al.^[Logan, J., Fowler, J. S., Volkow, N. D., Wang, G.-J., Ding, Y.-S., & Alexoff, D. L. (1996). Distribution Volume Ratios without Blood Sampling from Graphical Analysis of PET Data. Journal of Cerebral Blood Flow & Metabolism, 16(5), 834-840. https://doi.org/10.1097/00004647-199609000-00008] 
 
-In addition to the TAC data, depending on the tracer, a value for k' may need to be specified. For PIB, this has limited effect on the result, but can be specified, and a value of 0.2 has been recommended.^[http://www.turkupetcentre.net/petanalysis/analysis_11c-pib.html]
+In addition to the TAC data, depending on the tracer, a value for k2' may need to be specified. For PIB, this has limited effect on the result, but can be specified, and a value of 0.2 has been recommended.^[http://www.turkupetcentre.net/petanalysis/analysis_11c-pib.html]
 
 The non-invasive Logan plot works by finding the slope of the line of the following equation after time $t*$ where linearity has been reached:
 
