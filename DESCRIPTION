@@ -44,5 +44,6 @@ Suggests:
     testthat,
     knitr,
     rmarkdown,
-    covr
+    covr,
+    vdiffr
 VignetteBuilder: knitr
