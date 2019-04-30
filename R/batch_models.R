@@ -13,7 +13,8 @@
 #' @noRd
 model_definitions <- function() {
   return(c(SUVR=suvr, 
-           Logan=DVR_all_ref_Logan
+           Logan=DVR_all_ref_Logan,
+           SUV=suv
          ))
 }
 

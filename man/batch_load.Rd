@@ -7,7 +7,8 @@
 batch_load(participants, dir = "", tac_file_suffix = ".tac",
   tac_format = "PMOD", roi_m = FALSE, PVC = NULL,
   vol_file_suffix = NULL, vol_format = NULL, merge = NULL,
-  ROI_def = NULL)
+  ROI_def = NULL, tracer_dose = NULL, dose_unit = NULL,
+  weight_kg = NULL)
 }
 \arguments{
 \item{participants}{A vector of participant IDs}
@@ -30,6 +31,13 @@ not, the following parameters are not used)}
 \item{merge}{Passes value to tac_roi(); T to also incl. original atomic ROIs}
 
 \item{ROI_def}{Object that defines combined ROIs, see ROI_definitions.R}
+
+\item{tracer_dose}{optionally, a vector of tracer doses (in the same order as
+participants), for SUV}
+
+\item{dose_unit}{if tracer_dose is specified, note the unit (e.g "MBq")}
+
+\item{weight_kg}{optionally, a vector of participant weights in kg, for SUV}
 }
 \value{
 A list of data.frames, each is a participant's TACs

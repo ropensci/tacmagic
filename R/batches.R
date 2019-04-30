@@ -82,6 +82,10 @@ batch_tm <- function(all_tacs, models, custom_model=NULL, ...) {
 #'@param ROI_def Object that defines combined ROIs, see ROI_definitions.R
 #'@param PVC For PVC, true where the data is stored as _C in same tac file
 #'@param merge Passes value to tac_roi(); T to also incl. original atomic ROIs
+#'@param tracer_dose optionally, a vector of tracer doses (in the same order as
+#'       participants), for SUV
+#'@param dose_unit if tracer_dose is specified, note the unit (e.g "MBq")
+#'@param weight_kg optionally, a vector of participant weights in kg, for SUV
 #'@return A list of data.frames, each is a participant's TACs
 #'@family Batch functions
 #'@examples
@@ -94,7 +98,8 @@ batch_tm <- function(all_tacs, models, custom_model=NULL, ...) {
 batch_load <- function(participants, dir="", tac_file_suffix=".tac",
                        tac_format="PMOD", roi_m=FALSE, PVC=NULL, 
                        vol_file_suffix=NULL, vol_format=NULL, 
-                       merge=NULL, ROI_def=NULL) {
+                       merge=NULL, ROI_def=NULL, tracer_dose=NULL,
+                       dose_unit=NULL, weight_kg=NULL) {
   
   if (!roi_m) {
     if (!all(c(is.null(vol_format), is.null(vol_file_suffix), is.null(ROI_def), 
@@ -111,7 +116,32 @@ batch_load <- function(participants, dir="", tac_file_suffix=".tac",
   
   names(r) <- participants
 
+  if (!is.null(c(tracer_dose, dose_unit, weight_kg))) {
+    validate_batch_suv_data(participants, tracer_dose, dose_unit, weight_kg)
+    for (i in seq_along(r)) {
+      attributes(r[[i]])$tracer_dose <- tracer_dose[[i]]
+      attributes(r[[i]])$dose_unit <- dose_unit
+      attributes(r[[i]])$weight_kg <- weight_kg[[i]]
+    }
+  }
+
   return(r)
+}
+
+#'@noRd
+validate_batch_suv_data <- function(participants, tracer_dose, dose_unit,
+                                    weight_kg) {
+  if (length(participants) != length(tracer_dose)) stop("Need tracer dose for
+                                                         each participant")
+  if (!is.numeric(tracer_dose)) stop("Dose must be numeric.")
+
+  if (length(participants) != length(weight_kg)) stop("Need weight for each
+                                                       participant")
+  if (!is.numeric(weight_kg)) stop("Weight must be numeric.")
+
+  if (length(dose_unit) != 1) stop("Only provide 1 dose unit.")
+  if (!(dose_unit %in% names(get_activity_unit_index()))) stop("Bad dose unit.")
+
 }
 
 #' Obtain values from voistat files (using load_voistat() for a batch.

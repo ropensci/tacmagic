@@ -2,7 +2,9 @@
 
 A primary purpose of tacmagic is to foster open and reproducible in PET neuroimaging research. Therefore, the package is released under a GPL licence and contributions are welcome.
 
-Please suggest changes or report bugs using the Issues page of this repository. In addition to bugs and feature requests.
+At this relatively early stage in development, it would be extremely helpful to hear feedback about what is working well compared to existing workflows, and what needs work.
+
+Please suggest changes or report bugs using the Issues page of this repository. 
 
 Expanded funcitonality could be considered in the following areas:
 

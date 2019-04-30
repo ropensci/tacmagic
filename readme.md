@@ -4,21 +4,25 @@
 [![DOI](https://zenodo.org/badge/131427691.svg)](https://zenodo.org/badge/latestdoi/131427691) [![Build Status](https://travis-ci.org/ropensci/tacmagic.svg?branch=master)](https://travis-ci.org/ropensci/tacmagic) [![Coverage status](https://codecov.io/gh/ropensci/tacmagic/branch/master/graph/badge.svg)](https://codecov.io/github/ropensci/tacmagic?branch=master) [![](https://badges.ropensci.org/280_status.svg)](https://github.com/ropensci/software-review/issues/280)
 
 
-To foster openness, replicability, and efficiency, ```tacmagic``` facilitates loading and analysis of positron emission tomography data in R.
+To foster openness, replicability, and efficiency, `tacmagic` facilitates loading and analysis of positron emission tomography data in R.
 
-As a ```tacmagic``` is a new package, we strongly recommend checking all work against existing analyses to confirm the results are as expected.
+As a `tacmagic` is a new package, we strongly recommend checking all work against existing analyses to confirm the results are as expected, and welcome any feedback.
 
 ## Installation
 
 The stable version of the package can be installed from CRAN, and the more recent development version can be installed with the devtools package:
 
-```r
-# CRAN Version:
-install.packages("tacmagic")
+### CRAN Release Version:
 
-# Development Version:
-devtools::install_github("ropensci/tacmagic") 
-```
+`install.packages("tacmagic")`
+
+### Upcoming Release Version:
+
+`devtools::install_github("ropensci/tacmagic")`
+
+### Bleeding-edge Test Version (Not for Production Use):
+
+`devtools::install_github("ropensci/tacmagic", ref="devel")`
 
 ## Features
 
@@ -60,6 +64,6 @@ Loading and analysis functions can be run as a batch or by individual participan
 
 Please cite this software package if you use it in your analyses. 
 
-``Brown, E. E. (2019). tacmagic: PET Analysis in R. Journal of Open Source Software, 4(34), 1281. doi:10.21105/joss.01281.``
+`Brown, E. E. (2019). tacmagic: PET Analysis in R. Journal of Open Source Software, 4(34), 1281. doi:10.21105/joss.01281.`
 
 [![ropensci_footer](https://ropensci.org/public_images/ropensci_footer.png)](https://ropensci.org)

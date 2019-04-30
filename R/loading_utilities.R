@@ -33,7 +33,8 @@ validate_tac <- function(tac) {
     status <- FALSE
   }
 
-  if (!(attributes(tac)$activity_unit %in% c("kBq/cc", "nCi/cc", "Bq/cc"))) {
+  if (!(attributes(tac)$activity_unit %in% c("kBq/cc", "nCi/cc", "Bq/cc", 
+                                             "g/mL"))) {
     message("TAC data missing attribute activity_unit")
     status <- FALSE
   }
