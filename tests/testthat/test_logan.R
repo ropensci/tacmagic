@@ -86,16 +86,9 @@ test_that("plot_ref_logan creates the plots without error", {
   dev.control(displaylist="enable")
 
   plot(AD06_Logan)
-
-  p <- recordPlot()
-
-  sample <- as.vector(unlist(unlist(p)[c(123, 124,304, 305, 317, 318,586)]))
-  expected <- c("Time (minutes)", "Activity (kBq/cc)", "frontal", "cerebellum",
-                "frontal", "cerebellum", "Logan plot")
-
-  skip_on_cran()
-  expect_identical(sample, expected)
-
+  p4 <- recordPlot()
+  vdiffr::expect_doppelganger("Logan plot", p4)  
+  
 })
 
 
