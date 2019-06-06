@@ -1,9 +1,8 @@
 # test_batches.R
 
-context("batch_tm produces expected results")
+context("batch_tm and batch_load produce expected results")
 
-test_that("tac_roi() accurately calculates weighted averages from PMOD .tac and 
-	      .voistat files", {
+test_that("batch_tm works", {
   
   f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic")
   f_raw_vol <- system.file("extdata", "AD06_TAC.voistat", package="tacmagic")
@@ -86,7 +85,53 @@ test_that("batch_load() loads 3 particpants and produces same result as
 
 })
 
-test_that("batch_load() with merging loads 3 particpants with same result as 
+test_that("batch_load() loads 3 particpants with suv information", {
+
+  weights <- c(60, 65, 70)
+  tracer_dose <- c(5, 6, 7)
+  dose_unit <- "mCi"
+
+  participants <- c(system.file("extdata", "AD06.tac", package="tacmagic"),
+                    system.file("extdata", "AD07.tac", package="tacmagic"),
+                    system.file("extdata", "AD08.tac", package="tacmagic"))
+
+  batchtest <- batch_load(participants, tac_file_suffix="", weight_kg=weights,
+                          tracer_dose=tracer_dose, dose_unit=dose_unit)
+
+  expect_equal(validate_tac(batchtest[[1]]), TRUE)
+
+  expect_equal(attributes(batchtest[[1]])$weight_kg, 60)
+  expect_equal(attributes(batchtest[[2]])$tracer_dose, 6)
+  expect_equal(attributes(batchtest[[3]])$dose_unit, "mCi")
+
+})
+
+test_that("batch_tm() works with suv", {
+
+  weights <- c(60, 65, 70)
+  tracer_dose <- c(5, 6, 7)
+  dose_unit <- "mCi"
+
+  participants <- c(system.file("extdata", "AD06.tac", package="tacmagic"),
+                    system.file("extdata", "AD07.tac", package="tacmagic"),
+                    system.file("extdata", "AD08.tac", package="tacmagic"))
+
+  batchtest <- batch_load(participants, tac_file_suffix="", weight_kg=weights,
+                          tracer_dose=tracer_dose, dose_unit=dose_unit)
+
+
+  batchsuv <- batch_tm(batchtest, model="SUV", SUV_def="max")
+
+  AD07 <- load_tac(system.file("extdata", "AD07.tac", package="tacmagic"))
+  onesuv <- suv(AD07, SUV_def="max", weight_kg=65, dose=6, dose_unit="mCi")
+  onesuvb <- suv(batchtest[[2]], SUV_def="max")
+
+  expect_equal(onesuv, onesuvb)
+  expect_equal(as.numeric(unlist(onesuv)), as.numeric(unlist(batchsuv[2,])))
+
+})
+
+test_that("batch_load() with merging loads 3 particpants with same result as
            individual load_tac() and tac_roi()", {
 
   participants <- c(system.file("extdata", "AD06.tac", package="tacmagic"),

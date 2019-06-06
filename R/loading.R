@@ -188,3 +188,4 @@ load_voistat <- function(filename, ROI_def=NULL, model="VALUE") {
     names(VALUEtable) <- model
     return(VALUEtable)
 }
+

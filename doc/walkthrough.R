@@ -41,6 +41,14 @@ manual_tac <- as.tac(manual, time_unit="minutes", activity_unit="kBq/cc")
 summary(manual_tac)
 
 ## ------------------------------------------------------------------------
+change_units(5, to_unit = "kBq", from_unit = "nCi")
+change_units(0.5, to_unit = "nCi/cc", from_unit = "kBq/cc")
+
+## ------------------------------------------------------------------------
+AD06_nCi <- change_units(AD06_tac, to_unit = "nCi/cc")
+summary(AD06_nCi)
+
+## ------------------------------------------------------------------------
 AD06_volume <- load_vol(filename_voistat, format="voistat")
 
 roi_ham_pib()[1:2] # The first 2 definitions of merged ROIs, as an example.
@@ -60,6 +68,15 @@ plot(AD06,                                                    # TAC data
      time="minutes",                   # Convert x axis from seconds to minutes
      title="PIB time activity curves for AD06"        # A title for the plot
      )
+
+## ------------------------------------------------------------------------
+AD06_suv_tac <- tac_suv(AD06, dose = 8.5, dose_unit = "mCi", weight_kg = 70)
+
+## ------------------------------------------------------------------------
+AD06_suv_calc <- suv(AD06, SUV_def = c(3000, 3300, 3600), dose = 8.5, dose_unit = "mCi", weight_kg = 70)
+AD06_suv_calc["frontal",]
+AD06_suv_max <- suv(AD06, SUV_def = "max", dose = 8.5, dose_unit = "mCi", weight_kg = 70)
+AD06_suv_max["frontal",]
 
 ## ------------------------------------------------------------------------
 AD06_SUVR <- suvr(AD06,                       # TAC data

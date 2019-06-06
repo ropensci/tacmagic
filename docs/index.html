@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">tacmagic</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1.9000</span>
       </span>
     </div>
 
@@ -94,12 +94,12 @@
 <a href="#tacmagic-pet-analysis-in-r" class="anchor"></a>tacmagic: PET Analysis in R</h1></div>
 
 <p>To foster openness, replicability, and efficiency, <code>tacmagic</code> facilitates loading and analysis of positron emission tomography data in R.</p>
-<p>As a <code>tacmagic</code> is a new package, we strongly recommend checking all work against existing analyses to confirm the results are as expected.</p>
+<p>As a <code>tacmagic</code> is a new package, we strongly recommend checking all work against existing analyses to confirm the results are as expected, and welcome any feedback.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>Currently, the package can be installed within R from the github repository. The devtools package is required for installation:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"ropensci/tacmagic"</span>)</a></code></pre></div>
+<p>The stable version of the package can be installed from CRAN, and the more recent development version can be installed with the devtools package.</p>
+<p>Use the following R commands to download the version you would like: for the CRAN release, <code><a href="https://www.rdocumentation.org/packages/utils/topics/install.packages">install.packages("tacmagic")</a></code>, for the github release version that may not yet be available on CRAN, <code><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">devtools::install_github("ropensci/tacmagic")</a></code>, and for the very latest in-development version that is more likely to have bugs or errors and thus is not suitable for production use, use <code><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">devtools::install_github("ropensci/tacmagic", ref="devel")</a></code>.</p>
 </div>
 <div id="features" class="section level2">
 <h2 class="hasAnchor">
@@ -109,6 +109,7 @@
 <h3 class="hasAnchor">
 <a href="#data-loading-and-weighted-averages" class="anchor"></a>Data loading and weighted-averages</h3>
 <p>Time-activity curve (TAC) and/or region of interest (ROI) volume data can be loaded from various file formats including <a href="https://www.pmod.com/web/">PMOD</a> .tac and .voistat files, a .mat file from the <a href="http://aivo.utu.fi/magia/">magia</a> pipeline, and <a href="http://turkupetcentre.fi">Turku PET Centre’s</a> .DFT format.</p>
+<p>There is support for converting the radioactivity units in TAC data.</p>
 <p>This package is not affiliated with any of the above pipelines.</p>
 </div>
 <div id="time-activity-curve-plotting" class="section level3">
@@ -119,7 +120,7 @@
 <div id="binding-potential-models" class="section level3">
 <h3 class="hasAnchor">
 <a href="#binding-potential-models" class="anchor"></a>Binding potential models</h3>
-<p>Non-invasive models are implemented including the standardize uptake volume ratio (SUVR) and the non-invasive Logan reference method.</p>
+<p>Non-invasive models are implemented including the standardized uptake volume (SUV), SUV ratio (SUVR), and the non-invasive Logan reference method.</p>
 </div>
 <div id="batch-and-group-wise-analysis" class="section level3">
 <h3 class="hasAnchor">
@@ -130,17 +131,18 @@
 <div id="licence" class="section level2">
 <h2 class="hasAnchor">
 <a href="#licence" class="anchor"></a>Licence</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">Copyright</span> (C) <span class="dv">2018</span> Eric E. Brown</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">This program is free software<span class="op">:</span><span class="st"> </span>you can redistribute it and<span class="op">/</span>or modify</a>
-<a class="sourceLine" id="cb2-4" data-line-number="4">it under the terms of the GNU General Public License as published by</a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">the Free Software Foundation, either version <span class="dv">3</span> of the License, or</a>
-<a class="sourceLine" id="cb2-6" data-line-number="6">(at your option) any later version.</a>
-<a class="sourceLine" id="cb2-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb2-8" data-line-number="8">This program is distributed <span class="cf">in</span> the hope that it will be useful,</a>
-<a class="sourceLine" id="cb2-9" data-line-number="9">but WITHOUT ANY WARRANTY; without even the implied warranty of</a>
-<a class="sourceLine" id="cb2-10" data-line-number="10">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</a>
-<a class="sourceLine" id="cb2-11" data-line-number="11">GNU General Public License <span class="cf">for</span> more details.</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">Copyright</span> (C) <span class="dv">2018</span> Eric E. Brown</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">This program is free software<span class="op">:</span><span class="st"> </span>you can redistribute it and<span class="op">/</span>or modify</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">it under the terms of the GNU General Public License as published by</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">the Free Software Foundation, either version <span class="dv">3</span> of the License, or</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">(at your option) any later version.</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb1-8" data-line-number="8">This program is distributed <span class="cf">in</span> the hope that it will be useful,</a>
+<a class="sourceLine" id="cb1-9" data-line-number="9">but WITHOUT ANY WARRANTY; without even the implied warranty of</a>
+<a class="sourceLine" id="cb1-10" data-line-number="10">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</a>
+<a class="sourceLine" id="cb1-11" data-line-number="11">GNU General Public License <span class="cf">for</span> more details.</a></code></pre></div>
+<p>We also note specifically that this package is not intended for clinical use, and may contain bugs or errors, so any results should be verified. As above, we provide no warranty and assume no liability.</p>
 </div>
 <div id="citation" class="section level2">
 <h2 class="hasAnchor">
@@ -156,6 +158,8 @@
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
+<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=tacmagic">https://​cloud.r-project.org/​package=tacmagic</a>
+</li>
 <li>Browse source code at <br><a href="https://github.com/ropensci/tacmagic">https://​github.com/​ropensci/​tacmagic</a>
 </li>
 <li>Report a bug at <br><a href="https://github.com/ropensci/tacmagic">https://​github.com/​ropensci/​tacmagic</a>

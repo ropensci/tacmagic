@@ -5,6 +5,7 @@
 ^\.travis\.yml$
 ^Meta$
 ^doc$
+.buildconfig
 .git
 scratch
 .gitignore

@@ -3,5 +3,6 @@ Meta
 analysis
 scratch
 .Rhistory
+.buildconfig
 ..Rcheck
 man/.Rhistory

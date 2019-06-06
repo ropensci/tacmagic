@@ -65,7 +65,7 @@ larger ROIs based on the optional parameters that follow." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tacmagic</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1.9000</span>
       </span>
     </div>
 
@@ -132,7 +132,8 @@ larger ROIs based on the optional parameters that follow.</p>
     <pre class="usage"><span class='fu'>batch_load</span>(<span class='no'>participants</span>, <span class='kw'>dir</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>tac_file_suffix</span> <span class='kw'>=</span> <span class='st'>".tac"</span>,
   <span class='kw'>tac_format</span> <span class='kw'>=</span> <span class='st'>"PMOD"</span>, <span class='kw'>roi_m</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>PVC</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>vol_file_suffix</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>vol_format</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>merge</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>ROI_def</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+  <span class='kw'>ROI_def</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>tracer_dose</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>dose_unit</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>weight_kg</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -177,6 +178,19 @@ not, the following parameters are not used)</p></td>
     <tr>
       <th>ROI_def</th>
       <td><p>Object that defines combined ROIs, see ROI_definitions.R</p></td>
+    </tr>
+    <tr>
+      <th>tracer_dose</th>
+      <td><p>optionally, a vector of tracer doses (in the same order as
+participants), for SUV</p></td>
+    </tr>
+    <tr>
+      <th>dose_unit</th>
+      <td><p>if tracer_dose is specified, note the unit (e.g "MBq")</p></td>
+    </tr>
+    <tr>
+      <th>weight_kg</th>
+      <td><p>optionally, a vector of participant weights in kg, for SUV</p></td>
     </tr>
     </table>
     

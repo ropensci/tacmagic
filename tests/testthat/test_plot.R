@@ -15,25 +15,16 @@ test_that("plot.tac runs without error and contains correct axis label", {
   on.exit(dev.off())
   dev.control(displaylist="enable")
 
-  plot(AD06_tac_nc, ROIs=c("frontal", "cerebellum"), time="minutes", 
+  plot1 <- plot(AD06_tac_nc, ROIs=c("frontal", "cerebellum"), time="minutes", 
            title="Example Plot")
-
   p <- recordPlot()
-  
-  skip_on_cran()
-  expect_equal(unlist(p)[[123]], "Time (minutes)")
-  expect_equal(unlist(p)[[37]], 80) # 80 mins last value on x-axis
-
-  pdf(NULL)
-  on.exit(dev.off())
-  dev.control(displaylist="enable")
+  vdiffr::expect_doppelganger("TAC Plot with 2 ROIs", p)
 
   plot(AD06_tac_nc, ROIs=c("frontal", "cerebellum"), time="seconds", 
-           title="Example Plot")
-
-  p <- recordPlot()
-
-  expect_equal(unlist(p)[[123]], "Time (seconds)")
+       title="Example Plot")
+  p2 <- recordPlot()
+  vdiffr::expect_doppelganger("TAC Plot seconds units", p2)
+  
 })
 
 test_that("plot.tac with 2 tacs and conversion runs without error and 
@@ -51,21 +42,15 @@ test_that("plot.tac with 2 tacs and conversion runs without error and
   tac2 <- load_tac(f_raw_tac2)
   vol2 <- load_vol(f_raw_vol2)
   AD07_tac_nc <- tac_roi(tac2, vol2, roi_ham_full(), merge=FALSE, PVC=FALSE)
-
+  
   pdf(NULL)
   on.exit(dev.off())
   dev.control(displaylist="enable")
 
   plot(AD06_tac_nc, AD07_tac_nc, ROIs=c("frontal", "cerebellum"), 
            title="Example Plot", time="seconds")
-
-  p <- recordPlot()
-
-  skip_on_cran()
-  expect_equal(unlist(p)[[123]], "Time (seconds)")
-  expect_equal(unlist(p)[[37]], 4800) #4800 secs on last walk
-
-  ## and errors
+  p3 <- recordPlot()
+  vdiffr::expect_doppelganger("TAC Plot 2 participants", p3)  
 
   expect_error(plot(AD06_tac_nc, AD07_tac_nc, 
                     ROIs=c("notROI", "cerebellum"), 
