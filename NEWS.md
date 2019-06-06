@@ -1,6 +1,6 @@
 # tacmagic News
 
-## tacmagic 0.3.0 (in development)
+## tacmagic 0.3.0 (2019-06-06)
 
 ### Major changes
 
