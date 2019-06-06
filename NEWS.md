@@ -4,9 +4,9 @@
 
 ### Major changes
 
-- WIP Radioactivity unit conversion can now be done for tac objects and numeric objects
-- WIP Conversion of a tac object to standardized uptake value (SUV) by controlling for weight and injected dose
-- TODO Vignette updated with new features
+- Radioactivity unit conversion can now be done for tac objects and numeric objects
+- Conversion of a tac object to standardized uptake value (SUV) by controlling for weight and injected dose
+- Vignette updated with new features
 
 ## tacmagic 0.2.1 (2019-03-06)
 
