@@ -2,6 +2,7 @@
 
 
 [![DOI](https://zenodo.org/badge/131427691.svg)](https://zenodo.org/badge/latestdoi/131427691) [![Build Status](https://travis-ci.org/ropensci/tacmagic.svg?branch=master)](https://travis-ci.org/ropensci/tacmagic) [![Coverage status](https://codecov.io/gh/ropensci/tacmagic/branch/master/graph/badge.svg)](https://codecov.io/github/ropensci/tacmagic?branch=master) [![](https://badges.ropensci.org/280_status.svg)](https://github.com/ropensci/software-review/issues/280)
+[![cran checks](https://cranchecks.info/badges/summary/tacmagic)](https://cran.r-project.org/web/checks/check_results_tacmagic.html)
 
 
 To foster openness, replicability, and efficiency, `tacmagic` facilitates loading and analysis of positron emission tomography data in R.
