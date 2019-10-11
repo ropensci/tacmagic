@@ -1,7 +1,7 @@
 Package: tacmagic
 Type: Package
 Title: Positron Emission Tomography Time-Activity Curve Analysis
-Version: 0.3.0
+Version: 0.3.0.9999
 Authors@R: c(person("Eric", "Brown", 
                     role = c("aut", "cre"),
                     email = "eb@ericebrown.com",

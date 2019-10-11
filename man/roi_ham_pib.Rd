@@ -26,7 +26,7 @@ Brain, with Particular Reference to the Temporal Lobe. Human Brain Mapping
 19 (4): 224-247. doi:10.1002/hbm.10123
 }
 \seealso{
-Other ROI definitions: \code{\link{roi_ham_full}},
-  \code{\link{roi_ham_stand}}
+Other ROI definitions: \code{\link{roi_AAL_full}},
+  \code{\link{roi_ham_full}}, \code{\link{roi_ham_stand}}
 }
 \concept{ROI definitions}
