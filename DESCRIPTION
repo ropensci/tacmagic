@@ -29,7 +29,7 @@ Description: To facilitate the analysis of positron emission tomography (PET)
     a detailed overview of 'tacmagic' functions.
 Depends: R (>= 3.4)
 License: GPL-3
-URL: https://github.com/ropensci/tacmagic
+URL: https://docs.ropensci.org/tacmagic, https://github.com/ropensci/tacmagic
 BugReports: https://github.com/ropensci/tacmagic
 Encoding: UTF-8
 LazyData: true
