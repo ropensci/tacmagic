@@ -33,7 +33,9 @@ vol <- load_vol(f_raw_vol)
 AD06_tac_nc <- tac_roi(tac, vol, roi_ham_full(), merge=FALSE, PVC=FALSE)
 }
 \seealso{
-Other tac functions: \code{\link{plot.tac}},
-  \code{\link{save_tac}}, \code{\link{split_pvc}}
+Other tac functions: 
+\code{\link{plot.tac}()},
+\code{\link{save_tac}()},
+\code{\link{split_pvc}()}
 }
 \concept{tac functions}

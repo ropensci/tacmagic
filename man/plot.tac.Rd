@@ -4,8 +4,16 @@
 \alias{plot.tac}
 \title{Plots time activity curves from 1 or 2 participants or groups.}
 \usage{
-\method{plot}{tac}(x, tac2 = NULL, ROIs, ymax = 25, time = "minutes",
-  title = "", colors = rainbow, ...)
+\method{plot}{tac}(
+  x,
+  tac2 = NULL,
+  ROIs,
+  ymax = 25,
+  time = "minutes",
+  title = "",
+  colors = rainbow,
+  ...
+)
 }
 \arguments{
 \item{x}{A tac object containing time-activity curves to plot, e.g. from 
@@ -43,7 +51,9 @@ AD06_tac_nc <- tac_roi(tac, vol, roi_ham_full(), merge=FALSE, PVC=FALSE)
 plot(AD06_tac_nc, ROIs=c("frontal", "cerebellum"), title="Example Plot")
 }
 \seealso{
-Other tac functions: \code{\link{save_tac}},
-  \code{\link{split_pvc}}, \code{\link{tac_roi}}
+Other tac functions: 
+\code{\link{save_tac}()},
+\code{\link{split_pvc}()},
+\code{\link{tac_roi}()}
 }
 \concept{tac functions}

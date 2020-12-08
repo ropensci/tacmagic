@@ -4,8 +4,15 @@
 \alias{DVR_all_ref_Logan}
 \title{Non-invasive reference Logan method for all ROIs in tac data}
 \usage{
-DVR_all_ref_Logan(tac_data, ref, k2prime, t_star, error = 0.1,
-  method = "trapz", ...)
+DVR_all_ref_Logan(
+  tac_data,
+  ref,
+  k2prime,
+  t_star,
+  error = 0.1,
+  method = "trapz",
+  ...
+)
 }
 \arguments{
 \item{tac_data}{The time-activity curve data from tac_roi()}
@@ -48,7 +55,9 @@ Blood Flow & Metabolism, 16(5), 834-840.
 https://doi.org/10.1097/00004647-199609000-00008
 }
 \seealso{
-Other Logan plot functions: \code{\link{DVR_ref_Logan}},
-  \code{\link{dvr}}, \code{\link{plot.ref_Logan}}
+Other Logan plot functions: 
+\code{\link{DVR_ref_Logan}()},
+\code{\link{dvr}()},
+\code{\link{plot.ref_Logan}()}
 }
 \concept{Logan plot functions}

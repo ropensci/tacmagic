@@ -27,7 +27,9 @@ plot(AD06_DVR_fr)
 This plots the non-invasive Logan plot.
 }
 \seealso{
-Other Logan plot functions: \code{\link{DVR_all_ref_Logan}},
-  \code{\link{DVR_ref_Logan}}, \code{\link{dvr}}
+Other Logan plot functions: 
+\code{\link{DVR_all_ref_Logan}()},
+\code{\link{DVR_ref_Logan}()},
+\code{\link{dvr}()}
 }
 \concept{Logan plot functions}

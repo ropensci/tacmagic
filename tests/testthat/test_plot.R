@@ -2,6 +2,11 @@
 
 context("tacmagic plotting")
 
+expect_doppelganger <- function(title, fig, path = NULL, ...) {
+  testthat::skip_if_not_installed("vdiffr")
+  vdiffr::expect_doppelganger(title, fig, path = path, ...)
+}
+
 test_that("plot.tac runs without error and contains correct axis label", {
 
   f_raw_tac <- system.file("extdata", "AD06.tac", package="tacmagic") 
@@ -18,12 +23,12 @@ test_that("plot.tac runs without error and contains correct axis label", {
   plot1 <- plot(AD06_tac_nc, ROIs=c("frontal", "cerebellum"), time="minutes", 
            title="Example Plot")
   p <- recordPlot()
-  vdiffr::expect_doppelganger("TAC Plot with 2 ROIs", p)
+  expect_doppelganger("TAC Plot with 2 ROIs", p)
 
   plot(AD06_tac_nc, ROIs=c("frontal", "cerebellum"), time="seconds", 
        title="Example Plot")
   p2 <- recordPlot()
-  vdiffr::expect_doppelganger("TAC Plot seconds units", p2)
+  expect_doppelganger("TAC Plot seconds units", p2)
   
 })
 
@@ -50,7 +55,7 @@ test_that("plot.tac with 2 tacs and conversion runs without error and
   plot(AD06_tac_nc, AD07_tac_nc, ROIs=c("frontal", "cerebellum"), 
            title="Example Plot", time="seconds")
   p3 <- recordPlot()
-  vdiffr::expect_doppelganger("TAC Plot 2 participants", p3)  
+  expect_doppelganger("TAC Plot 2 participants", p3)  
 
   expect_error(plot(AD06_tac_nc, AD07_tac_nc, 
                     ROIs=c("notROI", "cerebellum"), 

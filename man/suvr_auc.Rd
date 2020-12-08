@@ -32,6 +32,7 @@ provided tac data, using the specified reference region. This is an
 alternate to suvr() which should provide very similar values.
 }
 \seealso{
-Other SUVR functions: \code{\link{suvr}}
+Other SUVR functions: 
+\code{\link{suvr}()}
 }
 \concept{SUVR functions}

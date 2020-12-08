@@ -4,8 +4,7 @@
 \alias{suv}
 \title{Calculate average SUV over time window, or maximum SUV}
 \usage{
-suv(tac, SUV_def, dose = NULL, dose_unit = NULL, weight_kg = NULL,
-  ...)
+suv(tac, SUV_def, dose = NULL, dose_unit = NULL, weight_kg = NULL, ...)
 }
 \arguments{
 \item{tac}{time-activity curve object (decay-corrected)}
@@ -47,6 +46,7 @@ AD06_suv <- suv(AD06, c(3000, 3300, 3600), dose = 9.0, dose_unit = "mCi",
                   weight_kg = 70)
 }
 \seealso{
-Other SUV functions: \code{\link{tac_suv}}
+Other SUV functions: 
+\code{\link{tac_suv}()}
 }
 \concept{SUV functions}

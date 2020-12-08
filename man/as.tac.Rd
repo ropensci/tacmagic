@@ -34,7 +34,9 @@ manual <- data.frame(start=c(0:4), end=c(2:6),
 manual_tac <- as.tac(manual, time_unit="minutes", activity_unit="kBq/cc")
 }
 \seealso{
-Other Loading functions: \code{\link{load_tac}},
-  \code{\link{load_voistat}}, \code{\link{load_vol}}
+Other Loading functions: 
+\code{\link{load_tac}()},
+\code{\link{load_voistat}()},
+\code{\link{load_vol}()}
 }
 \concept{Loading functions}

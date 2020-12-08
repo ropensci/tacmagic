@@ -4,8 +4,13 @@
 \alias{load_tac}
 \title{Loads TAC from file for use by other functions (default is PMOD .tac format)}
 \usage{
-load_tac(filename, format = "PMOD", acqtimes = NULL,
-  time_unit = NULL, activity_unit = NULL)
+load_tac(
+  filename,
+  format = "PMOD",
+  acqtimes = NULL,
+  time_unit = NULL,
+  activity_unit = NULL
+)
 }
 \arguments{
 \item{filename}{(e.g. "participant01.tac")}
@@ -44,7 +49,9 @@ tac <- load_tac(f_raw_tac)
 
 }
 \seealso{
-Other Loading functions: \code{\link{as.tac}},
-  \code{\link{load_voistat}}, \code{\link{load_vol}}
+Other Loading functions: 
+\code{\link{as.tac}()},
+\code{\link{load_voistat}()},
+\code{\link{load_vol}()}
 }
 \concept{Loading functions}

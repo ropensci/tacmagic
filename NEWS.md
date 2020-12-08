@@ -1,5 +1,11 @@
 # tacmagic News
 
+## tacmagic 0.3.1 (2020-12-08)
+
+### Minor changes
+
+- Make vdiffr plotting tests conditional.
+
 ## tacmagic 0.3.0 (2019-06-06)
 
 ### Major changes

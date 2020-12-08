@@ -38,6 +38,7 @@ AD06 <- tac_roi(tac=AD06_tac, volumes=AD06_volume, ROI_def=roi_ham_pib(),
 AD06_suv <- tac_suv(AD06, dose = 9.0, dose_unit = "mCi", weight_kg = 70)
 }
 \seealso{
-Other SUV functions: \code{\link{suv}}
+Other SUV functions: 
+\code{\link{suv}()}
 }
 \concept{SUV functions}

@@ -4,7 +4,9 @@
 \name{fake_DVR}
 \alias{fake_DVR}
 \title{Fake DVR data for vignette and package testing}
-\format{A data frame with 50 rows and 4 variables representing ROIs}
+\format{
+A data frame with 50 rows and 4 variables representing ROIs
+}
 \usage{
 fake_DVR
 }

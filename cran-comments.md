@@ -1,0 +1,1 @@
+Made all calls to vdiffr functions conditional, as requested by Brian Ripley. I tried to see whether setting _R_CHECK_DEPENDS_ONLY_=true would identify this issue, but it did not, so I could not confirm 100% that it is fixed. CHECK produces no errors before or after the change.

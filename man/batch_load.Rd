@@ -4,11 +4,21 @@
 \alias{batch_load}
 \title{Load (+/- merge) ROIs for batch of participants}
 \usage{
-batch_load(participants, dir = "", tac_file_suffix = ".tac",
-  tac_format = "PMOD", roi_m = FALSE, PVC = NULL,
-  vol_file_suffix = NULL, vol_format = NULL, merge = NULL,
-  ROI_def = NULL, tracer_dose = NULL, dose_unit = NULL,
-  weight_kg = NULL)
+batch_load(
+  participants,
+  dir = "",
+  tac_file_suffix = ".tac",
+  tac_format = "PMOD",
+  roi_m = FALSE,
+  PVC = NULL,
+  vol_file_suffix = NULL,
+  vol_format = NULL,
+  merge = NULL,
+  ROI_def = NULL,
+  tracer_dose = NULL,
+  dose_unit = NULL,
+  weight_kg = NULL
+)
 }
 \arguments{
 \item{participants}{A vector of participant IDs}
@@ -59,7 +69,8 @@ participants <- c(system.file("extdata", "AD06.tac", package="tacmagic"),
 tacs <- batch_load(participants, tac_file_suffix="")
 }
 \seealso{
-Other Batch functions: \code{\link{batch_tm}},
-  \code{\link{batch_voistat}}
+Other Batch functions: 
+\code{\link{batch_tm}()},
+\code{\link{batch_voistat}()}
 }
 \concept{Batch functions}

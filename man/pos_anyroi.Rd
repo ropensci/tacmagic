@@ -28,6 +28,7 @@ deposition without significant cognitive impairment among the elderly.
 Arch Neurol 65: 1509-1517.
 }
 \seealso{
-Other Cutoff functions: \code{\link{cutoff_aiz}}
+Other Cutoff functions: 
+\code{\link{cutoff_aiz}()}
 }
 \concept{Cutoff functions}

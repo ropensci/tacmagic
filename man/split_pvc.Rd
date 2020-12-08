@@ -30,7 +30,9 @@ tac_pvc <- split_pvc(tac, TRUE)
 tac_nc <- split_pvc(tac, FALSE)
 }
 \seealso{
-Other tac functions: \code{\link{plot.tac}},
-  \code{\link{save_tac}}, \code{\link{tac_roi}}
+Other tac functions: 
+\code{\link{plot.tac}()},
+\code{\link{save_tac}()},
+\code{\link{tac_roi}()}
 }
 \concept{tac functions}

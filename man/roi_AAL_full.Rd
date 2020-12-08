@@ -24,7 +24,9 @@ PMOD Groupings of the AAL Atlas.
 Automated Anatomical Labeling of Activations in SPM Using a Macroscopic Anatomical Parcellation of the MNI MRI Single-Subject Brain. N. Tzourio-Mazoyer, B. Landeau, D. Papathanassiou, F. Crivello, O. Étard, N. Delcroix, B. Mazoyer, and M. Joliot. NeuroImage 2002, 15 :273-289 <doi:10.1006/nimg.2001.0978>
 }
 \seealso{
-Other ROI definitions: \code{\link{roi_ham_full}},
-  \code{\link{roi_ham_pib}}, \code{\link{roi_ham_stand}}
+Other ROI definitions: 
+\code{\link{roi_ham_full}()},
+\code{\link{roi_ham_pib}()},
+\code{\link{roi_ham_stand}()}
 }
 \concept{ROI definitions}

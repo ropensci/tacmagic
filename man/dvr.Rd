@@ -4,8 +4,16 @@
 \alias{dvr}
 \title{Distribution volume ratio (DVR) for one or more ROIs}
 \usage{
-dvr(tac, model = "logan", target = NULL, ref, k2prime, t_star,
-  error = 0.1, method = "trapz")
+dvr(
+  tac,
+  model = "logan",
+  target = NULL,
+  ref,
+  k2prime,
+  t_star,
+  error = 0.1,
+  method = "trapz"
+)
 }
 \arguments{
 \item{tac}{The time-activity curve data from load_tac() or tac_roi()}
@@ -56,7 +64,9 @@ Blood Flow & Metabolism, 16(5), 834-840.
 https://doi.org/10.1097/00004647-199609000-00008
 }
 \seealso{
-Other Logan plot functions: \code{\link{DVR_all_ref_Logan}},
-  \code{\link{DVR_ref_Logan}}, \code{\link{plot.ref_Logan}}
+Other Logan plot functions: 
+\code{\link{DVR_all_ref_Logan}()},
+\code{\link{DVR_ref_Logan}()},
+\code{\link{plot.ref_Logan}()}
 }
 \concept{Logan plot functions}

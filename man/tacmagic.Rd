@@ -3,7 +3,6 @@
 \docType{package}
 \name{tacmagic}
 \alias{tacmagic}
-\alias{tacmagic-package}
 \title{tacmagic: PET Analysis in R}
 \description{
 The main features of tacmagic are to load PET time activity curve (tac) data 

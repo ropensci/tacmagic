@@ -43,7 +43,8 @@ batch <- batch_tm(tacs, models=c("SUVR", "Logan"), ref="Cerebellum_r",
 
 }
 \seealso{
-Other Batch functions: \code{\link{batch_load}},
-  \code{\link{batch_voistat}}
+Other Batch functions: 
+\code{\link{batch_load}()},
+\code{\link{batch_voistat}()}
 }
 \concept{Batch functions}

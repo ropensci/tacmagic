@@ -2,6 +2,11 @@
 
 context("Non-invasive Logan graphical method")
 
+expect_doppelganger <- function(title, fig, path = NULL, ...) {
+  testthat::skip_if_not_installed("vdiffr")
+  vdiffr::expect_doppelganger(title, fig, path = path, ...)
+}
+
 test_that("DVR_all_ref_Logan() produces the same results as existing tools", {
 
   # Prepare tac data ----------------------------------------------------------
@@ -87,7 +92,7 @@ test_that("plot_ref_logan creates the plots without error", {
 
   plot(AD06_Logan)
   p4 <- recordPlot()
-  vdiffr::expect_doppelganger("Logan plot", p4)  
+  expect_doppelganger("Logan plot", p4)  
   
 })
 

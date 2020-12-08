@@ -4,8 +4,13 @@
 \alias{batch_voistat}
 \title{Obtain values from voistat files (using load_voistat() for a batch.}
 \usage{
-batch_voistat(participants, ROI_def, dir = "", filesuffix = ".voistat",
-  varname = "VALUE")
+batch_voistat(
+  participants,
+  ROI_def,
+  dir = "",
+  filesuffix = ".voistat",
+  varname = "VALUE"
+)
 }
 \arguments{
 \item{participants}{A vector of participant IDs}
@@ -43,7 +48,8 @@ batchtest <- batch_voistat(participants=participants, ROI_def=roi_ham_pib(),
 
 }
 \seealso{
-Other Batch functions: \code{\link{batch_load}},
-  \code{\link{batch_tm}}
+Other Batch functions: 
+\code{\link{batch_load}()},
+\code{\link{batch_tm}()}
 }
 \concept{Batch functions}

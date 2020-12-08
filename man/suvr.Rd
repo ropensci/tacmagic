@@ -34,6 +34,7 @@ AD06_SUVR <- suvr(AD06, SUVR_def=c(3000,3300,3600), ref="cerebellum")
 
 }
 \seealso{
-Other SUVR functions: \code{\link{suvr_auc}}
+Other SUVR functions: 
+\code{\link{suvr_auc}()}
 }
 \concept{SUVR functions}
